@@ -18,6 +18,9 @@ Page({
     showAR: false,
     arTip: '',
     arWatched: false,
+    // 云游全景 viewer 接线（AR 升级；现场模式不使用）
+    panoramaPath: '',
+    arReloadKey: 0,
     finished: false,
     scaleCount: 0,
     hasNext: false,
@@ -116,15 +119,38 @@ Page({
   },
 
   openAR() {
-    const arTip =
-      this.data.mode === 'onsite'
-        ? '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）'
-        : '示意复原；M1接入XRFrame后呈现完整3D殿宇与光影';
-    this.setData({ showAR: true, arTip });
+    // 现场模式：行为保持不变（现场走 ar-camera，其内部不改动）。
+    if (this.data.mode === 'onsite') {
+      this.setData({
+        showAR: true,
+        arTip: '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）',
+      });
+      return;
+    }
+    // 云游模式：进入全景环视 viewer（XRFrame → 全景视差 → 复原图 三级回退）
+    const scene = this.data.scene;
+    const panoramaPath = `/package-tour/assets/panorama/${scene.id}.jpg`;
+    this.setData({
+      showAR: true,
+      panoramaPath,
+      arReloadKey: (this.data.arReloadKey || 0) + 1,
+      arTip: '拖动屏幕或转动手机环视殿宇复原，已为你叠加晨昏光影',
+    });
   },
 
   closeAR() {
     this.setData({ showAR: false, arWatched: true });
+  },
+
+  /** viewer 状态文案透传（可选展示） */
+  onArStatus(e: WechatMiniprogram.CustomEvent<{ text: string }>) {
+    const text = e.detail && e.detail.text;
+    if (text) this.setData({ arTip: text });
+  },
+
+  /** viewer 内部已自动降级，这里仅记录，不白屏 */
+  onArFallback(e: WechatMiniprogram.CustomEvent<{ reason: string }>) {
+    console.warn('[AR] panorama-viewer fallback:', e.detail && e.detail.reason);
   },
 
   openSource() {

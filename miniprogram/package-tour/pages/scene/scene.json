@@ -3,6 +3,7 @@
   "navigationBarBackgroundColor": "#F1E9D8",
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "share-card": "/package-tour/components/share-card/share-card"
+    "share-card": "/package-tour/components/share-card/share-card",
+    "panorama-viewer": "/package-tour/ar-components/panorama-viewer/panorama-viewer"
   }
 }

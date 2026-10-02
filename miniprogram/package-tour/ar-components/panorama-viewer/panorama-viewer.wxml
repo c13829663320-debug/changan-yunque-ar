@@ -1,0 +1,74 @@
+<view class="pv" catchtouchmove="noop">
+  <!-- ===== 第 1 级：XRFrame 沉浸式（能力门控，失败自动降级） ===== -->
+  <view class="pv-stage" wx:if="{{tier === 'xrframe'}}">
+    <xr-scene class="pv-xr" bind:error="onXrError" bind:loaded="onXrLoaded">
+      <xr-camera></xr-camera>
+      <xr-node>
+        <!-- 方向光 + 阴影：满足「带光影」 -->
+        <xr-light type="directional" intensity="1.1" shadow="true" position="2 6 4"></xr-light>
+        <xr-light type="ambient" intensity="0.35"></xr-light>
+        <xr-mesh cast-shadow="true" receive-shadow="true"></xr-mesh>
+      </xr-node>
+    </xr-scene>
+    <view class="pv-vignette"></view>
+  </view>
+
+  <!-- ===== 第 2 级：全景图 + 陀螺仪/拖动视差 ===== -->
+  <view
+    class="pv-stage pv-pano"
+    wx:elif="{{tier === 'panorama'}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  >
+    <view class="pv-pano-track" style="transform: translateX({{panoX}}px);">
+      <image
+        class="pv-pano-img"
+        src="{{panoramaPath}}"
+        mode="widthFix"
+        bindload="onPanoLoad"
+        binderror="onPanoError"
+      />
+    </view>
+    <!-- 光影叠加：晨昏暖色渐变 + 循环扫光 -->
+    <view class="pv-light"></view>
+    <view class="pv-sweep"></view>
+    <view class="pv-vignette"></view>
+  </view>
+
+  <!-- ===== 第 3 级：复原图轻视差 ===== -->
+  <view
+    class="pv-stage pv-restore"
+    wx:elif="{{tier === 'restore'}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  >
+    <view class="pv-restore-track" style="transform: translateX({{restoreX}}px);">
+      <image class="pv-restore-img" src="{{restoreSrc}}" mode="widthFix" />
+    </view>
+    <view class="pv-light pv-light-soft"></view>
+    <view class="pv-sweep pv-sweep-slow"></view>
+    <view class="pv-vignette"></view>
+  </view>
+
+  <!-- ===== 兜底：CSS 殿宇（无任何图，绝不白屏） ===== -->
+  <view class="pv-stage pv-static" wx:else>
+    <view class="pv-palace">
+      <view class="pv-roof"></view>
+      <view class="pv-body"></view>
+      <view class="pv-base"></view>
+    </view>
+    <view class="pv-light"></view>
+  </view>
+
+  <!-- 状态文案 -->
+  <text class="pv-status" wx:if="{{statusText}}">{{statusText}}</text>
+
+  <!-- 自带操作入口 -->
+  <view class="pv-ui">
+    <text class="pv-hint">{{sensorOn ? '转动手机或拖动屏幕环视' : '拖动屏幕环视殿宇复原'}}</text>
+    <button class="pv-close" catchtap="onClose">关闭</button>
+    <button class="pv-continue" catchtap="onContinue">继续剧情</button>
+  </view>
+</view>

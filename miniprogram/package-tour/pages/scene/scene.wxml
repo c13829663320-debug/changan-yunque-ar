@@ -14,7 +14,21 @@
 
   <!-- AR 复原层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
-    <view class="ar-frame" catchtap="noop">
+    <!-- 云游模式：全景环视 viewer（XRFrame → 全景视差 → 复原图 三级回退） -->
+    <panorama-viewer
+      wx:if="{{mode === 'cloud'}}"
+      class="ar-viewer"
+      scene="{{scene}}"
+      active="{{true}}"
+      visible="{{showAR}}"
+      panorama-path="{{panoramaPath}}"
+      reload-key="{{arReloadKey}}"
+      bind:status="onArStatus"
+      bind:close="closeAR"
+      bind:fallback="onArFallback"
+    ></panorama-viewer>
+    <!-- 现场模式：保持原静态复原块（行为不变，现场走 ar-camera） -->
+    <view wx:else class="ar-frame" catchtap="noop">
       <image wx:if="{{scene.arRestoreImage}}" class="ar-restore" src="{{scene.arRestoreImage}}" mode="widthFix" />
       <view wx:else class="ar-palace">
         <view class="ar-roof"></view>

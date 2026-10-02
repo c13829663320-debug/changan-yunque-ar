@@ -145,3 +145,6 @@
   margin-bottom: 24rpx;
   box-shadow: 0 8rpx 24rpx rgba(70, 62, 54, 0.12);
 }
+
+/* 云游全景 viewer：填满遮罩可视区（现场卡片样式不受影响） */
+.ar-viewer { width: 100%; height: 100%; display: block; }
