@@ -1,11 +1,18 @@
 .gd-cover {
-  height: 520rpx;
-  background: linear-gradient(160deg, #ece1cd, #ddcba9);
+  position: relative;
+  height: 560rpx;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
-.gd-cat { font-size: var(--fs-h2); color: var(--dark-gold); letter-spacing: 4rpx; }
+.gd-cover-img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gd-cat {
+  position: relative; z-index: 2;
+  margin: 24rpx; padding: 6rpx 20rpx;
+  font-size: var(--fs-small); color: #f6ecd9; letter-spacing: 3rpx;
+  background: rgba(70, 62, 54, 0.55); border-radius: 999rpx;
+}
 
 .gd-body { padding-top: 24rpx; padding-bottom: 160rpx; }
 .gd-name { font-size: 40rpx; color: var(--ink); font-weight: 700; line-height: 1.4; display:block; }
@@ -19,8 +26,9 @@
 /* AR */
 .ar-mask { position:fixed; inset:0; background:rgba(58,50,40,0.55); display:flex; align-items:center; justify-content:center; z-index:40; padding:40rpx; }
 .ar-frame { width:100%; background:linear-gradient(180deg,#dfe7e4,#eef0ea); border-radius:var(--radius-lg); padding:50rpx 36rpx 36rpx; display:flex; flex-direction:column; align-items:center; }
-.ar-object { width:220rpx; height:220rpx; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fbf6ec,#d8c4a4); border:2rpx solid var(--dark-gold-soft); margin-bottom:24rpx; animation:float 3s ease-in-out infinite; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14rpx)} }
+.ar-stage { width:300rpx; height:300rpx; border-radius:50%; overflow:hidden; border:3rpx solid var(--dark-gold-soft); box-shadow:0 16rpx 40rpx rgba(70,62,54,0.25); margin-bottom:26rpx; animation:spin 9s linear infinite; }
+.ar-object-img { width:100%; height:100%; }
+@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 .ar-title { font-size:var(--fs-h2); color:var(--ink); font-weight:600; }
 .ar-tip { font-size:var(--fs-small); color:var(--ink-muted); text-align:center; line-height:1.6; margin:14rpx 0 26rpx; }
 .ar-done { width:100%; }

@@ -1,5 +1,8 @@
 <view class="goods-detail" wx:if="{{goods}}">
-  <view class="gd-cover"><text class="gd-cat">{{categoryLabel}}</text></view>
+  <view class="gd-cover">
+    <image class="gd-cover-img" src="{{goods.cover}}" mode="aspectFill" />
+    <text class="gd-cat">{{categoryLabel}}</text>
+  </view>
 
   <view class="page-wrap gd-body">
     <view class="gd-head card">
@@ -29,7 +32,7 @@
   <!-- AR 预览层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
-      <view class="ar-object"></view>
+      <view class="ar-stage"><image class="ar-object-img" src="{{goods.cover}}" mode="aspectFill" /></view>
       <text class="ar-title">AR 预览</text>
       <text class="ar-tip">{{arTip}}</text>
       <button class="btn-primary ar-done" catchtap="closeAR">完成预览</button>

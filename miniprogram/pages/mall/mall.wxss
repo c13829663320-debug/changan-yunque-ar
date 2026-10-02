@@ -14,15 +14,19 @@
 .goods-grid { display: flex; flex-wrap: wrap; gap: 20rpx; }
 .grid-item { width: calc(50% - 10rpx); background: var(--bg-card); border: 1rpx solid var(--line); border-radius: var(--radius); padding: 16rpx; box-shadow: var(--shadow); }
 .grid-cover {
+  position: relative;
   height: 280rpx;
   border-radius: var(--radius-sm);
-  background: linear-gradient(160deg, #ece1cd, #e0d2b8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   margin-bottom: 14rpx;
 }
-.cover-cat { font-size: var(--fs-small); color: var(--dark-gold); }
+.cover-img { width: 100%; height: 100%; }
+.cover-badge {
+  position: absolute; left: 12rpx; top: 12rpx;
+  font-size: 20rpx; color: #f6ecd9;
+  background: rgba(70, 62, 54, 0.55); border-radius: 999rpx;
+  padding: 2rpx 14rpx;
+}
 .grid-name { font-size: var(--fs-small); color: var(--ink); line-height: 1.4; height: 72rpx; overflow: hidden; display: block; }
 .grid-price { font-size: var(--fs-body); color: var(--cinnabar); font-weight: 600; }
 .presale-tag { font-size: var(--fs-mini); color: var(--ink-muted); border: 1rpx solid var(--line); border-radius: 999rpx; padding: 2rpx 14rpx; }
