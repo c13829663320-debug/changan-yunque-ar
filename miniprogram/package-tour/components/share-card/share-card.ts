@@ -137,7 +137,7 @@ Component({
 
         // 走龙（右）
         try {
-          const long = await this._loadImage('/package-tour/assets/scenes/xuanwumen/zou-long.jpg');
+          const long = await this._loadImage('/assets/characters/yunque-dragon.jpg');
           this._drawRoundImage(ctx, long, 178, 92, 96, 96, 10);
         } catch (e) {
           ctx.fillStyle = COLOR.goldSoft;
