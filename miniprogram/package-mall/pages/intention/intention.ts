@@ -1,5 +1,6 @@
 import { getGoods } from '../../../data/repositories/goodsRepo';
 import { CATEGORY_LABEL, Goods } from '../../../data/types/goods';
+import config from '../../../config/index';
 
 const INTENTION_KEY = 'changan_yunque_intentions';
 const SUBMITTED_KEY = 'changan_yunque_intentions_done';
@@ -28,10 +29,34 @@ Page({
       .map((id) => getGoods(id))
       .filter((g): g is Goods => !!g)
       .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
+    const cloudReady = !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction;
     this.setData({
       items,
       submitted: pending.length === 0 && doneIds.length > 0,
-      cloudReady: !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction),
+      cloudReady,
+    });
+    if (cloudReady && !config.useMock) this.queryCloud();
+  },
+
+  /** 云端模式：从云函数查询当前用户的历史意向 */
+  queryCloud() {
+    wx.cloud.callFunction({
+      name: 'intention',
+      data: { action: 'query' },
+      success: (res) => {
+        const result = res.result as
+          | { success?: boolean; list?: { goodsId: string }[] }
+          | undefined;
+        const list = result?.list;
+        if (result?.success && Array.isArray(list) && list.length) {
+          const cloudIds = Array.from(new Set(list.map((x) => x.goodsId)));
+          const cloudItems: IntVM[] = cloudIds
+            .map((id) => getGoods(id))
+            .filter((g): g is Goods => !!g)
+            .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
+          this.setData({ items: cloudItems, submitted: true });
+        }
+      },
     });
   },
 
