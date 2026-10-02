@@ -41,6 +41,7 @@ const danfengmen: ScenePoint = {
     {
       id: 'dfm-3',
       actor: 'yunque',
+      expression: 'curious',
       text: '（小声）好多人呀……你也是来上朝的吗？前面有五道门，我们……该走哪一道？',
       choices: [
         {
@@ -50,7 +51,7 @@ const danfengmen: ScenePoint = {
           feedback: {
             actor: 'liguan',
             actorName: '守门礼官',
-            text: '站住！中间门道乃天子御道，百官由两侧门道依序而入，不可僭越！',
+            text: '且慢！中间那道是天子御道，百官不可擅行。来，随队列依品秩从两侧门道依次而入——这才合礼。',
           },
         },
         {
@@ -62,19 +63,22 @@ const danfengmen: ScenePoint = {
             actorName: '守门礼官',
             text: '嗯，依品秩左入，合礼。',
           },
+          easterEgg: '（吐了吐舌头）好险——我刚才都差点想拉你走中间那条宽的，原来那是天子专属的道呀。',
         },
       ],
     },
     {
       id: 'dfm-4',
       actor: 'yunque',
+      expression: 'curious',
       text: '原来中间那道是留给皇帝的……（仰头）那这座大门，叫什么名字？',
     },
     {
       id: 'dfm-5',
       actor: 'liguan',
       actorName: '守门礼官',
-      text: '此乃丹凤门，大明宫正门，五门道，天子由此出入，万国来朝，皆从此门觐见。',
+      text: '此乃丹凤门，大明宫正门。史料卡可一观。',
+      action: { type: 'open_source_card' },
     },
     {
       id: 'dfm-6',
@@ -85,7 +89,8 @@ const danfengmen: ScenePoint = {
     {
       id: 'dfm-7',
       actor: 'yunque',
-      text: '好高的门……（掌心浮起一片金鳞）我好像，记起了一点点什么。这片「启程鳞」，送给你。',
+      expression: 'daze',
+      text: '好高的门……（掌心浮起金鳞）我好像记起了一点什么。这片「启程鳞」送给你。',
       action: { type: 'collect_scale' },
     },
   ],
