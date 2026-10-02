@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大雁塔 · 大慈恩寺 · 数字馆</title>
+<style>
+  :root{
+    --ivory:#f4ecdd; --ivory-deep:#ece1cd; --azurite:#8fa6ab; --azurite-deep:#6f8b92;
+    --celadon:#a6bfae; --celadon-deep:#86a590; --ochre:#c7a987; --ochre-deep:#b08d68;
+    --dark-gold:#a8893a; --dark-gold-soft:#c2a668; --cinnabar:#9e4a2a; --cinnabar-soft:#b06a4a;
+    --ink:#463e36; --ink-soft:#6a5f52; --ink-muted:#93867a;
+    --bg:#f4ecdd; --bg-card:#fbf6ec; --bg-card-deep:#f1e8d6; --line:#e0d4bf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#d8cdb6;font-family:-apple-system,"PingFang SC","Songti SC","Noto Serif SC",serif;color:var(--ink);}
+  .phone{width:390px;margin:0 auto;background:var(--bg);min-height:844px;overflow:hidden;}
+  .card{background:var(--bg-card);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 15px rgba(90,74,50,.08);padding:16px;margin:0 14px 14px;}
+  .title-h2{font-size:17px;font-weight:600;color:var(--ink);letter-spacing:1px;}
+  .tag{display:inline-flex;align-items:center;padding:3px 12px;border-radius:999px;font-size:11px;margin-right:8px;}
+
+  .hero{position:relative;width:100%;height:300px;overflow:hidden;background:var(--ivory-deep);}
+  .hero img.cover{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,36,26,0)32%,rgba(46,36,26,.68)100%);}
+  .hero-inner{position:absolute;left:0;right:0;bottom:0;padding:16px 18px 18px;}
+  .hero-city{display:inline-block;font-size:11px;color:#f4ecdd;background:rgba(251,246,236,.16);border:1px solid rgba(251,246,236,.3);padding:2px 11px;border-radius:999px;margin-bottom:9px;}
+  .hero-name{font-size:26px;font-weight:700;color:#fbf6ec;letter-spacing:1px;text-shadow:0 2px 10px rgba(0,0,0,.35);}
+  .hero-sub{font-size:13px;color:rgba(251,246,236,.92);margin-top:6px;}
+  .hero-tags{margin-top:11px;}
+  .hero-tags .tag{color:#f4ecdd;background:rgba(251,246,236,.18);border:1px solid rgba(251,246,236,.28);}
+
+  .body{padding:14px 0 24px;}
+  .para{display:block;margin-top:8px;font-size:13.5px;color:var(--ink-soft);line-height:1.78;}
+
+  .stats{display:flex;margin-top:14px;background:var(--bg-card-deep);border-radius:10px;padding:11px 0;}
+  .stat{flex:1;display:flex;flex-direction:column;align-items:center;border-right:1px solid var(--line);padding:0 4px;}
+  .stat:last-child{border-right:none;}
+  .stat-value{font-size:11.5px;font-weight:700;color:var(--cinnabar);text-align:center;}
+  .stat-label{font-size:9.5px;color:var(--ink-muted);margin-top:4px;text-align:center;}
+
+  .tl-era{display:inline-block;font-size:12px;font-weight:600;color:var(--dark-gold);background:rgba(168,137,58,.12);padding:4px 12px;border-radius:999px;margin:12px 0 4px;}
+  .tl-item{display:grid;grid-template-columns:16px 1fr;column-gap:11px;padding-bottom:14px;}
+  .tl-axis{position:relative;}
+  .tl-dot{position:absolute;left:50%;top:4px;width:9px;height:9px;border-radius:50%;background:var(--cinnabar);border:2px solid var(--bg-card);box-shadow:0 0 0 3px rgba(158,74,42,.12);transform:translateX(-50%);}
+  .tl-axis::before{content:'';position:absolute;left:50%;top:16px;bottom:-14px;width:1.5px;transform:translateX(-50%);background:var(--line);}
+  .tl-item:last-child .tl-axis::before{display:none;}
+  .tl-year{font-size:11.5px;color:var(--dark-gold);font-weight:600;}
+  .tl-title{font-size:13.5px;color:var(--ink);font-weight:600;margin:3px 0;}
+  .tl-desc{font-size:12px;color:var(--ink-muted);line-height:1.7;}
+
+  .route-canvas{position:relative;width:100%;height:330px;margin-top:12px;border-radius:10px;overflow:hidden;background:var(--bg-card-deep);border:1px solid var(--line);}
+  .route-svg{position:absolute;left:0;top:0;width:100%;height:100%;}
+  .zone-label{position:absolute;transform:translate(4%,8%);font-size:10px;color:var(--ink-muted);opacity:.8;white-space:nowrap;font-weight:600;}
+  .edge-label{position:absolute;transform:translate(-50%,-50%);font-size:9.5px;color:var(--cinnabar);background:rgba(251,246,236,.92);padding:1px 7px;border-radius:5px;white-space:nowrap;}
+  .route-node{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}
+  .route-dot{width:10px;height:10px;border-radius:50%;background:var(--cinnabar);border:2px solid #fff;box-shadow:0 1px 5px rgba(90,74,50,.4);}
+  .route-node-label{margin-top:5px;background:rgba(251,246,236,.95);padding:2px 8px;border-radius:6px;text-align:center;box-shadow:0 2px 6px rgba(90,74,50,.12);white-space:nowrap;}
+  .route-node-name{font-size:10.5px;color:var(--ink);font-weight:600;}
+  .route-node-role{font-size:8.5px;color:var(--ink-muted);margin-top:1px;}
+  .route-note{font-size:10.5px;color:var(--ink-muted);margin-top:10px;display:block;line-height:1.6;}
+
+  .hl-grid{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .hl-card{background:var(--bg-card-deep);border-radius:10px;overflow:hidden;}
+  .hl-media{position:relative;width:100%;height:92px;}
+  .hl-media img{width:100%;height:100%;object-fit:cover;}
+  .hl-tag{position:absolute;left:7px;top:7px;font-size:9px;color:#fbf6ec;background:rgba(158,74,42,.88);padding:2px 8px;border-radius:999px;}
+  .hl-name{font-size:12px;font-weight:600;color:var(--ink);padding:9px 10px 0;}
+  .hl-desc{font-size:10.5px;color:var(--ink-muted);line-height:1.6;padding:5px 10px 11px;}
+
+  .cite{padding:12px 0;border-bottom:1px solid var(--line);}
+  .cite:last-child{border-bottom:none;}
+  .cite-head{display:flex;align-items:center;}
+  .cite-kind{font-size:9.5px;color:var(--azurite-deep);background:rgba(143,166,171,.18);padding:2px 8px;border-radius:5px;margin-right:8px;}
+  .cite-work{font-size:13px;font-weight:600;color:var(--ink);}
+  .cite-chapter{font-size:11px;color:var(--ink-soft);margin-top:5px;}
+  .cite-quote{font-size:11.5px;color:var(--ink);line-height:1.7;margin-top:7px;padding:8px 10px;background:var(--bg-card-deep);border-left:3px solid var(--ochre-deep);border-radius:0 6px 6px 0;}
+  .cite-note{font-size:10.5px;color:var(--ink-muted);line-height:1.6;margin-top:6px;}
+
+  .info-row{display:flex;padding:6px 0;}
+  .info-k{width:44px;font-size:12px;color:var(--ink-muted);flex-shrink:0;}
+  .info-v{flex:1;font-size:12px;color:var(--ink-soft);line-height:1.6;}
+
+  .btn-primary{display:flex;align-items:center;justify-content:center;height:46px;margin:6px 14px 8px;border-radius:999px;background:linear-gradient(135deg,#b9ad97,#c7b8a0);color:#fbf3e4;font-size:15px;letter-spacing:3px;border:none;}
+  .cta-note{text-align:center;font-size:10.5px;color:var(--ink-muted);margin:0 14px 16px;}
+
+  .related{padding:0 14px;}
+  .rel-scroll{display:flex;gap:10px;margin-top:10px;overflow:hidden;}
+  .rel-item{width:100px;flex-shrink:0;}
+  .rel-cover{height:100px;border-radius:10px;overflow:hidden;margin-bottom:6px;}
+  .rel-cover img{width:100%;height:100%;object-fit:cover;}
+  .rel-name{font-size:10px;color:var(--ink);line-height:1.3;height:26px;}
+  .rel-price{font-size:10.5px;color:var(--cinnabar);margin-top:3px;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- 1. 头图 -->
+  <div class="hero">
+    <img class="cover" src="../miniprogram/package-spot/assets/spot/dayanta/cover.jpg" alt="">
+    <div class="hero-shade"></div>
+    <div class="hero-inner">
+      <span class="hero-city">西安</span>
+      <div class="hero-name">大雁塔 · 大慈恩寺</div>
+      <div class="hero-sub">玄奘藏经之塔 · 丝路佛缘与唯识宗祖庭</div>
+      <div class="hero-tags">
+        <span class="tag">世界文化遗产</span><span class="tag">唐代楼阁式砖塔</span><span class="tag">玄奘译经地</span><span class="tag">唯识宗祖庭</span><span class="tag">全国重点文保</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- 概览 -->
+    <div class="card">
+      <div class="title-h2">景点概览</div>
+      <span class="para">大雁塔坐落于西安大慈恩寺内，又名慈恩寺塔。唐永徽三年（652）玄奘为保存由天竺取回的经像舍利，奏请于寺西院建塔，初为五层砖表土心；武周长安间重建为七层，明万历间包砖修葺成今貌，通高约六十四米。寺本太子李治追荐生母文德皇后所建，是玄奘主持译场与法相唯识宗祖庭；2014年作为丝绸之路遗产点列入世界文化遗产。</span>
+      <div class="stats">
+        <div class="stat"><span class="stat-value">652年</span><span class="stat-label">塔始建</span></div>
+        <div class="stat"><span class="stat-value">七层砖塔</span><span class="stat-label">现存形制</span></div>
+        <div class="stat"><span class="stat-value">约64米</span><span class="stat-label">通高</span></div>
+        <div class="stat"><span class="stat-value">世遗·国保</span><span class="stat-label">遗产属性</span></div>
+      </div>
+    </div>
+
+    <!-- 2. 历史沿革 -->
+    <div class="card">
+      <div class="title-h2">历史沿革</div>
+      <div class="tl-era">唐代营建</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">648年·贞观二十二年</div><div class="tl-title">大慈恩寺创建</div><div class="tl-desc">太子李治为追荐生母文德皇后扩建寺院，玄奘入主寺务。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">652年·永徽三年</div><div class="tl-title">玄奘奏建大雁塔</div><div class="tl-desc">玄奘奏请造石浮图安置经像，高宗敕改用砖造，就西院建成五层。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">701—704年·武周长安间</div><div class="tl-title">重建为七层</div><div class="tl-desc">原砖表土心塔倾圮，武则天率王公集资重建为方锥形楼阁式砖塔。</div></div></div>
+      <div class="tl-era">历代修葺</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">930—933年·后唐长兴间</div><div class="tl-title">五代整修</div><div class="tl-desc">西京留守安重霸重修大慈恩寺并整修大雁塔，维持唐代形制。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">1556年·明嘉靖三十四年</div><div class="tl-title">关中大地震</div><div class="tl-desc">八级强震，塔刹震落，塔下碑刻受损，塔身残破待修。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">1573—1620年·明万历间</div><div class="tl-title">包砖成今貌</div><div class="tl-desc">沿唐塔外形包砌磨砖对缝砖面，复安塔刹，形成今日七层外观。</div></div></div>
+      <div class="tl-era">现代文保</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">1961年</div><div class="tl-title">首批全国重点文保</div><div class="tl-desc">国务院公布大雁塔为第一批全国重点文物保护单位。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">2014年6月22日</div><div class="tl-title">列入世界文化遗产</div><div class="tl-desc">作为「丝绸之路：长安—天山廊道的路网」遗产点列入《世界遗产名录》。</div></div></div>
+    </div>
+
+    <!-- 3. 动线（园区简化） -->
+    <div class="card">
+      <div class="title-h2">园区简化动线</div>
+      <div class="route-canvas">
+        <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="0" y="0" width="100" height="100" fill="#fbf6ec"/>
+          <rect x="25" y="5" width="50" height="90" rx="1.6" fill="#a6bfae" fill-opacity="0.14" stroke="#a6bfae" stroke-opacity="0.55" stroke-width="0.6"/>
+          <line x1="50" y1="88" x2="50" y2="72" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="72" x2="50" y2="55" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="55" x2="50" y2="35" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="35" x2="50" y2="15" stroke="#8fa6ab" stroke-width="0.5" stroke-opacity="0.6" stroke-dasharray="2.2 1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="zone-label" style="left:26%;top:6%">寺院中轴</span>
+        <span class="edge-label" style="left:64%;top:80%">入寺</span>
+        <span class="edge-label" style="left:64%;top:45%">趋塔</span>
+        <span class="edge-label" style="left:64%;top:25%">三藏院</span>
+        <div class="route-node" style="left:50%;top:88%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">南广场 · 玄奘立像</div><div class="route-node-role">入口</div></div></div>
+        <div class="route-node" style="left:50%;top:72%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">山门 · 天王殿</div><div class="route-node-role">寺院入口</div></div></div>
+        <div class="route-node" style="left:50%;top:55%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">大雄宝殿</div><div class="route-node-role">祖庭殿宇</div></div></div>
+        <div class="route-node" style="left:50%;top:35%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">大雁塔本体</div><div class="route-node-role">核心遗址</div></div></div>
+        <div class="route-node" style="left:50%;top:15%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">玄奘三藏院</div><div class="route-node-role">纪念区</div></div></div>
+      </div>
+      <span class="route-note">示意动线，非真实地理比例（归一化坐标，仅示游览先后）。</span>
+    </div>
+
+    <!-- 4. 必看亮点 -->
+    <div class="card">
+      <div class="title-h2">必看亮点</div>
+      <div class="hl-grid">
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/dayanta/highlight-1.jpg" alt=""><span class="hl-tag">核心地标</span></div><div class="hl-name">大雁塔本体</div><div class="hl-desc">方形七层楼阁式砖塔，砖仿木檐、风铎层叠，玄奘藏经之处。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/dayanta/highlight-2.jpg" alt=""><span class="hl-tag">玄奘纪念</span></div><div class="hl-name">玄奘三藏院</div><div class="hl-desc">塔北侧专馆，以壁画雕刻再现玄奘西行求法、归国译经一生。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/dayanta/highlight-3.jpg" alt=""><span class="hl-tag">唯识宗祖庭</span></div><div class="hl-name">大慈恩寺殿宇</div><div class="hl-desc">唐长安三大译场之一，玄奘在此主持译场、创法相唯识宗。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/dayanta/highlight-4.jpg" alt=""><span class="hl-tag">人文典故</span></div><div class="hl-name">雁塔题名 · 圣教序碑</div><div class="hl-desc">新进士雁塔题名盛事；塔下《圣教序》二碑记述玄奘西行。</div></div>
+      </div>
+    </div>
+
+    <!-- 5. 关联剧场：theaters=[] → 整块隐藏（此页不渲染该卡片） -->
+
+    <!-- 6. 史料引用 -->
+    <div class="card">
+      <div class="title-h2">史料引用</div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">典籍</span><span class="cite-work">《大唐大慈恩寺三藏法师传》</span></div>
+        <div class="cite-chapter">卷第七（唐·慧立、彦悰撰，CBETA T50n2053）</div>
+        <div class="cite-quote">三年春三月，法师欲于寺端门之阳造石浮图，安置西域所将经像……「所营塔功大，恐难卒成，宜用砖造。」……于是用砖，仍改就西院。</div>
+        <div class="cite-note">永徽三年造塔始末与改砖、移建西院的一手记载。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">典籍</span><span class="cite-work">《旧唐书》</span></div>
+        <div class="cite-chapter">卷一百九十一·方伎·玄奘</div>
+        <div class="cite-note">正史载玄奘西行求法、归国译经与慈恩寺事；只列出处，未逐字征引。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">近现代研究</span><span class="cite-work">陕西省文物局复函</span></div>
+        <div class="cite-note">官方口径：始建永徽三年，武周长安间改建七层，明万历间包砖成今貌。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">近现代研究</span><span class="cite-work">人民网《大雁塔，丝路繁华的见证者》</span></div>
+        <div class="cite-note">2014年作为丝绸之路遗产点列入《世界遗产名录》。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">近现代研究</span><span class="cite-work">陕西省佛教协会《唯识宗祖庭大慈恩寺》</span></div>
+        <div class="cite-note">贞观二十二年太子李治创建慈恩寺，玄奘主持译场、创唯识宗。</div>
+      </div>
+    </div>
+
+    <!-- 到访信息 -->
+    <div class="card">
+      <div class="title-h2">到访信息</div>
+      <div class="info-row"><span class="info-k">开放</span><span class="info-v">开放时段与登塔安排以大慈恩寺·大雁塔景区官方公示为准</span></div>
+      <div class="info-row"><span class="info-k">门票</span><span class="info-v">寺院门票与登塔票分别售票，价格以景区官方公示为准</span></div>
+      <div class="info-row"><span class="info-k">交通</span><span class="info-v">地铁3号线/4号线大雁塔站；雁塔区雁塔南路大慈恩寺</span></div>
+    </div>
+  </div>
+
+  <button class="btn-primary">跟随云阙巡游</button>
+  <div class="cta-note">无关联剧场：点击 CTA 将 toast 提示「该景点数字剧场即将上线」</div>
+
+  <div class="related">
+    <div class="title-h2">相关文创</div>
+    <div class="rel-scroll">
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-xuanzang.jpg" alt=""></div><div class="rel-name">玄奘像</div><div class="rel-price">¥89</div></div>
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-city-blindbox.jpg" alt=""></div><div class="rel-name">城市盲盒</div><div class="rel-price">¥59</div></div>
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-ar-theater.jpg" alt=""></div><div class="rel-name">数字AR券</div><div class="rel-price">¥39</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

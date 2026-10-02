@@ -1,69 +1,161 @@
-<view class="spot-detail" wx:if="{{spot}}">
-  <view class="hero {{spot.cover ? 'hero-img' : ''}}">
-    <image wx:if="{{spot.cover}}" class="hero-bg" src="{{spot.cover}}" mode="aspectFill" />
-    <view class="hero-scrim"></view>
-    <view class="hero-inner">
-      <text class="hero-name">{{spot.name}}</text>
-      <text class="hero-sub">{{spot.subtitle}}</text>
-      <view class="hero-tags">
-        <text class="tag tag-gold" wx:for="{{spot.tags}}" wx:key="*this">{{item}}</text>
-      </view>
-    </view>
+<view class="spot-detail">
+
+  <!-- 景点缺失兜底 -->
+  <view class="fallback" wx:if="{{notFound}}">
+    <view class="fallback-icon"><text>阙</text></view>
+    <text class="fallback-title">这座数字馆尚未开放</text>
+    <text class="fallback-desc">你访问的景点暂无数字化内容，或正在布展中。换一座宫殿走走吧。</text>
+    <button class="btn-ghost fallback-btn" bindtap="goBack">返回上一页</button>
   </view>
 
-  <view class="page-wrap body">
-    <view class="card">
-      <text class="title-h2">景点概览</text>
-      <image wx:if="{{spot.overviewImage}}" class="ov-img" src="{{spot.overviewImage}}" mode="widthFix" />
-      <text class="text-body para">{{spot.summary}}</text>
-    </view>
-
-    <view class="card">
-      <text class="title-h2">历史时间线</text>
-      <image wx:if="{{spot.timelineImage}}" class="tl-banner" src="{{spot.timelineImage}}" mode="widthFix" />
-      <view class="timeline">
-        <view class="tl-item" wx:for="{{spot.timeline}}" wx:key="year">
-          <view class="tl-dot"></view>
-          <view class="tl-content">
-            <text class="tl-year">{{item.year}}</text>
-            <text class="tl-title">{{item.title}}</text>
-            <text class="tl-desc">{{item.desc}}</text>
-          </view>
+  <block wx:else>
+    <!-- 1. 景点头图 -->
+    <view class="hero">
+      <image class="hero-cover" src="{{spot.cover}}" mode="aspectFill"></image>
+      <view class="hero-shade"></view>
+      <view class="hero-inner">
+        <text class="hero-city">{{spot.city}}</text>
+        <text class="hero-name">{{spot.name}}</text>
+        <text class="hero-sub">{{spot.subtitle}}</text>
+        <view class="hero-tags">
+          <text class="tag tag-gold" wx:for="{{spot.tags}}" wx:key="*this">{{item}}</text>
         </view>
       </view>
     </view>
 
-    <view class="card">
-      <text class="title-h2">主要看点</text>
-      <view class="relic" wx:for="{{spot.relics}}" wx:key="name">
-        <image wx:if="{{item.image}}" class="relic-img" src="{{item.image}}" mode="widthFix" />
-        <text class="relic-name">{{item.name}}</text>
-        <text class="relic-desc">{{item.desc}}</text>
-      </view>
-    </view>
+    <view class="page-wrap body">
 
-    <view class="card">
-      <text class="title-h2">到访信息</text>
-      <text class="info-line">开放：{{spot.openInfo.hours}}</text>
-      <text class="info-line">门票：{{spot.openInfo.ticket}}</text>
-      <text class="info-line">交通：{{spot.openInfo.traffic}}</text>
-    </view>
-
-    <button wx:if="{{canTour}}" class="btn-primary start-tour" bindtap="startTour">跟随云阙巡游</button>
-    <button wx:else class="btn-ghost start-tour" disabled>云阙剧场即将上线，敬请期待</button>
-
-    <view class="related">
-      <text class="title-h2">相关文创</text>
-      <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="rel-scroll">
-        <view class="rel-item" wx:for="{{relatedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="goGoods">
-          <view class="rel-cover">
-            <image wx:if="{{item.cover}}" class="rel-cover-img" src="{{item.cover}}" mode="aspectFill" />
-            <text wx:else>{{item.categoryLabel}}</text>
+      <!-- 概览 + 关键事实 -->
+      <view class="card">
+        <text class="title-h2">景点概览</text>
+        <text class="text-body para">{{spot.summary}}</text>
+        <view class="stats" wx:if="{{spot.stats && spot.stats.length}}">
+          <view class="stat" wx:for="{{spot.stats}}" wx:for-item="s" wx:key="label">
+            <text class="stat-value">{{s.value}}</text>
+            <text class="stat-label">{{s.label}}</text>
           </view>
-          <text class="rel-name">{{item.name}}</text>
-          <text class="rel-price">¥{{item.price}}</text>
         </view>
-      </scroll-view>
+      </view>
+
+      <!-- 2. 历史沿革时间线 -->
+      <view class="card" wx:if="{{spot.timeline.length}}">
+        <text class="title-h2">历史沿革</text>
+        <view class="tl-group" wx:for="{{timelineGroups}}" wx:for-item="g" wx:key="index">
+          <text class="tl-era" wx:if="{{g.era}}">{{g.era}}</text>
+          <view class="tl-item" wx:for="{{g.items}}" wx:for-item="it" wx:key="year">
+            <view class="tl-axis"><view class="tl-dot"></view></view>
+            <view class="tl-body">
+              <text class="tl-year">{{it.year}}</text>
+              <text class="tl-title">{{it.title}}</text>
+              <image class="tl-img" wx:if="{{it.image}}" src="{{it.image}}" mode="widthFix"></image>
+              <text class="tl-desc">{{it.desc}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 3. 宫城 / 园区动线（确定性 SVG 示意） -->
+      <view class="card" wx:if="{{spot.route}}">
+        <text class="title-h2">{{spot.route.title || '宫城动线'}}</text>
+        <view class="route-canvas">
+          <image class="route-svg" mode="scaleToFill" src="{{routeSvgUri}}"></image>
+          <text class="zone-label" wx:for="{{spot.route.zones}}" wx:for-item="z" wx:key="id"
+                style="left:{{z.bounds.x}}%;top:{{z.bounds.y}}%">{{z.name}}</text>
+          <text class="edge-label" wx:for="{{edgeLabels}}" wx:key="label"
+                style="left:{{item.x}}%;top:{{item.y}}%">{{item.label}}</text>
+          <view class="route-node {{n.sceneId ? 'is-link' : ''}}" wx:for="{{spot.route.nodes}}" wx:for-item="n" wx:key="id"
+                style="left:{{n.x}}%;top:{{n.y}}%" data-scene-id="{{n.sceneId}}" bindtap="goScene">
+            <view class="route-dot"></view>
+            <view class="route-node-label">
+              <text class="route-node-name">{{n.name}}</text>
+              <text class="route-node-role" wx:if="{{n.role}}">{{n.role}}</text>
+            </view>
+          </view>
+        </view>
+        <text class="route-note" wx:if="{{spot.route.note}}">{{spot.route.note}}</text>
+      </view>
+
+      <!-- 4. 必看亮点 -->
+      <view class="card" wx:if="{{spot.highlights.length}}">
+        <text class="title-h2">必看亮点</text>
+        <view class="hl-grid">
+          <view class="hl-card {{h.sceneId ? 'is-link' : ''}}" wx:for="{{spot.highlights}}" wx:for-item="h" wx:key="id"
+                data-scene-id="{{h.sceneId}}" bindtap="goScene">
+            <view class="hl-media">
+              <image class="hl-img" wx:if="{{h.image}}" src="{{h.image}}" mode="aspectFill"></image>
+              <text class="hl-tag" wx:if="{{h.tag}}">{{h.tag}}</text>
+            </view>
+            <text class="hl-name">{{h.name}}</text>
+            <text class="hl-desc">{{h.desc}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 5. 关联剧场入口（空数组整块隐藏） -->
+      <view class="card" wx:if="{{hasTheaters}}">
+        <text class="title-h2">关联数字剧场</text>
+        <view class="theater-card" wx:for="{{theaterVms}}" wx:key="sceneId"
+              data-scene-id="{{item.sceneId}}" bindtap="goScene">
+          <image class="theater-img" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="theater-info">
+            <text class="theater-name">{{item.name}}</text>
+            <text class="theater-scale" wx:if="{{item.scaleName}}">龙鳞 · {{item.scaleName}}</text>
+            <text class="theater-sub">{{item.subtitle}}</text>
+            <view class="theater-cta">
+              <text>进入剧场</text>
+              <text class="theater-arrow">→</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 6. 史料引用 -->
+      <view class="card" wx:if="{{spot.citations.length}}">
+        <text class="title-h2">史料引用</text>
+        <view class="cite" wx:for="{{spot.citations}}" wx:key="id">
+          <view class="cite-head">
+            <text class="cite-kind">{{item.kindLabel}}</text>
+            <text class="cite-work">{{item.work}}</text>
+          </view>
+          <text class="cite-chapter" wx:if="{{item.chapter}}">{{item.chapter}}</text>
+          <text class="cite-quote" wx:if="{{item.quote}}">「{{item.quote}}」</text>
+          <text class="cite-note" wx:if="{{item.note}}">{{item.note}}</text>
+          <text class="cite-url" wx:if="{{item.url}}" data-url="{{item.url}}" bindtap="copySource">来源链接</text>
+        </view>
+      </view>
+
+      <!-- 到访信息 -->
+      <view class="card">
+        <text class="title-h2">到访信息</text>
+        <view class="info-row">
+          <text class="info-k">开放</text>
+          <text class="info-v">{{spot.openInfo.hours}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-k">门票</text>
+          <text class="info-v">{{spot.openInfo.ticket}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-k">交通</text>
+          <text class="info-v">{{spot.openInfo.traffic}}</text>
+        </view>
+      </view>
+
+      <!-- 主 CTA -->
+      <button class="btn-primary start-tour" bindtap="startTour">跟随云阙巡游</button>
+
+      <!-- 相关文创 -->
+      <view class="related">
+        <text class="title-h2">相关文创</text>
+        <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="rel-scroll">
+          <view class="rel-item" wx:for="{{relatedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="goGoods">
+            <view class="rel-cover"><image src="{{item.cover}}" mode="aspectFill"></image></view>
+            <text class="rel-name">{{item.name}}</text>
+            <text class="rel-price">¥{{item.price}}</text>
+          </view>
+        </scroll-view>
+      </view>
+
     </view>
-  </view>
+  </block>
 </view>

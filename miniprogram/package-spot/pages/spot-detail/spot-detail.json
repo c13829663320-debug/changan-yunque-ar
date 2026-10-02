@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "景点数字馆",
-  "navigationBarBackgroundColor": "#F1E9D8"
+  "navigationBarBackgroundColor": "#F1E9D8",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F4ECDD"
 }

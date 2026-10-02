@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大明宫国家遗址公园 · 数字馆</title>
+<style>
+  :root{
+    --ivory:#f4ecdd; --ivory-deep:#ece1cd; --azurite:#8fa6ab; --azurite-deep:#6f8b92;
+    --celadon:#a6bfae; --celadon-deep:#86a590; --ochre:#c7a987; --ochre-deep:#b08d68;
+    --dark-gold:#a8893a; --dark-gold-soft:#c2a668; --cinnabar:#9e4a2a; --cinnabar-soft:#b06a4a;
+    --ink:#463e36; --ink-soft:#6a5f52; --ink-muted:#93867a;
+    --bg:#f4ecdd; --bg-card:#fbf6ec; --bg-card-deep:#f1e8d6; --line:#e0d4bf;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#d8cdb6;font-family:-apple-system,"PingFang SC","Songti SC","Noto Serif SC",serif;color:var(--ink);}
+  .phone{width:390px;margin:0 auto;background:var(--bg);min-height:844px;overflow:hidden;}
+  .card{background:var(--bg-card);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 15px rgba(90,74,50,.08);padding:16px;margin:0 14px 14px;}
+  .title-h2{font-size:17px;font-weight:600;color:var(--ink);letter-spacing:1px;}
+  .tag{display:inline-flex;align-items:center;padding:3px 12px;border-radius:999px;font-size:11px;margin-right:8px;}
+
+  .hero{position:relative;width:100%;height:300px;overflow:hidden;background:var(--ivory-deep);}
+  .hero img.cover{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,36,26,0)32%,rgba(46,36,26,.68)100%);}
+  .hero-inner{position:absolute;left:0;right:0;bottom:0;padding:16px 18px 18px;}
+  .hero-city{display:inline-block;font-size:11px;color:#f4ecdd;background:rgba(251,246,236,.16);border:1px solid rgba(251,246,236,.3);padding:2px 11px;border-radius:999px;margin-bottom:9px;}
+  .hero-name{font-size:27px;font-weight:700;color:#fbf6ec;letter-spacing:1px;text-shadow:0 2px 10px rgba(0,0,0,.35);}
+  .hero-sub{font-size:13.5px;color:rgba(251,246,236,.92);margin-top:6px;}
+  .hero-tags{margin-top:11px;}
+  .hero-tags .tag{color:#f4ecdd;background:rgba(251,246,236,.18);border:1px solid rgba(251,246,236,.28);}
+
+  .body{padding:14px 0 24px;}
+  .para{display:block;margin-top:8px;font-size:13.5px;color:var(--ink-soft);line-height:1.78;}
+
+  .stats{display:flex;margin-top:14px;background:var(--bg-card-deep);border-radius:10px;padding:11px 0;}
+  .stat{flex:1;display:flex;flex-direction:column;align-items:center;border-right:1px solid var(--line);padding:0 4px;}
+  .stat:last-child{border-right:none;}
+  .stat-value{font-size:13px;font-weight:700;color:var(--cinnabar);text-align:center;}
+  .stat-label{font-size:9.5px;color:var(--ink-muted);margin-top:4px;text-align:center;}
+
+  .tl-era{display:inline-block;font-size:12px;font-weight:600;color:var(--dark-gold);background:rgba(168,137,58,.12);padding:4px 12px;border-radius:999px;margin:12px 0 4px;}
+  .tl-item{display:grid;grid-template-columns:16px 1fr;column-gap:11px;padding-bottom:14px;}
+  .tl-axis{position:relative;}
+  .tl-dot{position:absolute;left:50%;top:4px;width:9px;height:9px;border-radius:50%;background:var(--cinnabar);border:2px solid var(--bg-card);box-shadow:0 0 0 3px rgba(158,74,42,.12);transform:translateX(-50%);}
+  .tl-axis::before{content:'';position:absolute;left:50%;top:16px;bottom:-14px;width:1.5px;transform:translateX(-50%);background:var(--line);}
+  .tl-item:last-child .tl-axis::before{display:none;}
+  .tl-year{font-size:11.5px;color:var(--dark-gold);font-weight:600;}
+  .tl-title{font-size:13.5px;color:var(--ink);font-weight:600;margin:3px 0;}
+  .tl-desc{font-size:12px;color:var(--ink-muted);line-height:1.7;}
+
+  .route-canvas{position:relative;width:100%;height:330px;margin-top:12px;border-radius:10px;overflow:hidden;background:var(--bg-card-deep);border:1px solid var(--line);}
+  .route-svg{position:absolute;left:0;top:0;width:100%;height:100%;}
+  .zone-label{position:absolute;transform:translate(4%,8%);font-size:10px;color:var(--ink-muted);opacity:.8;white-space:nowrap;font-weight:600;}
+  .edge-label{position:absolute;transform:translate(-50%,-50%);font-size:9.5px;color:var(--cinnabar);background:rgba(251,246,236,.92);padding:1px 7px;border-radius:5px;white-space:nowrap;}
+  .route-node{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}
+  .route-dot{width:10px;height:10px;border-radius:50%;background:var(--dark-gold);border:2px solid #fff;box-shadow:0 1px 5px rgba(90,74,50,.4);}
+  .route-node-label{margin-top:5px;background:rgba(251,246,236,.95);padding:2px 8px;border-radius:6px;text-align:center;box-shadow:0 2px 6px rgba(90,74,50,.12);white-space:nowrap;}
+  .route-node-name{font-size:10.5px;color:var(--ink);font-weight:600;}
+  .route-node-role{font-size:8.5px;color:var(--ink-muted);margin-top:1px;}
+  .route-note{font-size:10.5px;color:var(--ink-muted);margin-top:10px;display:block;line-height:1.6;}
+
+  .hl-grid{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .hl-card{background:var(--bg-card-deep);border-radius:10px;overflow:hidden;}
+  .hl-media{position:relative;width:100%;height:92px;}
+  .hl-media img{width:100%;height:100%;object-fit:cover;}
+  .hl-media.placeholder{background:linear-gradient(150deg,var(--azurite),var(--celadon));}
+  .hl-tag{position:absolute;left:7px;top:7px;font-size:9px;color:#fbf6ec;background:rgba(158,74,42,.88);padding:2px 8px;border-radius:999px;}
+  .hl-name{font-size:12px;font-weight:600;color:var(--ink);padding:9px 10px 0;}
+  .hl-desc{font-size:10.5px;color:var(--ink-muted);line-height:1.6;padding:5px 10px 11px;}
+
+  .theater-card{display:flex;margin-top:12px;background:var(--bg-card-deep);border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .theater-card img{width:100px;height:82px;object-fit:cover;flex-shrink:0;}
+  .theater-info{flex:1;padding:9px 12px;display:flex;flex-direction:column;}
+  .theater-name{font-size:13.5px;font-weight:700;color:var(--ink);}
+  .theater-scale{font-size:10px;color:var(--dark-gold);margin-top:3px;}
+  .theater-sub{font-size:10.5px;color:var(--ink-muted);line-height:1.5;margin-top:5px;flex:1;}
+  .theater-cta{margin-top:6px;font-size:11px;color:var(--cinnabar);font-weight:600;}
+
+  .cite{padding:12px 0;border-bottom:1px solid var(--line);}
+  .cite:last-child{border-bottom:none;}
+  .cite-head{display:flex;align-items:center;}
+  .cite-kind{font-size:9.5px;color:var(--azurite-deep);background:rgba(143,166,171,.18);padding:2px 8px;border-radius:5px;margin-right:8px;}
+  .cite-work{font-size:13px;font-weight:600;color:var(--ink);}
+  .cite-chapter{font-size:11px;color:var(--ink-soft);margin-top:5px;}
+  .cite-quote{font-size:11.5px;color:var(--ink);line-height:1.7;margin-top:7px;padding:8px 10px;background:var(--bg-card-deep);border-left:3px solid var(--ochre-deep);border-radius:0 6px 6px 0;}
+  .cite-note{font-size:10.5px;color:var(--ink-muted);line-height:1.6;margin-top:6px;}
+
+  .info-row{display:flex;padding:6px 0;}
+  .info-k{width:44px;font-size:12px;color:var(--ink-muted);flex-shrink:0;}
+  .info-v{flex:1;font-size:12px;color:var(--ink-soft);line-height:1.6;}
+
+  .btn-primary{display:flex;align-items:center;justify-content:center;height:46px;margin:6px 14px 16px;border-radius:999px;background:linear-gradient(135deg,var(--cinnabar),var(--ochre-deep));color:#fbf3e4;font-size:15px;letter-spacing:3px;border:none;}
+
+  .related{padding:0 14px;}
+  .rel-scroll{display:flex;gap:10px;margin-top:10px;overflow:hidden;}
+  .rel-item{width:100px;flex-shrink:0;}
+  .rel-cover{height:100px;border-radius:10px;overflow:hidden;margin-bottom:6px;}
+  .rel-cover img{width:100%;height:100%;object-fit:cover;}
+  .rel-name{font-size:10px;color:var(--ink);line-height:1.3;height:26px;}
+  .rel-price{font-size:10.5px;color:var(--cinnabar);margin-top:3px;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- 1. 头图 -->
+  <div class="hero">
+    <img class="cover" src="../miniprogram/package-spot/assets/spot/daminggong/cover.jpg" alt="">
+    <div class="hero-shade"></div>
+    <div class="hero-inner">
+      <span class="hero-city">西安</span>
+      <div class="hero-name">大明宫国家遗址公园</div>
+      <div class="hero-sub">千宫之宫 · 丝绸之路的东方圣殿</div>
+      <div class="hero-tags">
+        <span class="tag">世界文化遗产</span><span class="tag">国家5A级景区</span><span class="tag">唐代皇宫</span><span class="tag">夯土遗址</span><span class="tag">丝绸之路</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- 概览 -->
+    <div class="card">
+      <div class="title-h2">景点概览</div>
+      <span class="para">大明宫是唐长安城「三大内」中规模最大的皇宫，又称东内，坐落于龙首原高地。始建于贞观八年（634），龙朔三年（663）建成启用，唐代共17位皇帝在此理政、历时两百余年。宫城约3.2平方公里，约为北京故宫的4.5倍。如今宫殿原址上建成国家遗址公园，以夯土遗址保护与展示为主。</span>
+      <div class="stats">
+        <div class="stat"><span class="stat-value">约3.2km²</span><span class="stat-label">宫城面积</span></div>
+        <div class="stat"><span class="stat-value">17位</span><span class="stat-label">理政皇帝</span></div>
+        <div class="stat"><span class="stat-value">200余年</span><span class="stat-label">历时</span></div>
+        <div class="stat"><span class="stat-value">约4.5倍</span><span class="stat-label">相当于故宫</span></div>
+      </div>
+    </div>
+
+    <!-- 2. 历史沿革 -->
+    <div class="card">
+      <div class="title-h2">历史沿革</div>
+      <div class="tl-era">唐代营建</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">634年·贞观八年</div><div class="tl-title">始建永安宫</div><div class="tl-desc">唐太宗为太上皇李渊修建避暑夏宫，十月动工，初名永安宫。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">635年·贞观九年</div><div class="tl-title">改名大明宫 · 停工</div><div class="tl-desc">李渊驾崩，工程停工；正月改名大明宫，宫殿并未完工。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">662年·龙朔二年</div><div class="tl-title">大规模营建 · 蓬莱宫</div><div class="tl-desc">高宗患风痹，以太极宫内湫湿，乃修旧大明宫，改名蓬莱宫。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">663年·龙朔三年</div><div class="tl-title">竣工 · 高宗迁入听政</div><div class="tl-desc">宫殿建成启用，高宗与武则天迁入，成为大唐统治中心。</div></div></div>
+      <div class="tl-era">盛唐气象</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">705年·神龙元年</div><div class="tl-title">复名大明宫</div><div class="tl-desc">恢复「大明宫」之名，成为唐代皇帝主要听政与寝居之所。</div></div></div>
+      <div class="tl-era">由盛转衰</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">755年·天宝十四载</div><div class="tl-title">安史之乱 · 首次战火</div><div class="tl-desc">长安沦陷，大明宫首次遭受兵燹，盛唐由盛转衰。</div></div></div>
+      <div class="tl-era">唐末凋零</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">880年·广明元年</div><div class="tl-title">黄巢入长安</div><div class="tl-desc">大明宫再遭劫掠焚毁，晚唐王室权威进一步衰落。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">904年·天祐元年</div><div class="tl-title">朱温毁宫 · 迁都洛阳</div><div class="tl-desc">拆毁长安宫室，木料沿渭水运往洛阳，大明宫化为废墟。</div></div></div>
+      <div class="tl-era">遗址新生</div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">1961年</div><div class="tl-title">第一批全国重点文保</div><div class="tl-desc">大明宫遗址被国务院公布为第一批全国重点文物保护单位。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">2010年10月</div><div class="tl-title">国家遗址公园开园</div><div class="tl-desc">大明宫国家遗址公园正式建成开放，以大遗址保护与展示为核心。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">2014年6月</div><div class="tl-title">列入世界文化遗产</div><div class="tl-desc">作为「丝绸之路：长安—天山廊道的路网」遗产点列入《世界遗产名录》。</div></div></div>
+      <div class="tl-item"><div class="tl-axis"><div class="tl-dot"></div></div><div><div class="tl-year">2020年12月</div><div class="tl-title">国家5A级旅游景区</div><div class="tl-desc">大明宫旅游景区获评国家5A级旅游景区。</div></div></div>
+    </div>
+
+    <!-- 3. 动线 -->
+    <div class="card">
+      <div class="title-h2">大明宫中轴动线示意</div>
+      <div class="route-canvas">
+        <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="0" y="0" width="100" height="100" fill="#fbf6ec"/>
+          <rect x="5" y="0" width="90" height="30" rx="1.6" fill="#a6bfae" fill-opacity="0.14" stroke="#a6bfae" stroke-opacity="0.55" stroke-width="0.6"/>
+          <rect x="20" y="28" width="60" height="68" rx="1.6" fill="#8fa6ab" fill-opacity="0.12" stroke="#8fa6ab" stroke-opacity="0.55" stroke-width="0.6"/>
+          <line x1="50" y1="90" x2="50" y2="72" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="72" x2="50" y2="52" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="52" x2="50" y2="35" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="50" y1="35" x2="55" y2="15" stroke="#9e4a2a" stroke-width="1.2" stroke-opacity="0.85" stroke-linecap="round"/>
+          <line x1="55" y1="15" x2="25" y2="20" stroke="#8fa6ab" stroke-width="0.5" stroke-opacity="0.6" stroke-dasharray="2.2 1.8" stroke-linecap="round"/>
+          <line x1="55" y1="15" x2="50" y2="5" stroke="#8fa6ab" stroke-width="0.5" stroke-opacity="0.6" stroke-dasharray="2.2 1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="zone-label" style="left:5%;top:1%">北部后寝</span>
+        <span class="zone-label" style="left:21%;top:29%">三朝中轴</span>
+        <span class="edge-label" style="left:64%;top:81%">御道·龙尾道</span>
+        <span class="edge-label" style="left:64%;top:62%">宣政门</span>
+        <span class="edge-label" style="left:64%;top:43%">紫宸门</span>
+        <span class="edge-label" style="left:72%;top:25%">入后寝</span>
+        <span class="edge-label" style="left:38%;top:15%">西通麟德殿</span>
+        <span class="edge-label" style="left:60%;top:9%">北出玄武门</span>
+        <div class="route-node" style="left:50%;top:90%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">丹凤门</div><div class="route-node-role">正南门</div></div></div>
+        <div class="route-node" style="left:50%;top:72%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">含元殿</div><div class="route-node-role">外朝</div></div></div>
+        <div class="route-node" style="left:50%;top:52%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">宣政殿</div><div class="route-node-role">中朝</div></div></div>
+        <div class="route-node" style="left:50%;top:35%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">紫宸殿</div><div class="route-node-role">内朝</div></div></div>
+        <div class="route-node" style="left:55%;top:15%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">太液池</div><div class="route-node-role">皇家园林</div></div></div>
+        <div class="route-node" style="left:25%;top:20%;transform:translateX(-50%)"><div class="route-dot"></div><div class="route-node-label" style="transform:translateX(-30%)"><div class="route-node-name">麟德殿</div><div class="route-node-role">宴饮接待</div></div></div>
+        <div class="route-node" style="left:50%;top:5%"><div class="route-dot"></div><div class="route-node-label"><div class="route-node-name">玄武门</div><div class="route-node-role">北门</div></div></div>
+      </div>
+      <span class="route-note">示意动线，非真实地理比例。依据考古探明的中轴对称格局绘制，用于展示三朝制度与后寝分区关系。</span>
+    </div>
+
+    <!-- 4. 必看亮点 -->
+    <div class="card">
+      <div class="title-h2">必看亮点</div>
+      <div class="hl-grid">
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/daminggong/highlight-1.jpg" alt=""><span class="hl-tag">正南门 · 核心遗址</span></div><div class="hl-name">丹凤门遗址保护建筑</div><div class="hl-desc">五门道形制为唐代城门最高等级，门式保护建筑覆盖原址。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/daminggong/highlight-2.jpg" alt=""><span class="hl-tag">外朝正殿</span></div><div class="hl-name">含元殿遗址</div><div class="hl-desc">踞龙首原高地，龙尾道迤逦而上，元日冬至大朝会在此举行。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/daminggong/highlight-3.jpg" alt=""><span class="hl-tag">宴饮接待</span></div><div class="hl-name">麟德殿遗址</div><div class="hl-desc">前中后三殿串联，皇家赐宴、接见外国使节的重要场所。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/daminggong/highlight-4.jpg" alt=""><span class="hl-tag">后寝园林</span></div><div class="hl-name">太液池遗址</div><div class="hl-desc">北部皇家园林湖泊，池中堆蓬莱山，帝后日常游赏之所。</div></div>
+        <div class="hl-card"><div class="hl-media placeholder"><span class="hl-tag">镇馆看点</span></div><div class="hl-name">大明宫遗址博物馆</div><div class="hl-desc">全地下建筑，藏1:15微缩大明宫全景沙盘与全息投影。</div></div>
+        <div class="hl-card"><div class="hl-media"><img src="../miniprogram/package-spot/assets/spot/daminggong/highlight-5.jpg" alt=""><span class="hl-tag">三朝制度</span></div><div class="hl-name">中轴朝堂全景</div><div class="hl-desc">沿南北中轴线外朝、中朝、内朝依次递进，前朝后寝典范。</div></div>
+      </div>
+    </div>
+
+    <!-- 5. 关联剧场（七张） -->
+    <div class="card">
+      <div class="title-h2">关联数字剧场</div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/danfengmen-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">丹凤门</div><div class="theater-scale">龙鳞 · 启程鳞</div><div class="theater-sub">大明宫正南门，五门道、天子由此出入，被誉为盛唐第一门。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/hanyuan-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">含元殿</div><div class="theater-scale">龙鳞 · 朝会鳞</div><div class="theater-sub">外朝正殿，龙尾道三折而上，元旦冬至大朝会于此。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/xuanzheng-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">宣政殿</div><div class="theater-scale">龙鳞 · 廊下鳞</div><div class="theater-sub">中朝正殿，朔望大朝、殿试册封之所，退朝百官领廊下食。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/zichen-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">紫宸殿</div><div class="theater-scale">龙鳞 · 召对鳞</div><div class="theater-sub">内朝正殿，群臣入閤，君臣近距离议政。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/taiyechi-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">太液池</div><div class="theater-scale">龙鳞 · 池苑鳞</div><div class="theater-sub">后寝中心，一池三山、蓬莱在望，皇家游宴赋诗之所。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/linde-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">麟德殿</div><div class="theater-scale">龙鳞 · 盛宴鳞</div><div class="theater-sub">三殿相连的宴饮大殿，大宴群臣、接见外宾，舞马百戏毕陈。</div><div class="theater-cta">进入剧场 →</div></div></div>
+      <div class="theater-card"><img src="../miniprogram/package-tour/assets/scenes/xuanwumen-restore.jpg" alt=""><div class="theater-info"><div class="theater-name">玄武门</div><div class="theater-scale">龙鳞 · 归愿鳞</div><div class="theater-sub">大明宫北门，云阙在此辨明玄武门之变误会，集齐七鳞投龙祈愿。</div><div class="theater-cta">进入剧场 →</div></div></div>
+    </div>
+
+    <!-- 6. 史料引用 -->
+    <div class="card">
+      <div class="title-h2">史料引用</div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">典籍</span><span class="cite-work">《唐会要》</span></div>
+        <div class="cite-chapter">卷三十 · 大明宫</div>
+        <div class="cite-quote">贞观八年十月，营永安宫。至九年正月，改名大明宫……至龙朔二年，高宗染风痹，以宫内湫湿，乃修旧大明宫，改名蓬莱宫。</div>
+        <div class="cite-note">记载大明宫始建、改名与龙朔营建始末。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">典籍</span><span class="cite-work">《全唐诗》</span></div>
+        <div class="cite-chapter">卷一百二十八 · 王维《和贾至舍人早朝大明宫之作》</div>
+        <div class="cite-quote">九天阊阖开宫殿，万国衣冠拜冕旒。</div>
+        <div class="cite-note">诗写大明宫早朝威仪，为盛唐宫廷气象名句。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">考古报告</span><span class="cite-work">国家文物局 · 陕西唐大明宫遗址</span></div>
+        <div class="cite-note">官方公布中轴线为丹凤门—含元殿—宣政殿—紫宸殿—太液池。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">考古报告</span><span class="cite-work">中国社会科学院考古研究所</span></div>
+        <div class="cite-note">历年发掘麟德殿、含元殿、玄武门、太液池等遗址，确认四十余处殿阁位置。</div>
+      </div>
+      <div class="cite">
+        <div class="cite-head"><span class="cite-kind">近现代研究</span><span class="cite-work">陕西省地方志办公室</span></div>
+        <div class="cite-note">宫区面积3.2平方公里，约为故宫4.5倍；唐代17位帝王在此朝寝。</div>
+      </div>
+    </div>
+
+    <!-- 到访信息 -->
+    <div class="card">
+      <div class="title-h2">到访信息</div>
+      <div class="info-row"><span class="info-k">开放</span><span class="info-v">开放时间以景区官方公示为准</span></div>
+      <div class="info-row"><span class="info-k">门票</span><span class="info-v">遗址公园开放区域及收费展馆门票以官方公示为准</span></div>
+      <div class="info-row"><span class="info-k">交通</span><span class="info-v">地铁4号线含元殿站/西安站；公交至大明宫丹凤门站；新城区太华南路</span></div>
+    </div>
+  </div>
+
+  <button class="btn-primary">跟随云阙巡游</button>
+
+  <div class="related">
+    <div class="title-h2">相关文创</div>
+    <div class="rel-scroll">
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-yunque-blindbox.jpg" alt=""></div><div class="rel-name">云阙盲盒</div><div class="rel-price">¥69</div></div>
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-shanhe-set.jpg" alt=""></div><div class="rel-name">山河套装</div><div class="rel-price">¥159</div></div>
+      <div class="rel-item"><div class="rel-cover"><img src="../miniprogram/assets/goods/g-ar-theater.jpg" alt=""></div><div class="rel-name">数字AR剧场券</div><div class="rel-price">¥39</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
