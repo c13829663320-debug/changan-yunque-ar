@@ -1,0 +1,52 @@
+/* 盛唐敦煌壁画美学 · Design Token
+   低饱和、沉静华贵：象牙白/月白/浅石青/淡青绿/浅赭，暗金与低饱和朱砂少量点缀 */
+page {
+  /* 主色 */
+  --ivory: #f4ecdd;          /* 象牙白 · 底 */
+  --ivory-deep: #ece1cd;
+  --moon: #e6ebea;           /* 月白 · 冷高光 */
+  --azurite: #8fa6ab;        /* 浅石青 */
+  --azurite-deep: #6f8b92;
+  --celadon: #a6bfae;        /* 淡青绿 */
+  --celadon-deep: #86a590;
+  --ochre: #c7a987;          /* 浅赭 */
+  --ochre-deep: #b08d68;
+
+  /* 点缀 */
+  --dark-gold: #a8893a;      /* 暗金 · 少量 */
+  --dark-gold-soft: #c2a668;
+  --cinnabar: #9e4a2a;       /* 低饱和朱砂 · 局部重心 */
+  --cinnabar-soft: #b06a4a;
+
+  /* 墨色文字 */
+  --ink: #463e36;
+  --ink-soft: #6a5f52;
+  --ink-muted: #93867a;
+
+  /* 语义 */
+  --bg: #f4ecdd;
+  --bg-card: #fbf6ec;
+  --bg-card-deep: #f1e8d6;
+  --line: #e0d4bf;
+
+  /* 字号 */
+  --fs-title: 44rpx;
+  --fs-h2: 34rpx;
+  --fs-body: 28rpx;
+  --fs-small: 24rpx;
+  --fs-mini: 20rpx;
+
+  /* 圆角与间距 */
+  --radius-lg: 24rpx;
+  --radius: 16rpx;
+  --radius-sm: 10rpx;
+  --space: 24rpx;
+
+  /* 阴影 · 克制 */
+  --shadow: 0 8rpx 30rpx rgba(90, 74, 50, 0.08);
+  --shadow-deep: 0 12rpx 40rpx rgba(90, 74, 50, 0.14);
+
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, "PingFang SC", "Songti SC", "Noto Serif SC", serif;
+}

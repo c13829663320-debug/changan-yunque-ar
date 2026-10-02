@@ -1,0 +1,24 @@
+<view class="page-wrap cart">
+  <block wx:if="{{items.length}}">
+    <view class="card cart-item" wx:for="{{items}}" wx:key="id">
+      <view class="ci-cover"><text class="ci-cat">{{item.categoryLabel}}</text></view>
+      <view class="ci-info">
+        <text class="ci-name">{{item.name}}</text>
+        <text class="ci-price">¥{{item.price}}</text>
+      </view>
+      <view class="ci-remove" data-id="{{item.id}}" catchtap="remove">移除</view>
+    </view>
+
+    <view class="card total-row">
+      <text class="total-label">合计（预售意向）</text>
+      <text class="total-price">¥{{total}}</text>
+    </view>
+    <button class="btn-primary checkout" bindtap="checkout">提交预售意向</button>
+    <text class="cart-note">提交后仅作意向登记，开售时优先通知，暂不扣款。</text>
+  </block>
+
+  <view class="empty" wx:else>
+    <text class="empty-text">购物车还是空的</text>
+    <button class="btn-primary empty-btn" bindtap="goMall">去商城逛逛</button>
+  </view>
+</view>

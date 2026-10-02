@@ -1,0 +1,66 @@
+<view class="home">
+  <view class="bg-mountains"></view>
+
+  <view class="page-wrap inner">
+    <!-- 云阙互动开场 -->
+    <view class="hero">
+      <view class="yunque-badge"><text class="yb-text">云阙</text></view>
+      <view class="bubble">
+        <text class="bubble-text">{{greeting}}</text>
+      </view>
+      <button class="btn-primary enter-btn" bindtap="onEnterPalace">随我入宫</button>
+      <text class="hint-text">一键直达丹凤门 · 约2分钟体验首个剧场</text>
+    </view>
+
+    <!-- 双模式入口 -->
+    <view class="mode-grid">
+      <view class="mode-card" bindtap="onCloudTour">
+        <text class="mode-word">云游</text>
+        <text class="mode-name">云游长安</text>
+        <text class="mode-desc">虚拟主线剧情，随处可玩</text>
+      </view>
+      <view class="mode-card outline" bindtap="onSiteTour">
+        <text class="mode-word">现场</text>
+        <text class="mode-name">现场巡游</text>
+        <text class="mode-desc">人在大明宫，AR复原集章</text>
+      </view>
+    </view>
+
+    <!-- 当前景点 -->
+    <view class="card spot-card" bindtap="goSpotDetail">
+      <view class="row-between">
+        <view>
+          <text class="title-h2">{{spot.name}}</text>
+          <view class="tag-row">
+            <text class="tag tag-gold" wx:for="{{spot.tags}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+        <text class="enter-arrow">›</text>
+      </view>
+      <text class="text-body spot-summary">{{spot.summary}}</text>
+    </view>
+
+    <!-- 甄选商品 -->
+    <view class="section">
+      <view class="row-between">
+        <text class="title-h2">云阙甄选</text>
+        <text class="text-muted link" bindtap="goMall">进商城 ›</text>
+      </view>
+      <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="goods-scroll">
+        <view
+          class="goods-item"
+          wx:for="{{featured}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="goGoods"
+        >
+          <view class="goods-cover">
+            <text class="goods-cat">{{item.categoryLabel}}</text>
+          </view>
+          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-price">¥{{item.price}} · 预售登记</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

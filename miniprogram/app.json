@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/tour/tour",
+    "pages/mall/mall",
+    "pages/mine/mine"
+  ],
+  "subpackages": [
+    {
+      "root": "package-tour",
+      "name": "tour",
+      "pages": [
+        "pages/scene/scene",
+        "pages/ar-camera/ar-camera"
+      ]
+    },
+    {
+      "root": "package-spot",
+      "name": "spot",
+      "pages": [
+        "pages/spot-detail/spot-detail"
+      ]
+    },
+    {
+      "root": "package-mall",
+      "name": "mallpkg",
+      "pages": [
+        "pages/goods-detail/goods-detail",
+        "pages/cart/cart",
+        "pages/intention/intention"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/tour/tour": {
+      "network": "all",
+      "packages": ["tour"]
+    }
+  },
+  "window": {
+    "navigationBarBackgroundColor": "#F4ECDD",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "长安云阙",
+    "backgroundColor": "#F4ECDD",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9A8E78",
+    "selectedColor": "#A65A2C",
+    "backgroundColor": "#FBF6EC",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "长安" },
+      { "pagePath": "pages/tour/tour", "text": "巡游" },
+      { "pagePath": "pages/mall/mall", "text": "云阙商城" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在大明宫现场触发AR巡游点位与剧情"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "onLocationChange",
+    "startCompass"
+  ],
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2"
+}

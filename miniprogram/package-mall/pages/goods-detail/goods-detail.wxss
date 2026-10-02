@@ -1,0 +1,41 @@
+.gd-cover {
+  height: 520rpx;
+  background: linear-gradient(160deg, #ece1cd, #ddcba9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gd-cat { font-size: var(--fs-h2); color: var(--dark-gold); letter-spacing: 4rpx; }
+
+.gd-body { padding-top: 24rpx; padding-bottom: 160rpx; }
+.gd-name { font-size: 40rpx; color: var(--ink); font-weight: 700; line-height: 1.4; display:block; }
+.gd-price-row { display: flex; align-items: baseline; gap: 18rpx; margin: 18rpx 0; }
+.gd-price { font-size: 44rpx; color: var(--cinnabar); font-weight: 700; }
+.gd-presale { font-size: var(--fs-small); color: var(--ink-muted); border:1rpx solid var(--line); border-radius:999rpx; padding:4rpx 16rpx; }
+.gd-tags { display: flex; flex-wrap: wrap; gap: 8rpx; }
+.para { display:block; margin-top:12rpx; }
+.ar-btn { margin-top: 4rpx; }
+
+/* AR */
+.ar-mask { position:fixed; inset:0; background:rgba(58,50,40,0.55); display:flex; align-items:center; justify-content:center; z-index:40; padding:40rpx; }
+.ar-frame { width:100%; background:linear-gradient(180deg,#dfe7e4,#eef0ea); border-radius:var(--radius-lg); padding:50rpx 36rpx 36rpx; display:flex; flex-direction:column; align-items:center; }
+.ar-object { width:220rpx; height:220rpx; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fbf6ec,#d8c4a4); border:2rpx solid var(--dark-gold-soft); margin-bottom:24rpx; animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14rpx)} }
+.ar-title { font-size:var(--fs-h2); color:var(--ink); font-weight:600; }
+.ar-tip { font-size:var(--fs-small); color:var(--ink-muted); text-align:center; line-height:1.6; margin:14rpx 0 26rpx; }
+.ar-done { width:100%; }
+
+/* 底部操作栏 */
+.gd-bar {
+  position: fixed; left:0; right:0; bottom:0;
+  display:flex; align-items:center; gap:16rpx;
+  background:var(--bg-card); border-top:1rpx solid var(--line);
+  padding:16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  z-index:30;
+}
+.bar-side { padding:0 14rpx; }
+.side-text { font-size:var(--fs-mini); color:var(--ink-soft); }
+.bar-cart, .bar-buy { flex:1; height:80rpx; border-radius:999rpx; font-size:28rpx; display:flex; align-items:center; justify-content:center; margin:0; padding:0; line-height:80rpx; }
+.bar-cart { background:var(--bg-card-deep); color:var(--ink-soft); border:1rpx solid var(--line); }
+.bar-buy { background:linear-gradient(135deg,var(--cinnabar),var(--ochre-deep)); color:#fbf3e4; }
+.bar-cart::after, .bar-buy::after { border:none; }

@@ -1,0 +1,81 @@
+.progress-head { padding-bottom: 30rpx; }
+
+.seg-group {
+  display: flex;
+  background: var(--bg-card-deep);
+  border-radius: 999rpx;
+  padding: 4rpx;
+}
+.seg {
+  padding: 10rpx 28rpx;
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  border-radius: 999rpx;
+}
+.seg.on { background: #fff; color: var(--cinnabar); box-shadow: var(--shadow); }
+
+.scale-line { margin: 24rpx 0 26rpx; }
+.scale-text { font-size: var(--fs-small); color: var(--ink-soft); }
+.scale-track {
+  height: 14rpx;
+  background: var(--bg-card-deep);
+  border-radius: 999rpx;
+  margin-top: 14rpx;
+  overflow: hidden;
+}
+.scale-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--dark-gold-soft), var(--dark-gold));
+  border-radius: 999rpx;
+  transition: width 0.3s;
+}
+.continue-btn { margin-top: 4rpx; }
+
+/* 路线卷轴 */
+.route { position: relative; padding-left: 8rpx; }
+.route-item { position: relative; display: flex; padding-bottom: 22rpx; }
+.route-item:not(:last-child) .node::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 64rpx;
+  transform: translateX(-50%);
+  width: 2rpx;
+  height: calc(100% - 40rpx);
+  background: var(--line);
+}
+.node {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: var(--bg-card-deep);
+  border: 2rpx solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.node-index { font-size: var(--fs-small); color: var(--ink-muted); }
+
+.route-card {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1rpx solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22rpx 24rpx;
+}
+.route-name { font-size: var(--fs-h2); font-weight: 600; color: var(--ink); }
+.route-state { font-size: var(--fs-mini); color: var(--ink-muted); }
+.route-role, .route-scale { display: block; font-size: var(--fs-mini); color: var(--ink-muted); margin-top: 8rpx; }
+
+/* 状态 */
+.route-item.completed .node { background: var(--dark-gold); border-color: var(--dark-gold); }
+.route-item.completed .node-index { color: #fbf3e4; }
+.route-item.completed .route-state { color: var(--dark-gold); }
+.route-item.unlocked .node { border-color: var(--cinnabar-soft); }
+.route-item.unlocked .node-index { color: var(--cinnabar); }
+.route-item.unlocked .route-state { color: var(--cinnabar); }
+.route-item.locked { opacity: 0.55; }

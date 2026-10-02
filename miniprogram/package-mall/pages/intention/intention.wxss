@@ -1,0 +1,15 @@
+.ok-head { text-align:center; }
+.ok-title { font-size:var(--fs-title); color:var(--dark-gold); font-weight:700; display:block; }
+.ok-sub { font-size:var(--fs-small); color:var(--ink-muted); display:block; margin-top:12rpx; line-height:1.6; }
+
+.int-item { display:flex; align-items:center; gap:18rpx; padding:20rpx; }
+.ii-cover { width:110rpx; height:110rpx; border-radius:var(--radius-sm); background:linear-gradient(160deg,#ece1cd,#e0d2b8); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ii-cover text { font-size:18rpx; color:var(--dark-gold); text-align:center; }
+.ii-info { flex:1; min-width:0; }
+.ii-name { font-size:var(--fs-small); color:var(--ink); line-height:1.4; display:block; }
+.ii-price { font-size:var(--fs-small); color:var(--cinnabar); display:block; margin-top:8rpx; }
+.ii-status { font-size:var(--fs-mini); color:var(--dark-gold); }
+
+.note-card { text-align:center; }
+.clear-btn { margin-bottom:16rpx; }
+.back-mall { margin-top:4rpx; }

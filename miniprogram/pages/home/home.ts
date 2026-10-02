@@ -1,0 +1,68 @@
+import { getSpot } from '../../data/repositories/spotRepo';
+import { getFeaturedGoods } from '../../data/repositories/goodsRepo';
+import { CATEGORY_LABEL, Goods } from '../../data/types/goods';
+import { getProgressStore } from '../../store/progress';
+
+interface FeaturedGoodsVM extends Goods {
+  categoryLabel: string;
+}
+
+Page({
+  data: {
+    greeting:
+      '你来了……我是云阙，一只从盛唐醒来的小走龙。随我入宫，一起去看看千宫之宫，还有那些少有人知的旧事，好不好？',
+    spot: getSpot('daminggong'),
+    featured: [] as FeaturedGoodsVM[],
+    scaleCount: 0,
+  },
+
+  onShow() {
+    const featured: FeaturedGoodsVM[] = getFeaturedGoods(6).map((g) => ({
+      ...g,
+      categoryLabel: CATEGORY_LABEL[g.category],
+    }));
+    this.setData({
+      featured,
+      scaleCount: getProgressStore().scaleCount,
+    });
+  },
+
+  /** 一键入宫：直达丹凤门剧场（云游模式） */
+  onEnterPalace() {
+    wx.navigateTo({
+      url: '/package-tour/pages/scene/scene?id=danfengmen&mode=cloud',
+    });
+  },
+
+  /** 云游长安：从巡游地图进入 */
+  onCloudTour() {
+    wx.switchTab({ url: '/pages/tour/tour' });
+  },
+
+  /** 现场巡游：切到巡游页并提示现场模式 */
+  onSiteTour() {
+    wx.switchTab({
+      url: '/pages/tour/tour',
+      success: () => {
+        wx.showToast({ title: '请在大明宫现场开启AR', icon: 'none' });
+      },
+    });
+  },
+
+  goSpotDetail() {
+    wx.navigateTo({
+      url: '/package-spot/pages/spot-detail/spot-detail?id=daminggong',
+    });
+  },
+
+  goGoods(e: WechatMiniprogram.TouchEvent) {
+    const id = (e.currentTarget.dataset as { id: string }).id;
+    wx.navigateTo({
+      url: `/package-mall/pages/goods-detail/goods-detail?id=${id}`,
+    });
+  },
+
+  goMall() {
+    wx.switchTab({ url: '/pages/mall/mall' });
+  },
+});

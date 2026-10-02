@@ -1,0 +1,23 @@
+<view class="ar-cam">
+  <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
+
+  <view class="cam-top">
+    <text class="cam-title">现场AR · {{sceneName}}</text>
+    <text class="cam-tip">将镜头对准点位解说牌或识别图</text>
+  </view>
+
+  <view class="cam-overlay" wx:if="{{detected}}">
+    <view class="overlay-palace">
+      <view class="ov-roof"></view>
+      <view class="ov-body"></view>
+    </view>
+    <text class="ov-label">{{sceneName}} · AR复原</text>
+  </view>
+
+  <view class="cam-bottom">
+    <button class="btn-primary detect-btn" bindtap="onDetect">
+      {{detected ? '重新识别' : '识别图中复原'}}
+    </button>
+    <text class="vk-status">{{vkStatus}}</text>
+  </view>
+</view>

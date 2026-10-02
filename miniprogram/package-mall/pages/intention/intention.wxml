@@ -1,0 +1,24 @@
+<view class="page-wrap intention">
+  <view class="card ok-head">
+    <text class="ok-title">意向已登记</text>
+    <text class="ok-sub">商品开售时将优先通知你，当前阶段暂不扣款。</text>
+  </view>
+
+  <block wx:if="{{items.length}}">
+    <view class="card int-item" wx:for="{{items}}" wx:key="id">
+      <view class="ii-cover"><text>{{item.categoryLabel}}</text></view>
+      <view class="ii-info">
+        <text class="ii-name">{{item.name}}</text>
+        <text class="ii-price">¥{{item.price}} · 预售</text>
+      </view>
+      <text class="ii-status">已登记</text>
+    </view>
+  </block>
+
+  <view class="card note-card">
+    <text class="text-muted">接入微信云开发后，意向单将同步至云端，并支持开售提醒与一键转正式订单。</text>
+  </view>
+
+  <button class="btn-ghost clear-btn" bindtap="clear">清空意向单</button>
+  <button class="btn-primary back-mall" bindtap="goMall">继续逛逛</button>
+</view>

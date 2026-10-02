@@ -1,0 +1,76 @@
+<view class="scene scene-tone-{{scene.index}}">
+  <!-- 舞台 -->
+  <view class="stage">
+    <view class="figure-wrap {{node.actor}}">
+      <view class="figure">
+        <text class="figure-word">{{figureLabel}}</text>
+      </view>
+      <view class="figure-shadow"></view>
+    </view>
+    <text class="place-tag">{{scene.name}} · {{scene.role}}</text>
+  </view>
+
+  <!-- AR 复原层 -->
+  <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
+    <view class="ar-frame" catchtap="noop">
+      <view class="ar-palace">
+        <view class="ar-roof"></view>
+        <view class="ar-body"></view>
+        <view class="ar-base"></view>
+      </view>
+      <text class="ar-title">AR 复原 · {{scene.name}}</text>
+      <text class="ar-tip">{{arTip}}</text>
+      <button class="btn-primary ar-continue" catchtap="closeAR">继续剧情</button>
+    </view>
+  </view>
+
+  <!-- 史料卡 -->
+  <view class="source-mask" wx:if="{{showSource}}" bindtap="closeSource">
+    <view class="source-panel" catchtap="noop">
+      <text class="s-title">{{scene.sourceCard.title}}</text>
+      <view class="s-work" wx:for="{{scene.sourceCard.works}}" wx:key="name">
+        <text class="work-name">{{item.name}}</text>
+        <text class="work-quote" wx:if="{{item.quote}}">「{{item.quote}}」</text>
+      </view>
+      <text class="s-note">{{scene.sourceCard.note}}</text>
+      <button class="btn-ghost s-close" catchtap="closeSource">我知道了</button>
+    </view>
+  </view>
+
+  <!-- 分支反馈 -->
+  <view class="feedback-bar" wx:if="{{showFeedback}}">
+    <text class="fb-name">{{feedback.actorName || ''}}</text>
+    <text class="fb-text">{{feedback.text}}</text>
+    <button class="btn-primary fb-continue" bindtap="dismissFeedback">继续</button>
+  </view>
+
+  <!-- 结算 -->
+  <view class="end-mask" wx:if="{{finished}}">
+    <view class="end-panel">
+      <view class="scale-circle"><text class="scale-word">{{scene.scaleName}}</text></view>
+      <text class="end-title">你获得一片龙鳞</text>
+      <text class="end-sub">龙鳞 {{scaleCount}} / {{total}}</text>
+      <button class="btn-primary" bindtap="goNext" wx:if="{{hasNext}}">前往下一点位</button>
+      <button class="btn-ghost end-back" bindtap="backMap">返回巡游地图</button>
+    </view>
+  </view>
+
+  <!-- 对话区 -->
+  <view class="dialog-bar" wx:if="{{!finished && !showFeedback}}">
+    <view class="actor-line">
+      <text class="a-name">{{actorDisplay}}</text>
+      <view class="source-mini" bindtap="openSource">史料卡</view>
+    </view>
+    <text class="d-text">{{node.text}}</text>
+    <view class="choices" wx:if="{{showChoices}}">
+      <button
+        class="choice-btn"
+        wx:for="{{node.choices}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onChoose"
+      >{{item.text}}</button>
+    </view>
+    <button class="btn-primary next-btn" wx:else bindtap="onNext">{{nextLabel}}</button>
+  </view>
+</view>

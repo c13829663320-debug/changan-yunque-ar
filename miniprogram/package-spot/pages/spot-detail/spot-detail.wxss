@@ -1,0 +1,34 @@
+.hero {
+  padding: 50rpx 34rpx 44rpx;
+  background:
+    radial-gradient(120% 100% at 50% 0%, rgba(166,191,174,0.35), transparent 70%),
+    linear-gradient(180deg, #ece1cd, #f1e9d8);
+}
+.hero-name { font-size: 46rpx; color: var(--ink); font-weight: 700; display: block; }
+.hero-sub { font-size: var(--fs-small); color: var(--ink-soft); display: block; margin: 12rpx 0 18rpx; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 10rpx; }
+
+.body { padding-top: 24rpx; }
+.para { display: block; margin-top: 14rpx; }
+
+.timeline { margin-top: 18rpx; }
+.tl-item { position: relative; padding-left: 36rpx; padding-bottom: 26rpx; }
+.tl-item:not(:last-child)::before { content:''; position:absolute; left:9rpx; top:18rpx; bottom:0; width:2rpx; background:var(--line); }
+.tl-dot { position:absolute; left:4rpx; top:10rpx; width:14rpx; height:14rpx; border-radius:50%; background:var(--dark-gold-soft); }
+.tl-year { font-size: var(--fs-small); color: var(--dark-gold); }
+.tl-title { font-size: var(--fs-body); color: var(--ink); font-weight:600; display:block; margin:6rpx 0; }
+.tl-desc { font-size: var(--fs-small); color: var(--ink-muted); line-height:1.6; }
+
+.relic { padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
+.relic:last-child { border-bottom:none; }
+.relic-name { font-size: var(--fs-body); color: var(--ink); font-weight:600; display:block; }
+.relic-desc { font-size: var(--fs-small); color: var(--ink-muted); line-height:1.6; margin-top:6rpx; display:block; }
+.info-line { font-size: var(--fs-small); color: var(--ink-soft); line-height:1.8; display:block; }
+
+.start-tour { margin: 8rpx 0 24rpx; }
+.rel-scroll { white-space:nowrap; margin-top:16rpx; }
+.rel-item { display:inline-flex; flex-direction:column; width:200rpx; margin-right:16rpx; vertical-align:top; }
+.rel-cover { height:200rpx; border-radius:var(--radius); background:linear-gradient(160deg,#ece1cd,#e0d2b8); display:flex; align-items:center; justify-content:center; margin-bottom:10rpx; }
+.rel-cover text { font-size:var(--fs-mini); color:var(--dark-gold); }
+.rel-name { font-size:var(--fs-mini); color:var(--ink); white-space:normal; height:56rpx; }
+.rel-price { font-size:var(--fs-mini); color:var(--cinnabar); margin-top:4rpx; }

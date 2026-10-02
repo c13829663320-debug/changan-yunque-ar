@@ -1,0 +1,17 @@
+{
+  "name": "changan-yunque-ar",
+  "version": "0.1.0",
+  "description": "长安云阙·AR文旅助手（微信小程序）",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc -p . --noEmit",
+    "lint": "eslint \"miniprogram/**/*.ts\""
+  },
+  "dependencies": {
+    "xr-frame": "^1.0.0"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^4.0.0",
+    "typescript": "^5.4.5"
+  }
+}

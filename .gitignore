@@ -1,0 +1,21 @@
+# 依赖与小程序构建产物
+node_modules/
+miniprogram_npm/
+cloudfunctions/**/node_modules/
+
+# 微信开发者工具
+project.private.config.json
+.cache/
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# 日志与环境变量
+*.log
+.env
+.env.local
+dist/

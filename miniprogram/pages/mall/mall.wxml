@@ -1,0 +1,22 @@
+<view class="page-wrap mall">
+  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
+    <view
+      class="cat {{activeCat === item.id ? 'on' : ''}}"
+      wx:for="{{categories}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onFilter"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <view class="goods-grid">
+    <view class="grid-item" wx:for="{{goods}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="grid-cover"><text class="cover-cat">{{item.categoryLabel}}</text></view>
+      <text class="grid-name">{{item.name}}</text>
+      <view class="row-between">
+        <text class="grid-price">¥{{item.price}}</text>
+        <text class="presale-tag">预售登记</text>
+      </view>
+    </view>
+  </view>
+</view>

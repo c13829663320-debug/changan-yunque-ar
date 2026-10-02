@@ -1,0 +1,41 @@
+<view class="page-wrap tour">
+  <!-- 进度与模式 -->
+  <view class="card progress-head">
+    <view class="row-between">
+      <text class="title-h2">云阙AR巡游</text>
+      <view class="seg-group">
+        <view class="seg {{mode==='cloud'?'on':''}}" data-mode="cloud" bindtap="switchMode">云游</view>
+        <view class="seg {{mode==='onsite'?'on':''}}" data-mode="onsite" bindtap="switchMode">现场</view>
+      </view>
+    </view>
+    <view class="scale-line">
+      <text class="scale-text">龙鳞 {{scaleCount}} / {{total}}</text>
+      <view class="scale-track">
+        <view class="scale-fill" style="width:{{percent}}%"></view>
+      </view>
+    </view>
+    <button class="btn-primary continue-btn" bindtap="onContinue">{{continueText}}</button>
+  </view>
+
+  <!-- 路线卷轴 -->
+  <view class="route">
+    <view
+      class="route-item {{item.state}}"
+      wx:for="{{scenes}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      data-state="{{item.state}}"
+      bindtap="onTapScene"
+    >
+      <view class="node"><text class="node-index">{{item.index}}</text></view>
+      <view class="route-card">
+        <view class="row-between">
+          <text class="route-name">{{item.name}}</text>
+          <text class="route-state">{{item.stateLabel}}</text>
+        </view>
+        <text class="route-role">你将成为：{{item.role}}</text>
+        <text class="route-scale">龙鳞 · {{item.scaleName}}</text>
+      </view>
+    </view>
+  </view>
+</view>

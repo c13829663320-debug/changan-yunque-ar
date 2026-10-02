@@ -1,0 +1,25 @@
+<view class="mine">
+  <view class="mine-head">
+    <view class="avatar"></view>
+    <text class="mine-name">云阙旅人</text>
+    <text class="mine-sub">已集 {{scaleCount}} 片龙鳞 · 走过 {{stampCount}} 处</text>
+  </view>
+
+  <view class="page-wrap mine-body">
+    <view class="stat-grid">
+      <view class="stat"><text class="stat-num">{{scaleCount}}</text><text class="stat-label">龙鳞</text></view>
+      <view class="stat"><text class="stat-num">{{stampCount}}</text><text class="stat-label">集章</text></view>
+      <view class="stat"><text class="stat-num">0</text><text class="stat-label">数藏</text></view>
+    </view>
+
+    <view class="card menu">
+      <view class="menu-item" data-k="intention" bindtap="onMenu"><text class="m-label">我的意向单</text><text class="m-arrow">›</text></view>
+      <view class="menu-item" data-k="booking" bindtap="onMenu"><text class="m-label">体验预约</text><text class="m-arrow">›</text></view>
+      <view class="menu-item" data-k="source" bindtap="onMenu"><text class="m-label">史料卡收藏</text><text class="m-arrow">›</text></view>
+      <view class="menu-item" data-k="share" bindtap="onMenu"><text class="m-label">我的祈愿分享</text><text class="m-arrow">›</text></view>
+      <view class="menu-item" data-k="about" bindtap="onMenu"><text class="m-label">关于长安云阙</text><text class="m-arrow">›</text></view>
+    </view>
+
+    <button class="btn-ghost reset-btn" bindtap="onReset">重置巡游进度</button>
+  </view>
+</view>
