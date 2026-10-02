@@ -10,26 +10,49 @@ Page({
     categoryLabel: '',
     showAR: false,
     arTip: '',
+    activeImage: '',
+    thumbList: [] as { url: string }[],
+    isSummoning: false,
   },
+
+  _summonTimer: 0 as number,
 
   onLoad(query) {
     const id = query?.id || '';
     const goods = getGoods(id);
+    const gallery = goods?.gallery || [];
+    const cover = goods?.cover || '';
+    // gallery 缩略条：本地封面 + 高清网络图
+    const thumbList = [cover, ...gallery].filter(Boolean).map((url) => ({ url: url as string }));
+    const hasGlb = !!goods?.arPreview && /\.glb($|\?)/.test(goods.arPreview);
     this.setData({
       goods: goods || null,
       categoryLabel: goods ? CATEGORY_LABEL[goods.category] : '',
+      activeImage: cover,
+      thumbList,
+      arTip: hasGlb
+        ? '已接入 XRFrame 后将可 360° 旋转查看商品模型；当前以封面示意召唤效果。'
+        : '将镜头对准商品或实物卡片，云阙会为你召唤文物故事与讲解。',
     });
+  },
+
+  pickImage(e: WechatMiniprogram.TouchEvent) {
+    const url = (e.currentTarget.dataset as { url: string }).url;
+    if (url) this.setData({ activeImage: url });
   },
 
   previewAR() {
-    this.setData({
-      showAR: true,
-      arTip: 'M1接入XRFrame后将呈现商品3D模型；扫描实物可召唤云阙与文物讲解',
-    });
+    clearTimeout(this._summonTimer);
+    this.setData({ showAR: true, isSummoning: true });
+    // 召唤动效结束后进入「已召唤」态（无 glb 时用封面优雅示意）
+    this._summonTimer = setTimeout(() => {
+      this.setData({ isSummoning: false });
+    }, 1800);
   },
 
   closeAR() {
-    this.setData({ showAR: false });
+    clearTimeout(this._summonTimer);
+    this.setData({ showAR: false, isSummoning: false });
   },
 
   noop() {},
