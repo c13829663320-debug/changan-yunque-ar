@@ -1,0 +1,30 @@
+<view class="marker-layer">
+  <!-- 真机 VKSession：webgl 相机画布（YUV 相机背景 + 复原图透视叠加） -->
+  <canvas
+    wx:if="{{!simulate}}"
+    type="webgl"
+    id="arCanvas"
+    canvas-id="arCanvas"
+    class="ar-canvas"
+  ></canvas>
+
+  <!-- 模拟路径：主题背景 + 复原图叠加（无真机也能演示，绝不黑白屏） -->
+  <view wx:if="{{simulate}}" class="sim-stage">
+    <image
+      wx:if="{{themeBg}}"
+      class="sim-bg"
+      src="{{themeBg}}"
+      mode="aspectFill"
+    ></image>
+    <view wx:else class="sim-bg sim-bg-gradient"></view>
+
+    <view wx:if="{{!overlayOn}}" class="sim-hint">正在模拟识别 marker，请对准识别图…</view>
+
+    <image
+      wx:if="{{overlayOn && restoreSrc}}"
+      class="sim-restore {{overlayOn ? 'sim-restore-in' : ''}}"
+      src="{{restoreSrc}}"
+      mode="aspectFit"
+    ></image>
+  </view>
+</view>
