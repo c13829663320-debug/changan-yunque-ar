@@ -11,7 +11,10 @@
 
   <view class="goods-grid">
     <view class="grid-item" wx:for="{{goods}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
-      <view class="grid-cover"><text class="cover-cat">{{item.categoryLabel}}</text></view>
+      <view class="grid-cover">
+        <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill"></image>
+        <text wx:else class="cover-cat">{{item.categoryLabel}}</text>
+      </view>
       <text class="grid-name">{{item.name}}</text>
       <view class="row-between">
         <text class="grid-price">¥{{item.price}}</text>

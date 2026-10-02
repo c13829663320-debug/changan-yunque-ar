@@ -3,8 +3,11 @@
 
   <view class="page-wrap inner">
     <!-- 云阙互动开场 -->
-    <view class="hero">
-      <view class="yunque-badge"><text class="yb-text">云阙</text></view>
+    <view class="hero {{entered ? 'entered' : ''}}">
+      <view class="yunque-badge">
+        <image class="yunque-portrait" src="/assets/characters/yunque-dragon.jpg" mode="aspectFill"></image>
+        <view class="yunque-halo"></view>
+      </view>
       <view class="bubble">
         <text class="bubble-text">{{greeting}}</text>
       </view>
@@ -55,7 +58,8 @@
           bindtap="goGoods"
         >
           <view class="goods-cover">
-            <text class="goods-cat">{{item.categoryLabel}}</text>
+            <image wx:if="{{item.cover}}" class="goods-cover-img" src="{{item.cover}}" mode="aspectFill"></image>
+            <text wx:else class="goods-cat">{{item.categoryLabel}}</text>
           </view>
           <text class="goods-name">{{item.name}}</text>
           <text class="goods-price">¥{{item.price}} · 预售登记</text>
