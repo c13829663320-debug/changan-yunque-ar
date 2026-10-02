@@ -5,7 +5,7 @@ import { ScenePoint } from '../../types/scene';
  * 用户身份：退朝赴廊下食的常参官。
  * 史料红线：贞观四年（630）唐太宗诏光禄寺于朝堂外廊按品级供给、约四菜一汤；
  *           始设时大明宫尚未建成（634 始建、663 启用），先在太极宫，后延续至大明宫。
- * 坐标 / intro / 史料卡 / 身份 / 龙鳞取值复用自 others.meta.ts（只读）。
+ * 坐标 / intro / sourceCard / 身份 / 龙鳞取值复用自 others.meta.ts（只读）。
  */
 const xuanzheng: ScenePoint = {
   id: 'xuanzheng',
@@ -35,7 +35,7 @@ const xuanzheng: ScenePoint = {
     {
       id: 'xz-1',
       actor: 'narrator',
-      text: '朔望大朝刚散，宣政殿外廊。晨光斜过廊柱，光禄寺小吏把食案排开，百官退到廊下。',
+      text: '朔望大朝刚散，宣政殿外廊。晨光斜过廊柱，光禄寺小吏排开食案，百官退到廊下。',
       action: { type: 'look_around' },
     },
     {
@@ -100,7 +100,7 @@ const xuanzheng: ScenePoint = {
       id: 'xz-8',
       actor: 'liguan',
       actorName: '光禄寺礼官',
-      text: '这「廊下食」的由来，史料卡写明，点开一观。',
+      text: '这「廊下食」是贞观年间的旧制，说来还有一段体恤百官的缘故。',
       action: { type: 'open_source_card' },
     },
     {
@@ -113,7 +113,7 @@ const xuanzheng: ScenePoint = {
       id: 'xz-10',
       actor: 'liguan',
       actorName: '光禄寺礼官',
-      text: '（点头赞许）使君灵醒。此制初设于太极宫朝堂外廊；大明宫启用后移到这宣政殿外廊，一沿百年。',
+      text: '（点头赞许）使君灵醒。此制初设于太极宫朝堂外廊；大明宫启用后移到这宣政殿外廊，相沿百年。',
     },
     {
       id: 'xz-11',

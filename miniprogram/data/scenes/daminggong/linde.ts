@@ -3,7 +3,7 @@ import { ScenePoint } from '../../types/scene';
 /**
  * 点位 6 · 麟德殿（重剧场）
  * 身份：国宴宾客/外邦使节；龙鳞：盛宴鳞
- * 闭环：look_around → choices(敬酒礼节/座次) → ar_restore(宴饮舞马) → open_source_card(史料卡) → collect_scale
+ * 闭环：look_around → choices(敬酒礼节/座次) → ar_restore(宴饮舞马) → open_source_card → collect_scale
  */
 const linde: ScenePoint = {
   id: 'linde',
@@ -49,7 +49,7 @@ const linde: ScenePoint = {
     {
       id: 'ld-4',
       actor: 'narrator',
-      text: '你侧目，邻席卷发高鼻、服饰各异的外邦使节正打量百戏；阶下竿木攀缘、舞旋翻飞、幻术吐火，一片喧腾。',
+      text: '你侧目望去，邻席上尽是卷发高鼻、服饰各异的外邦使节，正打量百戏；阶下竿木攀缘、舞旋翻飞、幻术吐火，一片喧腾。',
     },
     {
       id: 'ld-6',
@@ -101,7 +101,7 @@ const linde: ScenePoint = {
     {
       id: 'ld-10',
       actor: 'narrator',
-      text: '盛唐宫中专养舞马，宴则衔杯上寿。何家村银壶正是它模样，史料卡可一观。',
+      text: '盛唐宫中常养舞马，宴则衔杯上寿；何家村出土的银壶，铸的正是它的模样。',
       action: { type: 'open_source_card' },
     },
     {

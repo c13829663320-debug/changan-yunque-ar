@@ -4,8 +4,8 @@ import { ScenePoint } from '../../types/scene';
  * 点位 4 · 紫宸殿「入閤召对」（重剧场 · Line2）
  * 用户身份：被天子召对的近臣。
  * 氛围红线：殿内只余近臣，廊下一角一名宦官垂手肃立；以克制方式埋晚唐宦官权势渐重伏笔
- *           （史料卡背景含甘露之变 835），人物不穿越、不预演具体事件，只作氛围与史实说明。
- * 坐标 / intro / 史料卡 / 身份 / 龙鳞取值复用自 others.meta.ts（只读）。
+ *           （sourceCard 背景含甘露之变 835），人物不穿越、不预演具体事件，只作氛围与史实说明。
+ * 坐标 / intro / sourceCard / 身份 / 龙鳞取值复用自 others.meta.ts（只读）。
  */
 const zichen: ScenePoint = {
   id: 'zichen',
@@ -46,7 +46,7 @@ const zichen: ScenePoint = {
       id: 'zc-3',
       actor: 'liguan',
       actorName: '閤门值卫',
-      text: '召对禁言笑。天子垂问，据实而奏；退朝依序而出，不得喧呼。史料卡可一观。',
+      text: '召对禁言笑。天子垂问，据实而奏；退朝依序而出，不得喧呼。',
       action: { type: 'open_source_card' },
     },
     {

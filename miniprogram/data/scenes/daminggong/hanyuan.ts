@@ -150,7 +150,7 @@ const hanyuan: ScenePoint = {
       id: 'hy-16',
       actor: 'envoy',
       actorName: '同列异国使臣',
-      text: '往日只在国书中读到「九天阊阖」，今日亲见，这便是大唐天子气象。史料卡可一观。',
+      text: '往日只在国书中读到「九天阊阖」，今日亲见，方知大唐天子气象。',
       action: { type: 'open_source_card' },
     },
     {

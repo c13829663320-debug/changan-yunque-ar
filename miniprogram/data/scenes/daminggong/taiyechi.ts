@@ -3,7 +3,7 @@ import { ScenePoint } from '../../types/scene';
 /**
  * 点位 5 · 太液池（重剧场）
  * 身份：随游后苑的近臣；龙鳞：池苑鳞
- * 闭环：look_around → choices(临池对句) → ar_restore(一池三山) → open_source_card(史料卡) → collect_scale
+ * 闭环：look_around → choices(临池对句) → ar_restore(一池三山) → open_source_card → collect_scale
  */
 const taiyechi: ScenePoint = {
   id: 'taiyechi',
@@ -98,7 +98,7 @@ const taiyechi: ScenePoint = {
     {
       id: 'tyc-9',
       actor: 'narrator',
-      text: '贺拾遗闲闲道：这套「一池三山」自秦汉沿用至今。史料卡可一观。',
+      text: '贺拾遗闲闲道：这套「一池三山」的章法，自秦汉便沿用至今。',
       action: { type: 'open_source_card' },
     },
     {

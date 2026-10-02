@@ -77,7 +77,7 @@ const danfengmen: ScenePoint = {
       id: 'dfm-5',
       actor: 'liguan',
       actorName: '守门礼官',
-      text: '此乃丹凤门，大明宫正门。史料卡可一观。',
+      text: '此乃丹凤门，大明宫正门，五门道，天子由此出入。',
       action: { type: 'open_source_card' },
     },
     {
