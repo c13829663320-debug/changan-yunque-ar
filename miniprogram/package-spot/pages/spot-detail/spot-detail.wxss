@@ -32,3 +32,29 @@
 .rel-cover text { font-size:var(--fs-mini); color:var(--dark-gold); }
 .rel-name { font-size:var(--fs-mini); color:var(--ink); white-space:normal; height:56rpx; }
 .rel-price { font-size:var(--fs-mini); color:var(--cinnabar); margin-top:4rpx; }
+
+/* ===== 提质：图片位（数据驱动，无图自动回退，模板可复用） ===== */
+.hero { position: relative; overflow: hidden; }
+.hero-img { padding: 0; min-height: 360rpx; display: flex; align-items: flex-end; }
+.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(70,62,54,0.05) 0%, rgba(70,62,54,0.55) 100%);
+}
+.hero-inner { position: relative; z-index: 2; padding: 50rpx 34rpx 44rpx; width: 100%; }
+.hero-img .hero-name { color: #fbf6ec; text-shadow: 0 2rpx 10rpx rgba(0,0,0,0.35); }
+.hero-img .hero-sub { color: rgba(251,246,236,0.9); }
+
+.ov-img, .tl-banner {
+  width: 100%; display: block; border-radius: var(--radius);
+  margin: 16rpx 0 4rpx; border: 1rpx solid var(--line);
+  box-shadow: 0 6rpx 20rpx rgba(70,62,54,0.10);
+}
+.tl-banner { margin-top: 4rpx; }
+
+.relic-img {
+  width: 100%; display: block; border-radius: var(--radius);
+  margin-bottom: 14rpx; border: 1rpx solid var(--line);
+}
+.rel-cover { overflow: hidden; position: relative; }
+.rel-cover-img { width: 100%; height: 100%; }

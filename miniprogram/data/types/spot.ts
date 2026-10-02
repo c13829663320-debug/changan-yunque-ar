@@ -4,6 +4,8 @@ export interface SpotTimelineItem {
   year: string;
   title: string;
   desc: string;
+  /** 可选：该节点配图（向后兼容，模板按需渲染） */
+  image?: string;
 }
 
 export interface SpotRelic {
@@ -24,6 +26,10 @@ export interface Spot {
   subtitle: string;
   city: string;
   cover?: string;
+  /** 概览图（景点概览卡配图，向后兼容可选） */
+  overviewImage?: string;
+  /** 时间线长图（历史时间线卡顶部配图，向后兼容可选） */
+  timelineImage?: string;
   /** 一段话定位 */
   summary: string;
   tags: string[];

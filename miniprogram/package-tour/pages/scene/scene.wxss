@@ -112,6 +112,7 @@
 .end-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
 .end-sub { font-size: var(--fs-small); color: var(--ink-muted); margin: 10rpx 0 28rpx; }
 .end-back { width: 100%; margin-top: 16rpx; }
+.end-share { width: 100%; margin-top: 16rpx; }
 
 /* ===== 美术接线（数据驱动，见 docs/frontend-art-spec.md）===== */
 /* 舞台背景 */
