@@ -1,0 +1,15 @@
+<view class="sc-mask" wx:if="{{visible}}" bindtap="onMask">
+  <view class="sc-panel" catchtap="noop">
+    <text class="sc-title">你的祈愿分享卡</text>
+    <text class="sc-sub">投龙于山川 · 愿已寄出</text>
+
+    <view class="sc-canvas-wrap">
+      <canvas type="2d" id="shareCanvas" class="sc-canvas"></canvas>
+      <view class="sc-loading" wx:if="{{drawing}}">绘制中…</view>
+    </view>
+
+    <button class="btn-primary sc-save" bindtap="onSave">保存到相册</button>
+    <button class="btn-ghost sc-share" open-type="share">分享给好友</button>
+    <button class="sc-close" bindtap="onClose">返回巡游</button>
+  </view>
+</view>
