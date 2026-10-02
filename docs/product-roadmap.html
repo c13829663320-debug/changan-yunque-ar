@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长安云阙 · 产品目标与路线图</title>
+<style>
+  :root{
+    --ivory:#f4ecdd; --card:#fbf6ec; --ink:#463e36; --ink-soft:#6f655a; --ink-muted:#9a8f80;
+    --gold:#a8893a; --gold-soft:#d8c4a4; --cinnabar:#9e4a2a; --celadon:#a6bfae; --azurite:#8fa6ab; --line:#e3d8c3;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--ivory); color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif; line-height:1.6;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px 60px;}
+
+  /* banner */
+  .banner{padding:54px 0 30px; border-bottom:1px solid var(--line); margin-bottom:34px;}
+  .kicker{font-size:13px; letter-spacing:6px; color:var(--gold); }
+  .banner h1{font-size:40px; margin:10px 0 14px; letter-spacing:2px;}
+  .banner .vision{font-size:18px; color:var(--ink-soft); max-width:760px;}
+  .banner .vision b{color:var(--cinnabar); font-weight:600;}
+
+  h2{font-size:21px; margin:42px 0 18px; padding-left:14px; border-left:4px solid var(--gold); letter-spacing:1px;}
+
+  .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px;}
+  .card .ic{font-size:22px; }
+  .card h3{margin:8px 0 8px; font-size:17px;}
+  .card p{margin:0; font-size:14px; color:var(--ink-soft);}
+  .card ul{margin:8px 0 0; padding-left:18px; font-size:13.5px; color:var(--ink-soft);}
+  .card li{margin-bottom:4px;}
+
+  /* 成功标尺 */
+  .metrics{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .metric{background:linear-gradient(160deg,#fbf6ec,#f3ead9); border:1px solid var(--line); border-radius:14px; padding:20px 22px;}
+  .metric .n{font-size:15px; color:var(--gold); font-weight:700; letter-spacing:1px;}
+  .metric .t{font-size:15px; margin-top:6px;}
+
+  /* 路线图时间轴 */
+  .roadmap{position:relative; margin-top:10px;}
+  .phases{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .phase{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; position:relative;}
+  .phase .status{display:inline-block; font-size:12px; padding:3px 12px; border-radius:999px; margin-bottom:10px;}
+  .done .status{background:#e2ece4; color:#4f7a5c;}
+  .doing .status{background:#f6e6cf; color:var(--cinnabar);}
+  .todo .status{background:#e7eceb; color:var(--azurite);}
+  .phase h3{margin:0 0 4px; font-size:18px;}
+  .phase .when{font-size:12.5px; color:var(--ink-muted); margin-bottom:12px;}
+  .phase ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink-soft);}
+  .phase li{margin-bottom:5px;}
+
+  /* 五窗口 */
+  .lanes{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+  .lane{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 14px;}
+  .lane .ln{font-size:12px; color:#fff; background:var(--gold); border-radius:6px; display:inline-block; padding:2px 9px; margin-bottom:9px;}
+  .lane h4{margin:0 0 7px; font-size:14.5px; line-height:1.4;}
+  .lane p{margin:0; font-size:12.5px; color:var(--ink-soft); line-height:1.55;}
+
+  /* 红线 */
+  .rules{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .rule{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--cinnabar); border-radius:10px; padding:15px 18px; font-size:14px; color:var(--ink-soft);}
+  .rule b{color:var(--ink);}
+
+  .deadline{margin-top:40px; text-align:center; background:linear-gradient(135deg,#463e36,#5c5142); color:#f4ecdd; border-radius:16px; padding:26px;}
+  .deadline .big{font-size:24px; letter-spacing:2px;}
+  .deadline .sub{font-size:13.5px; color:#cfc4b0; margin-top:8px;}
+
+  @media(max-width:860px){
+    .cards,.metrics,.phases,.rules{grid-template-columns:1fr;}
+    .lanes{grid-template-columns:1fr 1fr;}
+    .banner h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner">
+    <div class="kicker">WECHAT MINI PROGRAM · AR CULTURAL TOUR</div>
+    <h1>长安云阙 · AR文旅助手</h1>
+    <div class="vision">跟着赤金走龙「云阙」，在盛唐宫阙与今日遗址之间，<b>把长安走一遍、把典故听一遍、把「长安」带回家</b>。首个景点为大明宫国家遗址公园，后续以可复用模板扩展到更多文旅景点。</div>
+  </div>
+
+  <h2>成功标尺（M1 结束时可验证）</h2>
+  <div class="metrics">
+    <div class="metric"><div class="n">标尺 01</div><div class="t">评委无需到现场，云游模式约 10–15 分钟走完全部七剧场、集齐七片龙鳞。</div></div>
+    <div class="metric"><div class="n">标尺 02</div><div class="t">现场游客 AR 复原七点位，每个典故都有可溯源史料卡，史实零硬伤。</div></div>
+    <div class="metric"><div class="n">标尺 03</div><div class="t">商城预售闭环可演示：浏览 → AR 预览 → 加购/意向登记 → 意向单。</div></div>
+  </div>
+
+  <h2>三大功能</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="ic">🏛️</div>
+      <h3>景点数字馆</h3>
+      <p>数据驱动、可复用的景点介绍模板。</p>
+      <ul><li>历史时间线 / 主要看点 / 到访信息</li><li>大明宫为首个实例，填数据即可扩展</li></ul>
+    </div>
+    <div class="card">
+      <div class="ic">🐉</div>
+      <h3>云阙 AR 巡游</h3>
+      <p>七点位互动小剧场，云游 / 现场双模式。</p>
+      <ul><li>中轴为骨、集七片龙鳞为线、兴衰为底</li><li>轻分支、AR 复原、史料卡、云阙懵懂同伴</li></ul>
+    </div>
+    <div class="card">
+      <div class="ic">🛍️</div>
+      <h3>云阙商城</h3>
+      <p>商品展示 ＋ 预售 / 意向登记。</p>
+      <ul><li>六类目、14 SKU、文物灵感文创</li><li>AR 预览，暂不接真实支付与履约</li></ul>
+    </div>
+  </div>
+
+  <h2>里程碑路线图</h2>
+  <div class="phases">
+    <div class="phase done">
+      <span class="status">✓ 已完成</span>
+      <h3>M0 · 地基与样板</h3>
+      <div class="when">10-03 凌晨 · 已推送 main</div>
+      <ul>
+        <li>原生 TS 工程、4 Tab、三分包</li>
+        <li>数据层 / Design Token / 官方核心形象</li>
+        <li>首页开场、巡游地图、丹凤门样板剧场</li>
+      </ul>
+    </div>
+    <div class="phase doing">
+      <span class="status">● 进行中</span>
+      <h3>M1 · 五窗口并行</h3>
+      <div class="when">10-03 白天 · 五条线同步开发</div>
+      <ul>
+        <li>剩余六剧场全部做重、可走通</li>
+        <li>数字馆与商城成型、前端精修</li>
+        <li>Seedream 5.0 Pro 生图 / Seedance 2.5 生视频</li>
+      </ul>
+    </div>
+    <div class="phase todo">
+      <span class="status">○ 待开始</span>
+      <h3>M2 · 集成与交付</h3>
+      <div class="when">10-03 晚 → 10-04 08:00</div>
+      <ul>
+        <li>五线合并、云开发接入、统一联调</li>
+        <li>真机走查、bug 回归、静态校验</li>
+        <li>演示录屏与交付文档</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>M1 · 五个窗口分工</h2>
+  <div class="lanes">
+    <div class="lane"><span class="ln">Line 1</span><h4>开场线</h4><p>含元殿重剧场＋丹凤门美术提质</p></div>
+    <div class="lane"><span class="ln">Line 2</span><h4>廊下线</h4><p>宣政殿廊下食＋紫宸殿</p></div>
+    <div class="lane"><span class="ln">Line 3</span><h4>后寝线</h4><p>太液池＋麟德殿舞马宴</p></div>
+    <div class="lane"><span class="ln">Line 4</span><h4>终章线</h4><p>玄武门纠偏/投龙/分享卡＋数字馆</p></div>
+    <div class="lane"><span class="ln">Line 5</span><h4>商城全局</h4><p>商品图/商城/首页打磨/云开发/视频</p></div>
+  </div>
+
+  <h2>红线与约束（不可逾越）</h2>
+  <div class="rules">
+    <div class="rule"><b>史实准确：</b>玄武门之变在太极宫、非大明宫；廊下食始设时大明宫尚未建成。终章主动纠偏。</div>
+    <div class="rule"><b>史料可溯源：</b>每个典故标注出处（《唐六典》《唐会要》《旧唐书》《资治通鉴》等）。</div>
+    <div class="rule"><b>文物合规：</b>统一标注「文物灵感 / AIGC 再现」，不冒充原文物、不夸大祈福功效。</div>
+    <div class="rule"><b>形象统一：</b>云阙/走龙一律基于官方核心形象延展，禁止凭空重画；真人历史人物只做符合史载之事。</div>
+  </div>
+
+  <div class="deadline">
+    <div class="big">交付截止：2026-10-04 08:00（Asia/Shanghai）</div>
+    <div class="sub">仓库 github.com/c13829663320-debug/changan-yunque-ar（私有）· 各分支及时推送 · 集成后 main 为可演示版本</div>
+  </div>
+
+</div>
+</body>
+</html>
