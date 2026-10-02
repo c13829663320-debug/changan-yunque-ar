@@ -1,11 +1,15 @@
 import { Goods } from '../types/goods';
 
 /**
- * 云阙商城商品目录（M0 演示数据，预售/意向登记模式）
- * 价格与设定对齐商业方案 SKU；文物相关统一标注「文物灵感 / AIGC 再现」
+ * 云阙商城商品目录（M1 数据层切换，预售/意向登记模式）
+ * 价格与设定对齐商业方案 SKU。
  *
- * cover：主包本地封面 /assets/goods/<id>.jpg（≤90KB，离线可显示，商城列表与详情首图）
- * gallery：高清母版网络图（接入云开发后需在小程序后台配置 downloadFile 合法域名）
+ * cover：主包本地封面 /assets/goods/<id>.jpg（≤95KB，离线可显示，商城列表与详情首图）
+ * gallery：分包 package-mall 本地多图（/package-mall/assets/gallery/<id>-*.jpg），
+ *          不再使用第三方分享外链（小程序 <image> 无法可靠渲染且无需配 downloadFile 域名）。
+ * culturalNote：
+ *   - 文物类 4 件统一醒目声明「文物灵感 / AIGC 再现，非原文物」，其后补充原型说明；
+ *   - 原创 IP 3 件保留「原创IP云阙…」措辞，绝不出现「文物灵感」。
  */
 const catalog: Goods[] = [
   {
@@ -15,9 +19,12 @@ const catalog: Goods[] = [
     price: 3980,
     presale: true,
     cover: '/assets/goods/g-sx-nangnang.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/FG6hwYrt6q'],
+    gallery: [
+      '/package-mall/assets/gallery/g-sx-nangnang-2.jpg',
+      '/package-mall/assets/gallery/g-sx-nangnang-3.jpg',
+    ],
     desc: '依何家村窖藏银香囊形制复刻，镂空葡萄花鸟、内置陀螺仪同心环，附收藏证书。',
-    culturalNote: '文物灵感 / AIGC 再现，原型为陕西历史博物馆何家村窖藏银香囊，非原文物。',
+    culturalNote: '文物灵感 / AIGC 再现，非原文物。原型为陕西历史博物馆何家村窖藏银香囊。',
     arPreview: 'models/nangnang.glb',
     tags: ['典藏', '何家村', '限量编号'],
     sales: 0,
@@ -29,7 +36,10 @@ const catalog: Goods[] = [
     price: 69,
     presale: true,
     cover: '/assets/goods/g-yunque-blindbox.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/WeOaycmwYy'],
+    gallery: [
+      '/package-mall/assets/gallery/g-yunque-blindbox-2.jpg',
+      '/package-mall/assets/gallery/g-yunque-blindbox-3.jpg',
+    ],
     desc: '六款常规姿态＋隐藏款，每只萌龙附一段投龙祈愿故事卡。',
     culturalNote: '原创IP云阙，灵感源自唐代赤金走龙。',
     tags: ['盲盒', '萌龙', '走量'],
@@ -42,7 +52,10 @@ const catalog: Goods[] = [
     price: 89,
     presale: true,
     cover: '/assets/goods/g-city-blindbox.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/qZnK2Tp3yA'],
+    gallery: [
+      '/package-mall/assets/gallery/g-city-blindbox-2.jpg',
+      '/package-mall/assets/gallery/g-city-blindbox-3.jpg',
+    ],
     desc: '大雁塔/城墙/钟楼/兵马俑/大唐不夜城各一款，华山投龙为隐藏款，仅西安及联名渠道发售。',
     tags: ['城市限定', '西安'],
     sales: 0,
@@ -54,7 +67,10 @@ const catalog: Goods[] = [
     price: 69,
     presale: true,
     cover: '/assets/goods/g-tongguan.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/N836t9EODg'],
+    gallery: [
+      '/package-mall/assets/gallery/g-tongguan-2.jpg',
+      '/package-mall/assets/gallery/g-tongguan-3.jpg',
+    ],
     desc: '内附大雁塔、城墙、钟楼、兵马俑、华山等篆刻集章，串联全城打卡。',
     tags: ['集章', '通关文牒'],
     sales: 0,
@@ -66,7 +82,10 @@ const catalog: Goods[] = [
     price: 79,
     presale: true,
     cover: '/assets/goods/g-yushou.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/Tr4fyljU1F'],
+    gallery: [
+      '/package-mall/assets/gallery/g-yushou-2.jpg',
+      '/package-mall/assets/gallery/g-yushou-3.jpg',
+    ],
     desc: '石青/石绿/朱砂三色，金线绣萌龙祥云，可与文牒组合成祈福礼盒。',
     tags: ['御守', '祈福'],
     sales: 0,
@@ -78,7 +97,10 @@ const catalog: Goods[] = [
     price: 199,
     presale: true,
     cover: '/assets/goods/g-shihe.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/zVZCZmQMuH'],
+    gallery: [
+      '/package-mall/assets/gallery/g-shihe-2.jpg',
+      '/package-mall/assets/gallery/g-shihe-3.jpg',
+    ],
     desc: '含萌龙造型绿豆糕、龙鳞酥、柿子饼及泡馍/肉夹馍象形点心。',
     tags: ['美食', '伴手礼'],
     sales: 0,
@@ -90,7 +112,10 @@ const catalog: Goods[] = [
     price: 199,
     presale: true,
     cover: '/assets/goods/g-yinghua.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/O0XqVjvWiL'],
+    gallery: [
+      '/package-mall/assets/gallery/g-yinghua-2.jpg',
+      '/package-mall/assets/gallery/g-yinghua-3.jpg',
+    ],
     desc: '含樱花御守、樱花丝巾、樱花香膏，淡粉暗金配色（春季限定）。',
     tags: ['季节限定', '青龙寺'],
     sales: 0,
@@ -102,7 +127,10 @@ const catalog: Goods[] = [
     price: 169,
     presale: true,
     cover: '/assets/goods/g-xuanzang.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/Gs2fpfpibS'],
+    gallery: [
+      '/package-mall/assets/gallery/g-xuanzang-2.jpg',
+      '/package-mall/assets/gallery/g-xuanzang-3.jpg',
+    ],
     desc: '书签、信笺、书香好物，取材大雁塔玄奘归唐场景（开学/秋季限定）。',
     tags: ['季节限定', '玄奘'],
     sales: 0,
@@ -114,9 +142,12 @@ const catalog: Goods[] = [
     price: 298,
     presale: true,
     cover: '/assets/goods/g-necklace.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/7zDYl1tVcB'],
+    gallery: [
+      '/package-mall/assets/gallery/g-necklace-2.jpg',
+      '/package-mall/assets/gallery/g-necklace-3.jpg',
+    ],
     desc: '925银镀金，化用银香囊镂空纹样，日常可佩戴。',
-    culturalNote: '文物灵感 / AIGC 再现，原型为何家村窖藏银香囊镂空纹样。',
+    culturalNote: '文物灵感 / AIGC 再现，非原文物。原型为何家村窖藏银香囊镂空纹样。',
     tags: ['轻奢', '925银'],
     sales: 0,
   },
@@ -127,9 +158,12 @@ const catalog: Goods[] = [
     price: 39.9,
     presale: true,
     cover: '/assets/goods/g-digital-ar.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/Xsnf8t60dA'],
+    gallery: [
+      '/package-mall/assets/gallery/g-digital-ar-2.jpg',
+      '/package-mall/assets/gallery/g-digital-ar-3.jpg',
+    ],
     desc: '扫描实物唤醒赤金走龙AR投龙祈愿，召唤何家村四道具3D模型与讲解。',
-    culturalNote: '文物灵感 / AIGC 再现，走龙原型为唐代赤金走龙，何家村道具为意境再现。',
+    culturalNote: '文物灵感 / AIGC 再现，非原文物。走龙原型为唐代赤金走龙，何家村道具为意境再现。',
     tags: ['数字藏品', 'AR'],
     sales: 0,
   },
@@ -140,9 +174,12 @@ const catalog: Goods[] = [
     price: 128,
     presale: true,
     cover: '/assets/goods/g-ar-theater.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/h7F2OXZHH3'],
+    gallery: [
+      '/package-mall/assets/gallery/g-ar-theater-2.jpg',
+      '/package-mall/assets/gallery/g-ar-theater-3.jpg',
+    ],
     desc: 'AR重现何家村窖藏、投龙仪式与盛唐长安的沉浸式叙事（体验馆场次预约）。',
-    culturalNote: '文物灵感 / AIGC 再现，何家村窖藏与投龙仪式为意境再现，非实景录像。',
+    culturalNote: '文物灵感 / AIGC 再现，非原文物。何家村窖藏与投龙仪式为意境再现，非实景录像。',
     tags: ['体验', '沉浸剧场'],
     sales: 0,
   },
@@ -153,7 +190,10 @@ const catalog: Goods[] = [
     price: 199,
     presale: true,
     cover: '/assets/goods/g-makeup.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/8ilvdbQZcN'],
+    gallery: [
+      '/package-mall/assets/gallery/g-makeup-2.jpg',
+      '/package-mall/assets/gallery/g-makeup-3.jpg',
+    ],
     desc: '唐制妆造＋汉服＋实景旅拍，体验馆场次定金预约。',
     tags: ['体验', '妆造旅拍'],
     sales: 0,
@@ -165,7 +205,10 @@ const catalog: Goods[] = [
     price: 899,
     presale: true,
     cover: '/assets/goods/g-shanhe-set.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/tlslCLXzF1'],
+    gallery: [
+      '/package-mall/assets/gallery/g-shanhe-set-2.jpg',
+      '/package-mall/assets/gallery/g-shanhe-set-3.jpg',
+    ],
     desc: '萌龙行走青绿山水台座，含玉简、祥云、防尘罩与收藏卡。',
     culturalNote: '原创IP云阙，灵感源自唐代赤金走龙与青绿山水。',
     tags: ['典藏', '套装'],
@@ -178,7 +221,10 @@ const catalog: Goods[] = [
     price: 699,
     presale: true,
     cover: '/assets/goods/g-girl-figure.jpg',
-    gallery: ['https://aka.doubaocdn.com/s/ESIciFafmA'],
+    gallery: [
+      '/package-mall/assets/gallery/g-girl-figure-2.jpg',
+      '/package-mall/assets/gallery/g-girl-figure-3.jpg',
+    ],
     desc: '少女捧玉简、金龙盘旋，电影级涂装手办。',
     culturalNote: '原创IP云阙少女，造型为本项目官方立绘衍生。',
     tags: ['典藏', '手办'],

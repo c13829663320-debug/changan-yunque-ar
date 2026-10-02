@@ -1,9 +1,18 @@
+/* 商品不存在兜底 */
+.not-found { padding-top: 200rpx; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.nf-ico { font-size: 90rpx; color: var(--line); margin-bottom: 24rpx; }
+.nf-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; margin-bottom: 14rpx; }
+.nf-text { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.6; margin-bottom: 40rpx; }
+.nf-btn { width: 60%; }
+
+/* gallery 多图轮播 */
 .gd-cover {
   position: relative;
   height: 560rpx;
   background: linear-gradient(160deg, #ece1cd, #ddcba9);
   overflow: hidden;
 }
+.gd-swiper { width: 100%; height: 100%; }
 .gd-cover-img { width: 100%; height: 100%; }
 .gd-cat {
   position: absolute;
@@ -14,26 +23,23 @@
   color: #fbf3e4;
   letter-spacing: 2rpx;
   background: rgba(70, 62, 54, 0.42);
-  backdrop-filter: blur(6rpx);
   border-radius: 999rpx;
+  z-index: 2;
 }
-/* gallery 缩略条 */
-.gd-gallery {
-  position: absolute;
-  left: 24rpx;
-  bottom: 20rpx;
-  display: flex;
-  gap: 12rpx;
-}
+
+/* 缩略条 */
+.gd-thumbs { white-space: nowrap; margin-bottom: 20rpx; }
 .gd-thumb {
-  width: 72rpx;
-  height: 72rpx;
+  display: inline-block;
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 14rpx;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 2rpx solid rgba(251, 246, 236, 0.7);
-  opacity: 0.75;
+  border: 3rpx solid transparent;
+  opacity: 0.7;
 }
-.gd-thumb.on { border-color: var(--dark-gold-soft); opacity: 1; }
+.gd-thumb.on { border-color: var(--cinnabar); opacity: 1; }
 .gd-thumb-img { width: 100%; height: 100%; }
 
 .gd-body { padding-top: 24rpx; padding-bottom: 180rpx; }
@@ -54,33 +60,48 @@
   display: flex; align-items: center; justify-content: center;
 }
 .relic-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
-.relic-badge {
-  margin-left: auto; font-size: var(--fs-mini);
-  color: var(--dark-gold); background: rgba(168,137,58,0.12);
-  padding: 4rpx 14rpx; border-radius: 999rpx;
+/* 文物统一徽标：朱砂底描边小章 */
+.relic-badge-seal {
+  display: inline-flex;
+  margin-top: 18rpx;
+  padding: 8rpx 20rpx;
+  background: var(--cinnabar);
+  border: 2rpx solid #fbf3e4;
+  outline: 2rpx solid var(--cinnabar);
+  border-radius: 8rpx;
+  transform: rotate(-1.5deg);
 }
+.relic-badge-text { font-size: var(--fs-small); color: #fbf3e4; letter-spacing: 2rpx; }
 
 .ar-btn { margin-top: 4rpx; }
-.ar-btn-icon { color: var(--azurite-deep); margin-right: 8rpx; }
+.ar-btn-icon { color: var(--cinnabar); margin-right: 8rpx; }
 
 /* AR 预览层 */
-.ar-mask { position:fixed; inset:0; background:rgba(46,40,33,0.7); display:flex; align-items:center; justify-content:center; z-index:40; padding:40rpx; }
+.ar-mask { position:fixed; inset:0; background:rgba(46,40,33,0.82); display:flex; align-items:center; justify-content:center; z-index:40; padding:36rpx; }
 .ar-frame { width:100%; background:linear-gradient(180deg,#2c3230,#3a3f3a); border-radius:var(--radius-lg); padding:44rpx 36rpx 36rpx; display:flex; flex-direction:column; align-items:center; }
 .ar-viewfinder {
   position: relative;
-  width: 440rpx; height: 440rpx;
+  width: 520rpx; height: 520rpx;
   display:flex; align-items:center; justify-content:center;
   margin-bottom: 26rpx;
+  touch-action: none;
 }
-.corner { position:absolute; width:48rpx; height:48rpx; border:4rpx solid var(--dark-gold-soft); }
+.corner { position:absolute; width:48rpx; height:48rpx; border:4rpx solid var(--dark-gold-soft); pointer-events:none; }
 .corner.tl { top:0; left:0; border-right:none; border-bottom:none; border-radius:8rpx 0 0 0; }
 .corner.tr { top:0; right:0; border-left:none; border-bottom:none; border-radius:0 8rpx 0 0; }
 .corner.bl { bottom:0; left:0; border-right:none; border-top:none; border-radius:0 0 0 8rpx; }
 .corner.br { bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 8rpx 0; }
-.ar-product { width:260rpx; height:260rpx; border-radius:50%; border:2rpx solid rgba(194,166,104,0.6); box-shadow:0 0 40rpx rgba(194,166,104,0.35); }
+.ar-product {
+  width:320rpx; height:320rpx;
+  border-radius:24rpx;
+  border:2rpx solid rgba(194,166,104,0.6);
+  box-shadow:0 0 40rpx rgba(194,166,104,0.35);
+  will-change: transform;
+}
 .ar-ring {
-  position:absolute; width:360rpx; height:360rpx; border-radius:50%;
+  position:absolute; width:440rpx; height:440rpx; border-radius:50%;
   border:2rpx dashed rgba(194,166,104,0.55);
+  pointer-events:none;
 }
 .ar-ring.spin { animation: spin 2.4s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -88,11 +109,14 @@
   position:absolute; left:30rpx; right:30rpx; height:6rpx;
   background: linear-gradient(90deg, transparent, rgba(194,166,104,0.9), transparent);
   animation: beam 1.4s ease-in-out infinite;
+  pointer-events:none;
 }
-@keyframes beam { 0%,100%{ top:60rpx; opacity:0.2; } 50%{ top:380rpx; opacity:1; } }
+@keyframes beam { 0%,100%{ top:60rpx; opacity:0.2; } 50%{ top:460rpx; opacity:1; } }
 .ar-title { font-size:var(--fs-h2); color:#f3ead6; font-weight:600; }
-.ar-tip { font-size:var(--fs-small); color:#c9bda6; text-align:center; line-height:1.6; margin:14rpx 0 26rpx; }
-.ar-done { width:100%; }
+.ar-tip { font-size:var(--fs-small); color:#c9bda6; text-align:center; line-height:1.6; margin:14rpx 0 22rpx; }
+.ar-actions { width:100%; display:flex; gap:16rpx; }
+.ar-reset { flex:1; height:80rpx; background:rgba(255,255,255,0.08); color:#e9dfc9; border-color:rgba(255,255,255,0.2); font-size:26rpx; }
+.ar-done { flex:2; height:80rpx; font-size:26rpx; margin:0; }
 
 /* 底部操作栏 */
 .gd-bar {
@@ -108,4 +132,5 @@
 .bar-cart, .bar-buy { flex:1; height:80rpx; border-radius:999rpx; font-size:28rpx; display:flex; align-items:center; justify-content:center; margin:0; padding:0; line-height:80rpx; }
 .bar-cart { background:var(--bg-card-deep); color:var(--ink-soft); border:1rpx solid var(--line); }
 .bar-buy { background:linear-gradient(135deg,var(--cinnabar),var(--ochre-deep)); color:#fbf3e4; }
+.bar-cart.disabled { opacity: 0.6; }
 .bar-cart::after, .bar-buy::after { border:none; }

@@ -1,21 +1,27 @@
 const cloud = require('wx-server-sdk');
+const { validateCreate } = require('./validator');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
-const _ = db.command;
-
-const PHONE_RE = /^1[3-9]\d{9}$/;
 
 /**
- * 预售 / 意向登记
+ * 预售 / 意向登记云函数
+ *
  * event:
- *   action='create'（默认）: { goodsId?, goodsIds?, name?, phone?, remark? }
- *   action='query':  查询当前用户的全部意向
+ *   action='create'（默认）:
+ *     { items:[{id,qty}?] | goodsIds? | goodsId?, name, phone, remark? }
+ *   action='query': 查询当前 openid 的意向单（按时间倒序，最多 50 条）
+ *
+ * create 返回：
+ *   成功 { success:true, id, ids:[id], count }   count=商品总件数(goodsCount)
+ *   校验失败 { success:false, code, message }
+ *   异常   { success:false, code:'DB_ERROR', message }
  */
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext();
   const action = event.action || 'create';
 
+  // ---- query：查看历史意向单 ----
   if (action === 'query') {
     try {
       const where = { openid: wxContext.OPENID };
@@ -32,34 +38,33 @@ exports.main = async (event) => {
     }
   }
 
-  // create
-  let { goodsIds, goodsId, name, phone, remark } = event;
-  if (goodsId && !goodsIds) goodsIds = [goodsId];
-  if (!Array.isArray(goodsIds) || goodsIds.length === 0) {
-    return { success: false, message: '缺少商品信息' };
-  }
-  if (phone && !PHONE_RE.test(phone)) {
-    return { success: false, message: '手机号格式不正确' };
+  // ---- create：登记意向 ----
+  const v = validateCreate(event);
+  if (!v.ok) {
+    return { success: false, code: v.code, message: v.message };
   }
 
-  const records = goodsIds.map((gid) => ({
-    goodsId: gid,
-    name: name || '',
-    phone: phone || '',
-    remark: remark || '',
-    openid: wxContext.OPENID,
-    createdAt: db.serverDate(),
-    notified: false,
-  }));
+  const { items, name, phone, remark } = v;
+  const goodsIds = items.map((i) => i.id);
+  const goodsCount = items.reduce((s, i) => s + i.qty, 0);
 
   try {
-    const ids = [];
-    for (const rec of records) {
-      const r = await db.collection('intentions').add({ data: rec });
-      ids.push(r._id);
-    }
-    return { success: true, ids, count: ids.length };
+    // 聚合为【1 条】文档
+    const r = await db.collection('intentions').add({
+      data: {
+        items,
+        goodsIds,
+        goodsCount,
+        name: name.trim(),
+        phone,
+        remark,
+        openid: wxContext.OPENID,
+        createdAt: db.serverDate(),
+        notified: false,
+      },
+    });
+    return { success: true, id: r._id, ids: [r._id], count: goodsCount };
   } catch (err) {
-    return { success: false, message: (err && err.message) || '登记失败' };
+    return { success: false, code: 'DB_ERROR', message: (err && err.message) || '登记失败' };
   }
 };

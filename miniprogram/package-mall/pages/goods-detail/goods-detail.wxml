@@ -1,77 +1,125 @@
-<view class="goods-detail" wx:if="{{goods}}">
-  <!-- 首屏封面 / gallery 切换 -->
-  <view class="gd-cover">
-    <image class="gd-cover-img" src="{{activeImage}}" mode="aspectFill"></image>
-    <text class="gd-cat">{{categoryLabel}}</text>
-    <view class="gd-gallery" wx:if="{{thumbList.length}}">
-      <view
-        class="gd-thumb {{activeImage === item.url ? 'on' : ''}}"
-        wx:for="{{thumbList}}"
-        wx:key="url"
-        data-url="{{item.url}}"
-        bindtap="pickImage"
-      >
-        <image class="gd-thumb-img" src="{{item.url}}" mode="aspectFill"></image>
-      </view>
-    </view>
-  </view>
-
-  <view class="page-wrap gd-body">
-    <view class="gd-head card">
-      <text class="gd-name">{{goods.name}}</text>
-      <view class="gd-price-row">
-        <text class="gd-price">¥{{goods.price}}</text>
-        <text class="gd-presale">预售 · 意向登记</text>
-      </view>
-      <view class="gd-tags">
-        <text class="tag" wx:for="{{goods.tags}}" wx:key="*this">{{item}}</text>
-      </view>
-    </view>
-
-    <view class="card">
-      <text class="title-h2">商品介绍</text>
-      <text class="text-body para">{{goods.desc}}</text>
-    </view>
-
-    <view class="card relic-card" wx:if="{{goods.culturalNote}}">
-      <view class="relic-head">
-        <text class="relic-icon">鼎</text>
-        <text class="relic-title">文物灵感</text>
-        <text class="relic-badge">AIGC 再现</text>
-      </view>
-      <text class="text-body para">{{goods.culturalNote}}</text>
-    </view>
-
-    <button class="btn-ghost ar-btn" bindtap="previewAR">
-      <text class="ar-btn-icon">◉</text> AR 预览 / 召唤云阙
-    </button>
-  </view>
-
-  <!-- AR 预览层（数据驱动：有 glb 走 3D 提示，无 glb 用封面+动效优雅示意） -->
-  <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
-    <view class="ar-frame" catchtap="noop">
-      <view class="ar-viewfinder">
-        <view class="corner tl"></view>
-        <view class="corner tr"></view>
-        <view class="corner bl"></view>
-        <view class="corner br"></view>
-        <view class="ar-ring {{isSummoning ? 'spin' : ''}}"></view>
-        <image class="ar-product" src="{{goods.cover}}" mode="aspectFit"></image>
-        <view class="ar-beam" wx:if="{{isSummoning}}"></view>
-      </view>
-      <text class="ar-title">{{isSummoning ? '云阙召唤中…' : '已召唤 · ' + categoryLabel}}</text>
-      <text class="ar-tip">{{arTip}}</text>
-      <button class="btn-primary ar-done" catchtap="closeAR">完成预览</button>
-    </view>
-  </view>
-
-  <!-- 底部操作 -->
-  <view class="gd-bar">
-    <view class="bar-side" bindtap="goCart">
-      <text class="side-ico">⌂</text>
-      <text class="side-text">购物车</text>
-    </view>
-    <button class="bar-cart" bindtap="addCart">加入购物车</button>
-    <button class="bar-buy" bindtap="registerIntention">预售登记</button>
-  </view>
+<!-- 商品不存在兜底 -->
+<view class="page-wrap not-found" wx:if="{{!goods}}">
+  <text class="nf-ico">◌</text>
+  <text class="nf-title">商品不存在或已下架</text>
+  <text class="nf-text">该商品可能已售罄或下架，返回商城逛逛其他好物吧。</text>
+  <button class="btn-primary nf-btn" bindtap="goBack">返回上一页</button>
 </view>
+
+<block wx:else>
+  <view class="goods-detail">
+    <!-- gallery 多图轮播 -->
+    <view class="gd-cover">
+      <swiper
+        class="gd-swiper"
+        circular
+        indicator-dots
+        indicator-color="rgba(251,246,236,0.55)"
+        indicator-active-color="#c2a668"
+        current="{{current}}"
+        bindchange="onSwiperChange"
+      >
+        <swiper-item wx:for="{{images}}" wx:key="*this">
+          <image
+            class="gd-cover-img"
+            src="{{item}}"
+            mode="aspectFill"
+            bindtap="previewImageCurrent"
+          ></image>
+        </swiper-item>
+      </swiper>
+      <text class="gd-cat">{{categoryLabel}}</text>
+    </view>
+
+    <!-- 缩略条 -->
+    <view class="page-wrap gd-body">
+      <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="gd-thumbs" wx:if="{{images.length}}">
+        <view
+          class="gd-thumb {{current === idx ? 'on' : ''}}"
+          wx:for="{{images}}"
+          wx:for-index="idx"
+          wx:key="*this"
+          data-idx="{{idx}}"
+          bindtap="pickImage"
+        >
+          <image class="gd-thumb-img" src="{{item}}" mode="aspectFill"></image>
+        </view>
+      </scroll-view>
+
+      <view class="gd-head card">
+        <text class="gd-name">{{goods.name}}</text>
+        <view class="gd-price-row">
+          <text class="gd-price">¥{{goods.price}}</text>
+          <text class="gd-presale">预售 · 意向登记</text>
+        </view>
+        <view class="gd-tags">
+          <text class="tag" wx:for="{{goods.tags}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="card">
+        <text class="title-h2">商品介绍</text>
+        <text class="text-body para">{{goods.desc}}</text>
+      </view>
+
+      <!-- 文物灵感卡 -->
+      <view class="card relic-card" wx:if="{{goods.culturalNote}}">
+        <view class="relic-head">
+          <text class="relic-icon">鼎</text>
+          <text class="relic-title">文物灵感</text>
+        </view>
+        <view class="relic-badge-seal" wx:if="{{isRelic}}">
+          <text class="relic-badge-text">{{relicBadge}}</text>
+        </view>
+        <text class="text-body para">{{goods.culturalNote}}</text>
+      </view>
+
+      <button class="btn-ghost ar-btn" bindtap="previewAR">
+        <text class="ar-btn-icon">◉</text> AR 预览 / 召唤云阙
+      </button>
+    </view>
+
+    <!-- AR 预览层：召唤动效 + 可手势旋转/缩放的商品图 -->
+    <view class="ar-mask" wx:if="{{showAR}}">
+      <view class="ar-frame">
+        <view
+          class="ar-viewfinder"
+          catchtouchstart="arTouchStart"
+          catchtouchmove="arTouchMove"
+          catchtouchend="arTouchEnd"
+          catchtouchcancel="arTouchEnd"
+        >
+          <view class="corner tl"></view>
+          <view class="corner tr"></view>
+          <view class="corner bl"></view>
+          <view class="corner br"></view>
+          <view class="ar-ring {{isSummoning ? 'spin' : ''}}"></view>
+          <image
+            class="ar-product"
+            src="{{arImage}}"
+            mode="aspectFit"
+            style="transform: {{arTransform}};"
+          ></image>
+          <view class="ar-beam" wx:if="{{isSummoning}}"></view>
+        </view>
+        <text class="ar-title">{{isSummoning ? '云阙召唤中…' : '已召唤 · ' + categoryLabel}}</text>
+        <text class="ar-tip" wx:if="{{!isSummoning}}">{{arTip}}</text>
+        <view class="ar-actions" wx:if="{{!isSummoning}}">
+          <button class="btn-ghost ar-reset" catchtap="resetArTransform">复位</button>
+          <button class="btn-primary ar-done" catchtap="closeAR">完成预览</button>
+        </view>
+        <button class="btn-primary ar-done" wx:if="{{isSummoning}}" catchtap="closeAR">取消召唤</button>
+      </view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="gd-bar">
+      <view class="bar-side" bindtap="goCart">
+        <text class="side-ico">⌂</text>
+        <text class="side-text">购物车</text>
+      </view>
+      <button class="bar-cart {{adding ? 'disabled' : ''}}" bindtap="addCart">{{adding ? '加入中…' : '加入购物车'}}</button>
+      <button class="bar-buy" bindtap="register">预售登记</button>
+    </view>
+  </view>
+</block>

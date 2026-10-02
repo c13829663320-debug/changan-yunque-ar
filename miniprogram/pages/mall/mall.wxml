@@ -1,19 +1,54 @@
 <view class="page-wrap mall">
-  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
-    <view
-      class="cat {{activeCat === item.id ? 'on' : ''}}"
-      wx:for="{{categories}}"
-      wx:key="id"
-      data-id="{{item.id}}"
-      bindtap="onFilter"
-    >{{item.label}}</view>
-  </scroll-view>
+  <!-- 顶部：分类横滑 + 购物车入口 -->
+  <view class="mall-top">
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
+      <view
+        class="cat {{activeCat === item.id ? 'on' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onFilter"
+      >{{item.label}}</view>
+    </scroll-view>
+    <view class="cart-entry" bindtap="goCart">
+      <text class="cart-entry-ico">⌂</text>
+      <text class="cart-entry-text">购物车</text>
+    </view>
+  </view>
 
-  <view class="goods-grid">
+  <!-- 首屏 loading 骨架 -->
+  <view class="goods-grid" wx:if="{{loading}}">
+    <view class="grid-item skeleton" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+      <view class="sk-cover"></view>
+      <view class="sk-line w60"></view>
+      <view class="sk-line w40"></view>
+    </view>
+  </view>
+
+  <!-- 空状态（某分类无结果） -->
+  <view class="empty" wx:elif="{{!goods.length}}">
+    <text class="empty-ico">◌</text>
+    <text class="empty-text">该分类暂无在售商品</text>
+    <button class="btn-primary empty-btn" bindtap="resetFilter">查看全部商品</button>
+  </view>
+
+  <!-- 商品网格 -->
+  <view class="goods-grid" wx:else>
     <view class="grid-item" wx:for="{{goods}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
       <view class="grid-cover">
-        <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill"></image>
-        <text wx:else class="cover-cat">{{item.categoryLabel}}</text>
+        <image
+          wx:if="{{item.cover && !item.imgError}}"
+          class="grid-cover-img"
+          src="{{item.cover}}"
+          mode="aspectFill"
+          data-id="{{item.id}}"
+          binderror="onImgError"
+        ></image>
+        <view wx:else class="cover-fallback">
+          <text class="cover-cat">{{item.categoryLabel}}</text>
+        </view>
+        <text class="grid-cat-badge">{{item.categoryLabel}}</text>
+        <text wx:if="{{item.isRelic}}" class="grid-relic-mark">文物灵感</text>
       </view>
       <text class="grid-name">{{item.name}}</text>
       <view class="row-between">

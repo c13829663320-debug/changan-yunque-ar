@@ -1,17 +1,58 @@
+.cart-loading { padding-top: 200rpx; display: flex; justify-content: center; }
+.cart-loading-text { font-size: var(--fs-small); color: var(--ink-muted); }
+
 .cart-item { display:flex; align-items:center; gap:18rpx; padding:20rpx; }
-.ci-cover { width:120rpx; height:120rpx; border-radius:var(--radius-sm); background:linear-gradient(160deg,#ece1cd,#e0d2b8); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ci-cover {
+  width:140rpx; height:140rpx; border-radius:var(--radius-sm);
+  background:linear-gradient(160deg,#ece1cd,#e0d2b8);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  overflow:hidden;
+}
+.ci-cover-img { width:100%; height:100%; }
 .ci-cat { font-size:var(--fs-mini); color:var(--dark-gold); }
 .ci-info { flex:1; min-width:0; }
 .ci-name { font-size:var(--fs-small); color:var(--ink); line-height:1.4; display:block; }
-.ci-price { font-size:var(--fs-body); color:var(--cinnabar); font-weight:600; display:block; margin-top:8rpx; }
-.ci-remove { font-size:var(--fs-mini); color:var(--ink-muted); padding:8rpx; }
+.ci-price { font-size:var(--fs-small); color:var(--cinnabar); font-weight:600; display:block; margin-top:6rpx; }
 
-.total-row { display:flex; align-items:center; justify-content:space-between; }
-.total-label { font-size:var(--fs-body); color:var(--ink-soft); }
-.total-price { font-size:40rpx; color:var(--cinnabar); font-weight:700; }
-.checkout { margin-top:6rpx; }
-.cart-note { font-size:var(--fs-mini); color:var(--ink-muted); text-align:center; display:block; margin-top:18rpx; line-height:1.6; }
+/* 数量步进器 */
+.ci-stepper { display:flex; align-items:center; margin-top:14rpx; }
+.step-btn {
+  width:52rpx; height:52rpx; line-height:52rpx; text-align:center;
+  font-size:30rpx; color:var(--ink-soft);
+  background:var(--bg-card-deep); border:1rpx solid var(--line);
+  border-radius:8rpx;
+}
+.step-btn:active { background:var(--line); }
+.step-qty { min-width:64rpx; text-align:center; font-size:var(--fs-small); color:var(--ink); }
+
+.ci-right { display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between; align-self:stretch; }
+.ci-subtotal { font-size:var(--fs-body); color:var(--cinnabar); font-weight:700; }
+.ci-remove { font-size:var(--fs-mini); color:var(--ink-muted); padding:8rpx 4rpx; }
+.ci-remove:active { color:var(--cinnabar); }
+
+.cart-note { font-size:var(--fs-mini); color:var(--ink-muted); text-align:center; display:block; margin:8rpx 0 24rpx; line-height:1.6; }
+
+/* 底部结算栏 */
+.cart-bar {
+  position:fixed; left:0; right:0; bottom:0;
+  display:flex; align-items:center; gap:20rpx;
+  background:var(--bg-card); border-top:1rpx solid var(--line);
+  padding:16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  z-index:30;
+}
+.cb-info { display:flex; flex-direction:column; }
+.cb-count { font-size:var(--fs-mini); color:var(--ink-muted); }
+.cb-total { font-size:38rpx; color:var(--cinnabar); font-weight:700; }
+.cb-btn {
+  flex:1; height:80rpx; margin:0; border-radius:999rpx;
+  background:linear-gradient(135deg,var(--cinnabar),var(--ochre-deep));
+  color:#fbf3e4; font-size:28rpx; letter-spacing:2rpx;
+  display:flex; align-items:center; justify-content:center;
+}
+.cb-btn::after { border:none; }
+.cb-btn.disabled { opacity: 0.6; }
 
 .empty { padding-top:200rpx; display:flex; flex-direction:column; align-items:center; }
+.empty-ico { font-size:80rpx; color:var(--line); margin-bottom:20rpx; }
 .empty-text { font-size:var(--fs-body); color:var(--ink-muted); margin-bottom:30rpx; }
 .empty-btn { width:60%; }

@@ -1,25 +1,46 @@
-.ok-head { text-align: center; }
-.ok-title { font-size: var(--fs-title); color: var(--dark-gold); font-weight: 700; display: block; }
-.ok-sub { font-size: var(--fs-small); color: var(--ink-muted); display: block; margin-top: 12rpx; line-height: 1.6; }
+/* 顶部说明 */
+.banner { text-align: center; }
+.banner-title { font-size: var(--fs-h2); color: var(--dark-gold); font-weight: 700; display: block; letter-spacing: 2rpx; }
+.banner-sub { font-size: var(--fs-small); color: var(--ink-muted); display: block; margin-top: 10rpx; line-height: 1.6; }
 
 /* 表单 */
 .form-card { padding: 28rpx 24rpx; }
 .form-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; display: block; margin-bottom: 12rpx; }
 .field { display: flex; align-items: center; gap: 20rpx; padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
 .field:last-child { border-bottom: none; }
-.field-label { width: 110rpx; font-size: var(--fs-small); color: var(--ink-soft); flex-shrink: 0; }
+.field-label { width: 120rpx; font-size: var(--fs-small); color: var(--ink-soft); flex-shrink: 0; }
 .field-input { flex: 1; font-size: var(--fs-body); color: var(--ink); }
 
+/* 意向商品列表 */
 .list-card { padding: 28rpx 24rpx; }
-
 .int-item { display: flex; align-items: center; gap: 18rpx; padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
-.int-item:last-child { border-bottom: none; }
-.ii-cover { width: 96rpx; height: 96rpx; border-radius: var(--radius-sm); flex-shrink: 0; }
+.int-item:last-of-type { border-bottom: none; }
+.ii-cover { width: 96rpx; height: 96rpx; border-radius: var(--radius-sm); flex-shrink: 0; background: var(--bg-card-deep); }
 .ii-info { flex: 1; min-width: 0; }
 .ii-name { font-size: var(--fs-small); color: var(--ink); line-height: 1.4; display: block; }
-.ii-price { font-size: var(--fs-small); color: var(--cinnabar); display: block; margin-top: 6rpx; }
-.ii-status { font-size: var(--fs-mini); color: var(--dark-gold); }
+.ii-price { font-size: var(--fs-mini); color: var(--ink-muted); display: block; margin-top: 6rpx; }
+.ii-subtotal { font-size: var(--fs-small); color: var(--cinnabar); font-weight: 600; }
+.total-row { display: flex; align-items: center; justify-content: space-between; padding-top: 18rpx; margin-top: 6rpx; border-top: 1rpx dashed var(--line); }
+.total-label { font-size: var(--fs-small); color: var(--ink-soft); }
+.total-value { font-size: var(--fs-h2); color: var(--cinnabar); font-weight: 700; }
 
 .submit-btn { margin-top: 8rpx; }
-.clear-btn { margin-top: 16rpx; margin-bottom: 16rpx; }
-.back-mall { margin-top: 4rpx; }
+
+/* 历史意向单 */
+.hist-card { padding: 24rpx; }
+.hist-head { display: flex; align-items: center; justify-content: space-between; }
+.hist-name { font-size: var(--fs-body); color: var(--ink); font-weight: 600; }
+.hist-tags { display: flex; gap: 8rpx; }
+.hist-items { margin-top: 14rpx; }
+.hist-item { display: block; font-size: var(--fs-small); color: var(--ink-soft); line-height: 1.8; }
+.hist-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 14rpx; padding-top: 14rpx; border-top: 1rpx solid var(--line); }
+.hist-phone { font-size: var(--fs-small); color: var(--ink-muted); letter-spacing: 1rpx; }
+.hist-time { font-size: var(--fs-mini); color: var(--ink-muted); }
+
+.clear-btn { margin-bottom: 24rpx; }
+
+/* 空状态 */
+.empty-card { text-align: center; padding: 60rpx 28rpx; }
+.empty-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; display: block; }
+.empty-sub { font-size: var(--fs-small); color: var(--ink-muted); display: block; margin-top: 14rpx; line-height: 1.7; }
+.empty-btn { margin-top: 32rpx; }

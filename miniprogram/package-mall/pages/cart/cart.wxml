@@ -1,24 +1,65 @@
 <view class="page-wrap cart">
-  <block wx:if="{{items.length}}">
-    <view class="card cart-item" wx:for="{{items}}" wx:key="id">
-      <view class="ci-cover"><text class="ci-cat">{{item.categoryLabel}}</text></view>
-      <view class="ci-info">
-        <text class="ci-name">{{item.name}}</text>
-        <text class="ci-price">¥{{item.price}}</text>
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="cart-loading">
+    <text class="cart-loading-text">正在加载购物车…</text>
+  </view>
+
+  <block wx:elif="{{lines.length}}">
+    <view class="card cart-item" wx:for="{{lines}}" wx:key="id">
+      <view class="ci-cover">
+        <image
+          wx:if="{{item.goods.cover}}"
+          class="ci-cover-img"
+          src="{{item.goods.cover}}"
+          mode="aspectFill"
+        ></image>
+        <text wx:else class="ci-cat">{{item.categoryLabel}}</text>
       </view>
-      <view class="ci-remove" data-id="{{item.id}}" catchtap="remove">移除</view>
+      <view class="ci-info">
+        <text class="ci-name">{{item.goods.name}}</text>
+        <text class="ci-price">¥{{item.goods.price}}</text>
+        <view class="ci-stepper">
+          <view
+            class="step-btn"
+            data-id="{{item.id}}"
+            data-qty="{{item.qty}}"
+            data-delta="{{-1}}"
+            catchtap="changeQty"
+          >−</view>
+          <text class="step-qty">{{item.qty}}</text>
+          <view
+            class="step-btn"
+            data-id="{{item.id}}"
+            data-qty="{{item.qty}}"
+            data-delta="{{1}}"
+            catchtap="changeQty"
+          >＋</view>
+        </view>
+      </view>
+      <view class="ci-right">
+        <text class="ci-subtotal">¥{{item.subtotal}}</text>
+        <text class="ci-remove" data-id="{{item.id}}" catchtap="remove">移除</text>
+      </view>
     </view>
 
-    <view class="card total-row">
-      <text class="total-label">合计（预售意向）</text>
-      <text class="total-price">¥{{total}}</text>
-    </view>
-    <button class="btn-primary checkout" bindtap="checkout">提交预售意向</button>
-    <text class="cart-note">提交后仅作意向登记，开售时优先通知，暂不扣款。</text>
+    <text class="cart-note">提交后仅作意向登记，开售优先通知，暂不扣款。</text>
   </block>
 
+  <!-- 空状态 -->
   <view class="empty" wx:else>
+    <text class="empty-ico">⌂</text>
     <text class="empty-text">购物车还是空的</text>
     <button class="btn-primary empty-btn" bindtap="goMall">去商城逛逛</button>
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view class="cart-bar" wx:if="{{lines.length && !loading}}">
+    <view class="cb-info">
+      <text class="cb-count">共 {{count}} 件</text>
+      <text class="cb-total">合计 ¥{{total}}</text>
+    </view>
+    <button class="cb-btn {{submitting ? 'disabled' : ''}}" bindtap="checkout">
+      {{submitting ? '提交中…' : '提交预售意向'}}
+    </button>
   </view>
 </view>
