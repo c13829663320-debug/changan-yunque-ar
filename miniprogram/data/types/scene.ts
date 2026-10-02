@@ -82,6 +82,10 @@ export interface ScenePoint {
   markerImage?: string;
   /** AR 复原模型（glb，CDN） */
   arModel?: string;
+  /** 舞台背景关键帧（包内绝对路径或 CDN）；为空时回退到色调渐变 */
+  bg?: string;
+  /** AR 复原层「复原图」（包内绝对路径或 CDN）；为空时回退到 CSS 示意殿宇 */
+  arRestoreImage?: string;
   cover?: string;
   intro: string;
   sourceCard: SourceCard;

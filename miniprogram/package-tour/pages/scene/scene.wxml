@@ -1,9 +1,11 @@
 <view class="scene scene-tone-{{scene.index}}">
   <!-- 舞台 -->
-  <view class="stage">
+  <view class="stage {{scene.bg ? 'has-bg' : ''}}" style="{{scene.bg ? 'background-image:url(' + scene.bg + ')' : ''}}">
+    <view class="stage-scrim"></view>
     <view class="figure-wrap {{node.actor}}">
-      <view class="figure">
-        <text class="figure-word">{{figureLabel}}</text>
+      <view class="figure {{node.actor === 'yunque' ? 'figure-yunque' : ''}}">
+        <image wx:if="{{node.actor === 'yunque'}}" class="figure-img" src="/assets/characters/yunque-girl.jpg" mode="aspectFill" />
+        <text wx:else class="figure-word">{{figureLabel}}</text>
       </view>
       <view class="figure-shadow"></view>
     </view>
@@ -13,7 +15,8 @@
   <!-- AR 复原层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
-      <view class="ar-palace">
+      <image wx:if="{{scene.arRestoreImage}}" class="ar-restore" src="{{scene.arRestoreImage}}" mode="widthFix" />
+      <view wx:else class="ar-palace">
         <view class="ar-roof"></view>
         <view class="ar-body"></view>
         <view class="ar-base"></view>

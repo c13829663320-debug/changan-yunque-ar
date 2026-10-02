@@ -112,3 +112,35 @@
 .end-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
 .end-sub { font-size: var(--fs-small); color: var(--ink-muted); margin: 10rpx 0 28rpx; }
 .end-back { width: 100%; margin-top: 16rpx; }
+
+/* ===== 美术接线（数据驱动，见 docs/frontend-art-spec.md）===== */
+/* 舞台背景 */
+.stage.has-bg { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.stage-scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(244,236,221,0.16) 0%, rgba(244,236,221,0.04) 42%, rgba(244,236,221,0.40) 100%);
+}
+.figure-wrap { z-index: 2; }
+.place-tag { z-index: 2; text-shadow: 0 1rpx 6rpx rgba(244,236,221,0.7); }
+
+/* 云阙「壁画龛」肖像（官方立绘，灰底以拱龛框收） */
+.figure-yunque {
+  width: 300rpx !important;
+  height: 420rpx !important;
+  border-radius: 150rpx 150rpx 26rpx 26rpx !important;
+  overflow: hidden;
+  padding: 0;
+  background: linear-gradient(180deg, #d9d4cc, #c9c3b8);
+  box-shadow: 0 14rpx 40rpx rgba(70, 62, 54, 0.22);
+}
+.figure-img { width: 100%; height: 100%; display: block; }
+.figure-wrap.yunque .figure-shadow { width: 200rpx; margin-top: 22rpx; }
+
+/* AR 复原图 */
+.ar-restore {
+  width: 100%; display: block;
+  border-radius: var(--radius);
+  border: 1rpx solid var(--line);
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(70, 62, 54, 0.12);
+}

@@ -7,9 +7,6 @@
     "typecheck": "tsc -p . --noEmit",
     "lint": "eslint \"miniprogram/**/*.ts\""
   },
-  "dependencies": {
-    "xr-frame": "^1.0.0"
-  },
   "devDependencies": {
     "miniprogram-api-typings": "^4.0.0",
     "typescript": "^5.4.5"
