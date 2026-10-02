@@ -14,6 +14,12 @@ Page({
     spot: getSpot('daminggong'),
     featured: [] as FeaturedGoodsVM[],
     scaleCount: 0,
+    entered: false,
+  },
+
+  onReady() {
+    // 首页 hero 入场动效（下一帧触发，保证过渡生效）
+    setTimeout(() => this.setData({ entered: true }), 60);
   },
 
   onShow() {

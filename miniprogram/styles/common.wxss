@@ -73,3 +73,13 @@
 .row-between { display: flex; align-items: center; justify-content: space-between; }
 .flex-center { display: flex; align-items: center; justify-content: center; }
 .gap-sm { gap: 12rpx; }
+
+/* —— 全局打磨（Line5）：轻按反馈与平滑过渡 —— */
+.card, .mode-card, .grid-item, .stat {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.card:active, .mode-card:active, .grid-item:active { transform: scale(0.985); }
+.btn-primary, .btn-ghost, .bar-cart, .bar-buy { transition: opacity 0.2s ease, transform 0.15s ease; }
+.btn-primary:active, .bar-buy:active { transform: scale(0.98); opacity: 0.92; }
+image { transition: opacity 0.3s ease; }
+

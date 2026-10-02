@@ -23,6 +23,7 @@
   margin-bottom: 14rpx;
 }
 .cover-cat { font-size: var(--fs-small); color: var(--dark-gold); }
+.grid-cover-img { width: 100%; height: 100%; border-radius: var(--radius-sm); }
 .grid-name { font-size: var(--fs-small); color: var(--ink); line-height: 1.4; height: 72rpx; overflow: hidden; display: block; }
 .grid-price { font-size: var(--fs-body); color: var(--cinnabar); font-weight: 600; }
 .presale-tag { font-size: var(--fs-mini); color: var(--ink-muted); border: 1rpx solid var(--line); border-radius: 999rpx; padding: 2rpx 14rpx; }
