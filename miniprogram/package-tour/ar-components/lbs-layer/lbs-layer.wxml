@@ -1,0 +1,55 @@
+<view class="lbs-layer">
+  <!-- ===== 背景层：lbs 相机 / 主题静态背景（绝不黑屏） ===== -->
+  <camera
+    wx:if="{{mode === 'lbs' && cameraActive}}"
+    class="lbs-camera"
+    device-position="back"
+    flash="off"
+    binderror="onCameraError"
+  ></camera>
+  <view wx:else class="lbs-bg">
+    <image wx:if="{{bgSrc}}" class="lbs-bg-img" src="{{bgSrc}}" mode="aspectFill"></image>
+  </view>
+
+  <!-- ===== 复原图叠加：lbs 进入半径 / static 恒显 ===== -->
+  <view wx:if="{{showRestore && restoreSrc}}" class="restore-mask">
+    <image class="restore-img" src="{{restoreSrc}}" mode="aspectFit"></image>
+    <view class="restore-tag">遗址复原示意</view>
+  </view>
+
+  <!-- ===== 方位引导：罗盘环 + 箭头 + 距离胶囊 + 转向文案 ===== -->
+  <view wx:if="{{compassOn}}" class="guide">
+    <view class="compass-ring">
+      <view class="ring-n">北</view>
+      <view class="arrow" style="transform: rotate({{arrowRotation}}deg);"></view>
+    </view>
+    <view wx:if="{{distanceText}}" class="dist-pill">{{distanceText}}</view>
+    <view wx:if="{{turnText}}" class="turn-text">{{turnText}}</view>
+  </view>
+
+  <!-- 定位中提示 -->
+  <view wx:if="{{locating}}" class="locating-pill">
+    <view class="locating-spinner"></view>
+    <text class="locating-text">正在定位…</text>
+  </view>
+
+  <!-- ===== 兜底文案（罗盘缺失 / 相机降级 / 定位异常） ===== -->
+  <view wx:if="{{fallbackText}}" class="fallback-note">{{fallbackText}}</view>
+
+  <!-- ===== 权限开启入口：static 恒显；lbs 缺定位时补显 ===== -->
+  <view class="perm-box">
+    <button
+      wx:if="{{mode === 'static' || showLocationButton}}"
+      class="perm-btn"
+      bindtap="onOpenLocation"
+    >开启定位权限</button>
+    <button
+      wx:if="{{mode === 'static'}}"
+      class="perm-btn"
+      bindtap="onOpenCamera"
+    >开启相机权限</button>
+  </view>
+
+  <!-- ===== 常驻小字：点位坐标近似（需现场实测） ===== -->
+  <view class="approx-note">{{approxNote}}</view>
+</view>

@@ -1,0 +1,197 @@
+/* LBS 方位 / 静态兜底层 */
+.lbs-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #3a3128 0%, #4a3d2f 60%, #5a4636 100%);
+}
+
+/* ===== 背景 ===== */
+.lbs-camera {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.lbs-bg {
+  position: absolute;
+  inset: 0;
+}
+.lbs-bg-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 复原图叠加 ===== */
+.restore-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 16, 12, 0.35);
+  z-index: 10;
+}
+.restore-img {
+  width: 86%;
+  max-height: 62%;
+}
+.restore-tag {
+  position: absolute;
+  bottom: calc(180rpx + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22rpx;
+  color: #fbf3e4;
+  background: rgba(70, 62, 54, 0.72);
+  border: 1rpx solid rgba(194, 166, 104, 0.4);
+  border-radius: 999rpx;
+  padding: 6rpx 22rpx;
+}
+
+/* ===== 方位引导 ===== */
+.guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(200rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 15;
+  pointer-events: none;
+}
+.compass-ring {
+  position: relative;
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(194, 166, 104, 0.55);
+  background: rgba(40, 34, 28, 0.55);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.4);
+}
+.ring-n {
+  position: absolute;
+  top: 6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20rpx;
+  color: rgba(244, 236, 221, 0.85);
+}
+.arrow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  /* 三角尖朝上；元素 0x0 点即环心 = 旋转支点，WXML 内联 rotate() 绕环心旋转 */
+  border-left: 12rpx solid transparent;
+  border-right: 12rpx solid transparent;
+  border-bottom: 64rpx solid #e8c16a;
+  filter: drop-shadow(0 0 8rpx rgba(232, 193, 106, 0.6));
+}
+.dist-pill {
+  margin-top: 24rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #fbf3e4;
+  background: rgba(70, 62, 54, 0.72);
+  border: 1rpx solid rgba(194, 166, 104, 0.4);
+  border-radius: 999rpx;
+  padding: 10rpx 36rpx;
+}
+.turn-text {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #f4ecdd;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.6);
+}
+
+/* ===== 定位中 ===== */
+.locating-pill {
+  position: absolute;
+  left: 50%;
+  bottom: calc(260rpx + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background: rgba(70, 62, 54, 0.7);
+  border-radius: 999rpx;
+  padding: 10rpx 28rpx;
+  z-index: 16;
+}
+.locating-spinner {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 14rpx;
+  border: 4rpx solid rgba(194, 166, 104, 0.25);
+  border-top-color: #e8c16a;
+  border-radius: 50%;
+  animation: lbs-spin 0.9s linear infinite;
+}
+@keyframes lbs-spin {
+  to { transform: rotate(360deg); }
+}
+.locating-text {
+  font-size: 24rpx;
+  color: #f4ecdd;
+}
+
+/* ===== 兜底文案 ===== */
+.fallback-note {
+  position: absolute;
+  left: 40rpx;
+  right: 40rpx;
+  bottom: calc(150rpx + env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 23rpx;
+  color: rgba(244, 236, 221, 0.85);
+  background: rgba(60, 50, 40, 0.6);
+  border-radius: 16rpx;
+  padding: 14rpx 24rpx;
+  z-index: 16;
+}
+
+/* ===== 权限按钮 ===== */
+.perm-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(90rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 16;
+}
+.perm-btn {
+  width: 420rpx;
+  margin-top: 18rpx;
+  font-size: 26rpx;
+  color: #fbf3e4;
+  background: rgba(194, 166, 104, 0.9);
+  border-radius: 999rpx;
+  padding: 16rpx 0;
+  line-height: 1.4;
+}
+.perm-btn::after {
+  border: none;
+}
+
+/* ===== 常驻近似坐标小字 ===== */
+.approx-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(24rpx + env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 20rpx;
+  color: rgba(244, 236, 221, 0.55);
+  z-index: 16;
+  pointer-events: none;
+}
