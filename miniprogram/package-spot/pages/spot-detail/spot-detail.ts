@@ -11,6 +11,7 @@ Page({
   data: {
     spot: null as Spot | null,
     relatedGoods: [] as RelatedVM[],
+    canTour: false,
   },
 
   onLoad(query) {
@@ -19,12 +20,14 @@ Page({
     const relatedGoods: RelatedVM[] = getAllGoods()
       .slice(0, 8)
       .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
-    this.setData({ spot: spot || null, relatedGoods });
+    const canTour = !!spot && spot.enabled && spot.sceneIds.length > 0;
+    this.setData({ spot: spot || null, relatedGoods, canTour });
   },
 
   startTour() {
+    const first = this.data.spot?.sceneIds?.[0] || 'danfengmen';
     wx.navigateTo({
-      url: '/package-tour/pages/scene/scene?id=danfengmen&mode=cloud',
+      url: `/package-tour/pages/scene/scene?id=${first}&mode=cloud`,
     });
   },
 

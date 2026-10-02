@@ -12,6 +12,24 @@
       <view class="stat"><text class="stat-num">0</text><text class="stat-label">数藏</text></view>
     </view>
 
+    <!-- 全部景点（模板可复用） -->
+    <view class="card spot-list-card">
+      <text class="title-h2">全部景点</text>
+      <view
+        class="spot-li"
+        wx:for="{{spots}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goSpot"
+      >
+        <view class="spot-li-info">
+          <text class="spot-li-name">{{item.name}}</text>
+          <text class="spot-li-sub">{{item.subtitle}}</text>
+        </view>
+        <text class="spot-li-badge {{item.enabled ? 'on' : 'soon'}}">{{item.enabled ? '可巡游' : '即将上线'}}</text>
+      </view>
+    </view>
+
     <view class="card menu">
       <view class="menu-item" data-k="intention" bindtap="onMenu"><text class="m-label">我的意向单</text><text class="m-arrow">›</text></view>
       <view class="menu-item" data-k="booking" bindtap="onMenu"><text class="m-label">体验预约</text><text class="m-arrow">›</text></view>

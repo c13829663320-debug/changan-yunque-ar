@@ -49,7 +49,8 @@
       <text class="info-line">交通：{{spot.openInfo.traffic}}</text>
     </view>
 
-    <button class="btn-primary start-tour" bindtap="startTour">跟随云阙巡游大明宫</button>
+    <button wx:if="{{canTour}}" class="btn-primary start-tour" bindtap="startTour">跟随云阙巡游</button>
+    <button wx:else class="btn-ghost start-tour" disabled>云阙剧场即将上线，敬请期待</button>
 
     <view class="related">
       <text class="title-h2">相关文创</text>
