@@ -1,10 +1,10 @@
 <view class="scene scene-tone-{{scene.index}}">
   <!-- 舞台 -->
-  <view class="stage {{scene.bg ? 'has-bg' : ''}}" style="{{scene.bg ? 'background-image:url(' + scene.bg + ')' : ''}}">
+  <view class="stage {{stageBg ? 'has-bg' : ''}}" style="{{stageBg ? 'background-image:url(' + stageBg + ')' : ''}}">
     <view class="stage-scrim"></view>
     <view class="figure-wrap {{node.actor}}">
       <view class="figure {{node.actor === 'yunque' ? 'figure-yunque' : ''}}">
-        <image wx:if="{{node.actor === 'yunque'}}" class="figure-img" src="/assets/characters/yunque-girl.jpg" mode="aspectFill" />
+        <image wx:if="{{node.actor === 'yunque'}}" class="figure-img" src="{{figureSrc}}" mode="aspectFill" />
         <text wx:else class="figure-word">{{figureLabel}}</text>
       </view>
       <view class="figure-shadow"></view>
@@ -23,7 +23,11 @@
       </view>
       <text class="ar-title">AR 复原 · {{scene.name}}</text>
       <text class="ar-tip">{{arTip}}</text>
-      <button class="btn-primary ar-continue" catchtap="closeAR">继续剧情</button>
+      <button
+        class="btn-primary ar-continue"
+        catchtap="closeAR"
+        disabled="{{!arCanClose}}"
+      >{{arCanClose ? '继续剧情' : '复原展开中（' + arCountdown + '）'}}</button>
     </view>
   </view>
 
@@ -41,9 +45,13 @@
   </view>
 
   <!-- 分支反馈 -->
-  <view class="feedback-bar" wx:if="{{showFeedback}}">
+  <view class="feedback-bar {{feedbackCorrect ? 'fb-right' : 'fb-wrong'}}" wx:if="{{showFeedback}}">
     <text class="fb-name">{{feedback.actorName || ''}}</text>
     <text class="fb-text">{{feedback.text}}</text>
+    <view class="fb-easter" wx:if="{{feedbackCorrect && feedbackEasterEgg}}">
+      <text class="fb-easter-tag">合礼 · 彩蛋</text>
+      <text class="fb-easter-text">{{feedbackEasterEgg}}</text>
+    </view>
     <button class="btn-primary fb-continue" bindtap="dismissFeedback">继续</button>
   </view>
 
@@ -74,8 +82,24 @@
     bind:close="onShareCardClose"
   ></share-card>
 
+  <!-- 现场定位拦截 -->
+  <view class="geo-mask" wx:if="{{geoBlock}}">
+    <view class="geo-panel">
+      <text class="geo-title">{{geoBlockReason === 'range' ? '尚在远处' : '暂时没能定位'}}</text>
+      <block wx:if="{{geoBlockReason === 'range'}}">
+        <text class="geo-text">到达『{{scene.name}}』附近后自动解锁</text>
+        <text class="geo-dist">距此约 {{geoDistance}} 米</text>
+      </block>
+      <block wx:else>
+        <text class="geo-text">暂时没能定位到你，可以先云游体验，或在到现场后重新检测定位。</text>
+      </block>
+      <button class="btn-primary" bindtap="retryLocation">重新检测定位</button>
+      <button class="btn-ghost" bindtap="goCloud">先云游体验</button>
+    </view>
+  </view>
+
   <!-- 对话区 -->
-  <view class="dialog-bar" wx:if="{{!finished && !showFeedback}}">
+  <view class="dialog-bar" wx:if="{{entered && !finished && !showFeedback}}">
     <view class="actor-line">
       <text class="a-name">{{actorDisplay}}</text>
       <view class="source-mini" bindtap="openSource">史料卡</view>

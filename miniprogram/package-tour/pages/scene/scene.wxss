@@ -145,3 +145,41 @@
   margin-bottom: 24rpx;
   box-shadow: 0 8rpx 24rpx rgba(70, 62, 54, 0.12);
 }
+.ar-continue[disabled] { opacity: 0.55; color: var(--ink-muted); }
+
+/* 分支反馈：合礼（金色彩蛋）与温和分支（暖灰/暗金，不用警示色） */
+.feedback-bar.fb-right { border: 2rpx solid var(--dark-gold); background: linear-gradient(180deg, #fbf3df, #f7ecd2); }
+.feedback-bar.fb-wrong { border: 1rpx solid var(--dark-gold-soft); background: var(--bg-card-deep); }
+.fb-easter {
+  background: rgba(176, 138, 74, 0.14);
+  border: 1rpx solid var(--dark-gold-soft);
+  border-radius: var(--radius);
+  padding: 18rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+.fb-easter-tag {
+  display: inline-block;
+  font-size: var(--fs-mini);
+  color: #fff;
+  background: var(--dark-gold);
+  border-radius: 999rpx;
+  padding: 4rpx 18rpx;
+  margin-bottom: 10rpx;
+  letter-spacing: 2rpx;
+}
+.fb-easter-text { font-size: var(--fs-body); color: var(--ink); line-height: 1.7; display: block; }
+
+/* 现场定位拦截 */
+.geo-mask {
+  position: fixed; inset: 0; background: rgba(58,50,40,0.6);
+  display: flex; align-items: center; justify-content: center; z-index: 50; padding: 40rpx;
+}
+.geo-panel {
+  width: 100%; background: var(--bg-card); border-radius: var(--radius-lg);
+  padding: 44rpx 34rpx 30rpx; display: flex; flex-direction: column; align-items: center;
+}
+.geo-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
+.geo-text { font-size: var(--fs-body); color: var(--ink-soft); text-align: center; line-height: 1.7; margin: 18rpx 0 8rpx; }
+.geo-dist { font-size: var(--fs-title); color: var(--dark-gold); font-weight: 600; margin: 10rpx 0 26rpx; }
+.geo-panel .btn-primary { width: 100%; margin-top: 10rpx; }
+.geo-panel .btn-ghost { width: 100%; margin-top: 16rpx; }

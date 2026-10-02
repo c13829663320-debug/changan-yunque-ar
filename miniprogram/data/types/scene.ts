@@ -9,6 +9,9 @@ export interface ChoiceFeedback {
   text: string;
 }
 
+/** 云阙舞台表情（仅 actor==='yunque' 节点生效；缺省 normal） */
+export type YunqueExpression = 'normal' | 'curious' | 'surprised' | 'happy' | 'daze';
+
 export interface DialogChoice {
   id: string;
   text: string;
@@ -16,6 +19,8 @@ export interface DialogChoice {
   feedback: ChoiceFeedback;
   /** 是否为合礼/正确选择，影响即时彩蛋与提示 */
   correct?: boolean;
+  /** correct===true 时的即时彩蛋一句（云阙口吻） */
+  easterEgg?: string;
 }
 
 export type SceneActionType =
@@ -43,6 +48,10 @@ export interface DialogNode {
   action?: SceneAction;
   /** 分支选择（出现选择时暂停，等待用户） */
   choices?: DialogChoice[];
+  /** 云阙表情（仅 actor==='yunque' 生效），缺省 normal */
+  expression?: YunqueExpression;
+  /** 节点级舞台背景覆盖；缺省用 scene.bg */
+  stageBg?: string;
 }
 
 export interface SourceWork {
