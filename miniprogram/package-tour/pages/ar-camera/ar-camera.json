@@ -1,4 +1,8 @@
 {
   "navigationStyle": "custom",
-  "disableScroll": true
+  "disableScroll": true,
+  "usingComponents": {
+    "marker-layer": "/package-tour/ar-components/marker-layer/marker-layer",
+    "lbs-layer": "/package-tour/ar-components/lbs-layer/lbs-layer"
+  }
 }

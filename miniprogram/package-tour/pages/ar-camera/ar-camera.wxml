@@ -1,37 +1,49 @@
 <view class="ar-cam">
-  <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
+  <!-- ===== marker 识别层（VKSession，自带相机画布） ===== -->
+  <marker-layer
+    wx:if="{{bootState === 'ready' && mode === 'marker'}}"
+    scene="{{scene}}"
+    active="{{true}}"
+    enable-glb="{{enableGlb}}"
+    marker-path="{{markerPath}}"
+    reload-key="{{reloadKey}}"
+    bind:status="onLayerStatus"
+    bind:detected="onDetected"
+    bind:lost="onLost"
+    bind:fallback="onLayerFallback"
+  ></marker-layer>
 
-  <view class="cam-top">
+  <!-- ===== LBS 方位 / 静态兜底层（自带相机或主题背景） ===== -->
+  <lbs-layer
+    wx:if="{{bootState === 'ready' && (mode === 'lbs' || mode === 'static')}}"
+    scene="{{scene}}"
+    active="{{true}}"
+    mode="{{mode}}"
+    location-granted="{{locationGranted}}"
+    reload-key="{{reloadKey}}"
+    bind:status="onLayerStatus"
+    bind:arrive="onArrive"
+    bind:heading="noop"
+    bind:permission="onRequestPermission"
+    bind:fallback="onLayerFallback"
+  ></lbs-layer>
+
+  <!-- ===== 启动中遮罩（不渲染相机，避免未授权先黑屏） ===== -->
+  <view class="boot-mask" wx:if="{{bootState !== 'ready'}}">
+    <view class="boot-card">
+      <view class="boot-spinner"></view>
+      <text class="boot-title">现场AR · {{sceneName}}</text>
+      <text class="boot-text">{{statusText}}</text>
+    </view>
+  </view>
+
+  <!-- ===== 顶部标题（就绪后悬浮，不阻挡操作） ===== -->
+  <view class="cam-top" wx:if="{{bootState === 'ready'}}">
     <text class="cam-title">现场AR · {{sceneName}}</text>
-    <text class="cam-tip">对准点位解说牌 / 识别图，或进入触发半径</text>
   </view>
 
-  <!-- 识别 / 方位叠加：真实复原图 -->
-  <view class="cam-overlay" wx:if="{{detected}}">
-    <image wx:if="{{restoreSrc}}" class="ov-restore" src="{{restoreSrc}}" mode="aspectFit" />
-    <view wx:else class="overlay-palace">
-      <view class="ov-roof"></view>
-      <view class="ov-body"></view>
-    </view>
-    <text class="ov-label">{{sceneName}} · AR复原</text>
-  </view>
-
-  <!-- 未识别：扫描框 -->
-  <view class="reticle" wx:else>
-    <view class="reticle-corner tl"></view>
-    <view class="reticle-corner tr"></view>
-    <view class="reticle-corner bl"></view>
-    <view class="reticle-corner br"></view>
-  </view>
-
-  <view class="cam-bottom">
-    <view class="loc-row">
-      <text class="loc-text" wx:if="{{distance}}">{{distance}}</text>
-      <text class="loc-text" wx:if="{{heading}}">{{heading}}</text>
-    </view>
-    <button class="btn-primary detect-btn" bindtap="onDetect">
-      {{detected ? '重新识别' : '识别图中复原'}}
-    </button>
-    <text class="vk-status">{{vkStatus}}</text>
+  <!-- ===== 顶部状态条 ===== -->
+  <view class="status-pill" wx:if="{{bootState === 'ready'}}">
+    <text class="status-text">{{statusText}}</text>
   </view>
 </view>

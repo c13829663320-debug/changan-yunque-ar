@@ -1,144 +1,159 @@
+/**
+ * 现场 AR 相机页（薄编排层）
+ * 职责：能力探测 → 相机/定位授权 → 模式决议 → 挂载 marker-layer 或 lbs-layer；
+ *      处理运行时二次降级与权限重试。具体识别/渲染/方位逻辑下沉到组件与 ar-libs。
+ *
+ * 任何异常都收敛到 static（复原图 + 方位指引），保证不白屏、不崩溃。
+ */
 import { getScene } from '../../../data/repositories/sceneRepo';
 import { ScenePoint } from '../../../data/types/scene';
+import { detectCapability } from '../../ar-libs/capability';
+import { requestARPermissions, guideOpenSetting } from '../../ar-libs/permission';
+import { decideMode, nextFallbackMode } from '../../ar-libs/degrade';
+import { ASSET_PATHS, ARMode, BootState } from '../../ar-libs/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-let session: WechatMiniprogram.VKSession | null = null;
-
 Page({
   data: {
     scene: {} as ScenePoint,
     sceneName: '',
-    detected: false,
-    vkStatus: '',
-    mode: 'vksession' as 'vksession' | 'lbs' | 'demo',
-    distance: '',
-    heading: '',
+    bootState: 'probing' as BootState,
+    mode: 'static' as ARMode,
+    statusText: '正在初始化 AR…',
+    // 授权状态
+    locationGranted: false,
+    // 传给组件
+    markerPath: '',
+    enableGlb: true,
+    reloadKey: 0,
     restoreSrc: '',
+    // 模拟旁路：?simulate=1 时强制 marker 层（开发者工具内用模拟锚点演示叠加）
+    simulate: false,
   },
 
   onLoad(query: Record<string, string | undefined>) {
     const id = query?.id || 'danfengmen';
+    const simulate = query?.simulate === '1';
     const scene = getScene(id);
     if (!scene) {
       wx.showToast({ title: '点位不存在', icon: 'none' });
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
-    const hasVK = typeof (wx as any).createVKSession === 'function';
     this.setData({
       scene,
       sceneName: scene.name,
       restoreSrc: scene.arRestoreImage || '',
-      mode: hasVK ? 'vksession' : 'lbs',
-      vkStatus: hasVK
-        ? 'VisionKit 可用，正在初始化 marker 识别…'
-        : '当前环境不支持 VisionKit，已切换 LBS/罗盘 方位叠加',
+      markerPath: ASSET_PATHS.markerDir + scene.id + '.png',
+      simulate,
     });
-    if (hasVK) {
-      this.initVK(scene);
-    } else {
-      this.initLBS(scene);
-    }
+    this.boot();
   },
 
-  onUnload() {
+  /** 启动流程：探测 → 授权 → 决议 */
+  async boot() {
     try {
-      (session as any)?.destroy?.();
-    } catch (e) {
-      /* noop */
-    }
-    session = null;
-    try {
-      wx.stopCompass();
-      wx.offCompassChange?.();
-    } catch (e) {
-      /* noop */
-    }
-  },
-
-  /** 真机：VKSession v2，marker 识别 + 平面，识别成功后叠加复原 */
-  initVK(scene: ScenePoint) {
-    try {
-      session = (wx as any).createVKSession({
-        track: { plane: { mode: 1 }, marker: true },
-        version: 'v2',
-      }) as WechatMiniprogram.VKSession;
-      session.start((err: any) => {
-        if (err) {
-          this.initLBS(scene);
-          return;
-        }
-        this.setData({ vkStatus: 'AR 已启动：对准解说牌 / 识别图即可叠加复原' });
-      });
-      session.on('updateAnchors', (res: any) => {
-        if (res && res.anchors && res.anchors.length) this.markDetected();
-      });
-      session.on('removeAnchors', () => this.setData({ detected: false }));
-    } catch (e) {
-      this.initLBS(scene);
-    }
-  },
-
-  /** 兜底：LBS 距离 + 罗盘朝向，进入触发半径自动叠加 */
-  initLBS(scene: ScenePoint) {
-    this.setData({
-      mode: 'lbs',
-      vkStatus: 'LBS/罗盘 方位叠加：进入点位触发半径即自动复原',
-    });
-    wx.getLocation({
-      type: 'gcj02',
-      success: (loc) => this.updateDistance(scene, loc),
-      fail: () =>
+      // 模拟旁路：直接进入 marker 层，由组件以模拟锚点演示
+      if (this.data.simulate) {
         this.setData({
-          mode: 'demo',
-          vkStatus: '未获得定位授权，可点按下方按钮手动演示叠加',
-        }),
-    });
-    wx.startCompass();
-    wx.onCompassChange?.((c) => {
-      this.setData({ heading: '朝向 ' + Math.round(c.direction) + '°' });
-    });
-  },
-
-  updateDistance(scene: ScenePoint, loc: WechatMiniprogram.GetLocationSuccessCallbackResult) {
-    if (!scene.geo) return;
-    const d = this.haversine(
-      loc.latitude,
-      loc.longitude,
-      scene.geo.latitude,
-      scene.geo.longitude,
-    );
-    const inside = d <= (scene.geo.radius || 120);
-    this.setData({
-      distance: d < 1000 ? Math.round(d) + ' 米' : (d / 1000).toFixed(1) + ' 公里',
-      detected: inside,
-    });
-  },
-
-  haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371000;
-    const toRad = (x: number) => (x * Math.PI) / 180;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-    return 2 * R * Math.asin(Math.sqrt(a));
-  },
-
-  markDetected() {
-    if (!this.data.detected) {
-      this.setData({ detected: true });
-      wx.showToast({ title: '已识别，殿宇已叠加', icon: 'none' });
+          mode: 'marker',
+          statusText: '模拟环境：演示 marker 识别与殿宇叠加',
+          bootState: 'ready',
+        });
+        return;
+      }
+      detectCapability(); // 提前探测并缓存
+      // 相机 + 定位都尝试申请；marker 模式失败时可无缝降级到 lbs
+      const permission = await requestARPermissions(true);
+      const decision = decideMode(detectCapability(), permission);
+      this.setData({
+        mode: decision.mode,
+        locationGranted: permission.location === 'granted',
+        statusText: decision.reason,
+        bootState: 'ready',
+      });
+    } catch (e) {
+      // 启动异常：直接进入静态兜底
+      this.setData({
+        mode: 'static',
+        bootState: 'ready',
+        statusText: 'AR 初始化异常，已为你展示复原图与方位指引',
+      });
     }
   },
 
-  /** 无真机 / 无定位时手动演示 */
-  onDetect() {
-    this.setData({ detected: !this.data.detected });
+  /** 组件状态文案 */
+  onLayerStatus(e: WechatMiniprogram.CustomEvent<{ text: string }>) {
+    if (e.detail && e.detail.text) this.setData({ statusText: e.detail.text });
   },
 
-  onCamError() {
-    wx.showToast({ title: '相机开启失败，请检查权限', icon: 'none' });
+  /** marker 识别命中 */
+  onDetected(e: WechatMiniprogram.CustomEvent<{ anchorId?: string }>) {
+    this.setData({ statusText: '已识别，殿宇已叠加在遗址之上' });
   },
+
+  onLost() {
+    this.setData({ statusText: '追踪已丢失，移动镜头重新对准识别图' });
+  },
+
+  onArrive() {
+    this.setData({ statusText: '已进入点位范围，殿宇复原已叠加' });
+  },
+
+  /**
+   * 组件请求降级（VKSession 初始化失败 / 相机渲染失败 / 传感器不可用）。
+   */
+  onLayerFallback(
+    e: WechatMiniprogram.CustomEvent<{ from?: ARMode; reason?: string }>,
+  ) {
+    const from = e.detail?.from || this.data.mode;
+    const next = nextFallbackMode(
+      from,
+      this.data.locationGranted ? 'granted' : 'permanently-denied',
+    );
+    if (next === this.data.mode) return;
+    this.setData({
+      mode: next,
+      statusText:
+        (e.detail?.reason ? e.detail.reason + '；' : '') +
+        (next === 'lbs'
+          ? '已切换 LBS/罗盘方位引导'
+          : '已切换复原图 + 方位指引'),
+      reloadKey: this.data.reloadKey + 1,
+    });
+  },
+
+  /**
+   * lbs-layer 请求开启权限（相机/定位被拒后的入口）。
+   */
+  async onRequestPermission(
+    e: WechatMiniprogram.CustomEvent<{ scope?: string }>,
+  ) {
+    const scope = e.detail?.scope || 'scope.camera';
+    const isLocation = scope === 'scope.userLocation';
+    const granted = await guideOpenSetting({
+      scope,
+      title: isLocation ? '需要定位权限' : '需要相机权限',
+      content: isLocation
+        ? '开启定位后，可在现场依据距离与罗盘方位叠加殿宇复原'
+        : '开启相机后，可在遗址之上实时叠加殿宇复原',
+    });
+    if (!granted) return;
+    // 成功后重新决议并强制组件重建
+    const permission = await requestARPermissions(true);
+    const decision = decideMode(detectCapability(), permission);
+    this.setData({
+      mode: decision.mode,
+      locationGranted: permission.location === 'granted',
+      statusText: decision.reason,
+      reloadKey: this.data.reloadKey + 1,
+    });
+  },
+
+  /** 手动重新识别（页面级兜底入口） */
+  onRetry() {
+    this.setData({ reloadKey: this.data.reloadKey + 1 });
+  },
+
+  noop() {},
 });
