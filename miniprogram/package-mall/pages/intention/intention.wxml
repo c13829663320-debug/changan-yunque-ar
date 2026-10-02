@@ -1,24 +1,44 @@
 <view class="page-wrap intention">
-  <view class="card ok-head">
-    <text class="ok-title">意向已登记</text>
-    <text class="ok-sub">商品开售时将优先通知你，当前阶段暂不扣款。</text>
+  <!-- 已提交 -->
+  <view class="card ok-head" wx:if="{{submitted}}">
+    <text class="ok-title">意向已{{cloudReady ? '提交' : '登记'}}</text>
+    <text class="ok-sub">已记录你的联系方式，商品开售时将优先短信通知；当前阶段暂不扣款。</text>
   </view>
 
-  <block wx:if="{{items.length}}">
-    <view class="card int-item" wx:for="{{items}}" wx:key="id">
-      <view class="ii-cover"><text>{{item.categoryLabel}}</text></view>
+  <!-- 待提交：联系方式表单 -->
+  <view class="card form-card" wx:else>
+    <text class="form-title">留下联系方式</text>
+    <view class="field">
+      <text class="field-label">称呼</text>
+      <input class="field-input" placeholder="怎么称呼你" value="{{name}}" bindinput="onName" />
+    </view>
+    <view class="field">
+      <text class="field-label">手机号</text>
+      <input class="field-input" type="number" maxlength="11" placeholder="用于开售提醒" value="{{phone}}" bindinput="onPhone" />
+    </view>
+    <view class="field">
+      <text class="field-label">备注</text>
+      <input class="field-input" placeholder="选填，如规格 / 数量" value="{{remark}}" bindinput="onRemark" />
+    </view>
+  </view>
+
+  <!-- 意向商品 -->
+  <view class="card list-card" wx:if="{{items.length}}">
+    <text class="form-title">意向商品（{{items.length}}）</text>
+    <view class="int-item" wx:for="{{items}}" wx:key="id">
+      <image class="ii-cover" src="{{item.cover}}" mode="aspectFill" />
       <view class="ii-info">
         <text class="ii-name">{{item.name}}</text>
         <text class="ii-price">¥{{item.price}} · 预售</text>
       </view>
-      <text class="ii-status">已登记</text>
+      <text class="ii-status">{{submitted ? '已登记' : '待提交'}}</text>
     </view>
-  </block>
-
-  <view class="card note-card">
-    <text class="text-muted">接入微信云开发后，意向单将同步至云端，并支持开售提醒与一键转正式订单。</text>
   </view>
 
+  <button class="btn-primary submit-btn" wx:if="{{!submitted}}" bindtap="submit" loading="{{submitting}}">
+    {{cloudReady ? '提交意向登记' : '提交（演示 · 本地登记）'}}
+  </button>
+
   <button class="btn-ghost clear-btn" bindtap="clear">清空意向单</button>
-  <button class="btn-primary back-mall" bindtap="goMall">继续逛逛</button>
+  <button class="btn-ghost back-mall" bindtap="goMall">继续逛逛</button>
 </view>

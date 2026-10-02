@@ -1,15 +1,25 @@
-.ok-head { text-align:center; }
-.ok-title { font-size:var(--fs-title); color:var(--dark-gold); font-weight:700; display:block; }
-.ok-sub { font-size:var(--fs-small); color:var(--ink-muted); display:block; margin-top:12rpx; line-height:1.6; }
+.ok-head { text-align: center; }
+.ok-title { font-size: var(--fs-title); color: var(--dark-gold); font-weight: 700; display: block; }
+.ok-sub { font-size: var(--fs-small); color: var(--ink-muted); display: block; margin-top: 12rpx; line-height: 1.6; }
 
-.int-item { display:flex; align-items:center; gap:18rpx; padding:20rpx; }
-.ii-cover { width:110rpx; height:110rpx; border-radius:var(--radius-sm); background:linear-gradient(160deg,#ece1cd,#e0d2b8); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.ii-cover text { font-size:18rpx; color:var(--dark-gold); text-align:center; }
-.ii-info { flex:1; min-width:0; }
-.ii-name { font-size:var(--fs-small); color:var(--ink); line-height:1.4; display:block; }
-.ii-price { font-size:var(--fs-small); color:var(--cinnabar); display:block; margin-top:8rpx; }
-.ii-status { font-size:var(--fs-mini); color:var(--dark-gold); }
+/* 表单 */
+.form-card { padding: 28rpx 24rpx; }
+.form-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; display: block; margin-bottom: 12rpx; }
+.field { display: flex; align-items: center; gap: 20rpx; padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
+.field:last-child { border-bottom: none; }
+.field-label { width: 110rpx; font-size: var(--fs-small); color: var(--ink-soft); flex-shrink: 0; }
+.field-input { flex: 1; font-size: var(--fs-body); color: var(--ink); }
 
-.note-card { text-align:center; }
-.clear-btn { margin-bottom:16rpx; }
-.back-mall { margin-top:4rpx; }
+.list-card { padding: 28rpx 24rpx; }
+
+.int-item { display: flex; align-items: center; gap: 18rpx; padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
+.int-item:last-child { border-bottom: none; }
+.ii-cover { width: 96rpx; height: 96rpx; border-radius: var(--radius-sm); flex-shrink: 0; }
+.ii-info { flex: 1; min-width: 0; }
+.ii-name { font-size: var(--fs-small); color: var(--ink); line-height: 1.4; display: block; }
+.ii-price { font-size: var(--fs-small); color: var(--cinnabar); display: block; margin-top: 6rpx; }
+.ii-status { font-size: var(--fs-mini); color: var(--dark-gold); }
+
+.submit-btn { margin-top: 8rpx; }
+.clear-btn { margin-top: 16rpx; margin-bottom: 16rpx; }
+.back-mall { margin-top: 4rpx; }

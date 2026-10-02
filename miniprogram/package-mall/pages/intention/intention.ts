@@ -2,6 +2,7 @@ import { getGoods } from '../../../data/repositories/goodsRepo';
 import { CATEGORY_LABEL, Goods } from '../../../data/types/goods';
 
 const INTENTION_KEY = 'changan_yunque_intentions';
+const SUBMITTED_KEY = 'changan_yunque_intentions_done';
 
 interface IntVM extends Goods {
   categoryLabel: string;
@@ -10,19 +11,85 @@ interface IntVM extends Goods {
 Page({
   data: {
     items: [] as IntVM[],
+    name: '',
+    phone: '',
+    remark: '',
+    submitting: false,
+    submitted: false,
+    cloudReady: false,
   },
 
   onShow() {
-    this.load();
-  },
-
-  load() {
+    const doneIds = (wx.getStorageSync(SUBMITTED_KEY) as string[]) || [];
     const ids = (wx.getStorageSync(INTENTION_KEY) as string[]) || [];
-    const items: IntVM[] = ids
+    const pending = ids.filter((id) => !doneIds.includes(id));
+    const showIds = pending.length ? pending : doneIds;
+    const items: IntVM[] = showIds
       .map((id) => getGoods(id))
       .filter((g): g is Goods => !!g)
       .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
-    this.setData({ items });
+    this.setData({
+      items,
+      submitted: pending.length === 0 && doneIds.length > 0,
+      cloudReady: !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction),
+    });
+  },
+
+  onName(e: WechatMiniprogram.Input) {
+    this.setData({ name: e.detail.value });
+  },
+  onPhone(e: WechatMiniprogram.Input) {
+    this.setData({ phone: e.detail.value });
+  },
+  onRemark(e: WechatMiniprogram.Input) {
+    this.setData({ remark: e.detail.value });
+  },
+
+  submit() {
+    const { name, phone, items, remark, cloudReady } = this.data;
+    if (!items.length) {
+      wx.showToast({ title: '没有意向商品', icon: 'none' });
+      return;
+    }
+    if (!name.trim()) {
+      wx.showToast({ title: '请填写称呼', icon: 'none' });
+      return;
+    }
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      wx.showToast({ title: '请填写正确手机号', icon: 'none' });
+      return;
+    }
+    this.setData({ submitting: true });
+    const goodsIds = items.map((g) => g.id);
+    const done = () => {
+      const existing = (wx.getStorageSync(SUBMITTED_KEY) as string[]) || [];
+      wx.setStorageSync(SUBMITTED_KEY, Array.from(new Set([...existing, ...goodsIds])));
+      wx.setStorageSync(INTENTION_KEY, []);
+      this.setData({ submitting: false, submitted: true });
+    };
+
+    if (cloudReady) {
+      wx.cloud.callFunction({
+        name: 'intention',
+        data: { goodsIds, name: name.trim(), phone, remark },
+        success: (res) => {
+          const result = res.result as { success?: boolean } | undefined;
+          if (result && result.success) {
+            done();
+          } else {
+            done();
+            wx.showToast({ title: '云端暂不可用，已本地登记', icon: 'none' });
+          }
+        },
+        fail: () => {
+          done();
+          wx.showToast({ title: '演示模式：已本地登记', icon: 'none' });
+        },
+      });
+    } else {
+      done();
+      wx.showToast({ title: '演示模式：已本地登记', icon: 'none' });
+    }
   },
 
   clear() {
@@ -32,7 +99,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.setStorageSync(INTENTION_KEY, []);
-          this.setData({ items: [] });
+          wx.setStorageSync(SUBMITTED_KEY, []);
+          this.setData({ items: [], submitted: false });
         }
       },
     });
