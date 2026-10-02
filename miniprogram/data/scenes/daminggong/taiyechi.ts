@@ -3,7 +3,7 @@ import { ScenePoint } from '../../types/scene';
 /**
  * 点位 5 · 太液池（重剧场）
  * 身份：随游后苑的近臣；龙鳞：池苑鳞
- * 闭环：look_around → choices(临池对句) → ar_restore(一池三山) → open_source_card(史料卡) → collect_scale
+ * 闭环：look_around → choices(临池对句) → ar_restore(一池三山) → open_source_card → collect_scale
  */
 const taiyechi: ScenePoint = {
   id: 'taiyechi',
@@ -28,28 +28,30 @@ const taiyechi: ScenePoint = {
     {
       id: 'tyc-1',
       actor: 'narrator',
-      text: '暮色四合，你随御舟缓缓划入太液池。水面平得像磨过的玉，岸旁灯烛初上，映出碎金似的光。',
+      text: '暮色四合，你随御舟划入太液池。水面平得像磨过的玉，岸旁灯烛映出碎金似的光。',
       action: { type: 'look_around' },
     },
     {
       id: 'tyc-2',
       actor: 'yunque',
+      expression: 'surprised',
       text: '（扒着船舷）哇——这池子也太大了！水中央那些长着树的小洲，是小岛吗？',
     },
     {
       id: 'tyc-3',
       actor: 'he',
       actorName: '贺拾遗',
-      text: '那不是寻常小洲，是仙山。太液池不只是一池水——匠人在水中堆出三座山：蓬莱、方丈、瀛洲，取法秦汉「一池三山」的古制，象征东海之外的三座神山。',
+      text: '那不是寻常小洲，是仙山。匠人在水中堆出三座山：蓬莱、方丈、瀛洲，取法秦汉「一池三山」古制。',
     },
     {
       id: 'tyc-4',
       actor: 'narrator',
-      text: '帝王以一池三山，把海上仙境搬进宫苑。人居长安城里，也仿佛能望见缥缈仙山。',
+      text: '帝王以一池三山，把海上仙境搬进宫苑，也仿佛能望见缥缈仙山。',
     },
     {
       id: 'tyc-5',
       actor: 'yunque',
+      expression: 'curious',
       text: '那……哪一座是蓬莱？听说蓬莱最远最险，只有神仙才住得上去。',
     },
     {
@@ -67,6 +69,7 @@ const taiyechi: ScenePoint = {
             actorName: '贺拾遗',
             text: '（击节）好！「芙蓉」对「宫阙」，「千顷碧」对「五云高」，对仗工稳，气韵也接得上。这一句，可记入今日的诗卷。',
           },
+          easterEgg: '（拍手）对得好！我虽不大懂诗，可这两句放在一处，听着就像那么回事。',
         },
         {
           id: 'tyc-c-xie',
@@ -89,33 +92,36 @@ const taiyechi: ScenePoint = {
     {
       id: 'tyc-8',
       actor: 'yunque',
-      text: '（望着复原图，轻声）原来三座山这样遥遥相望……像把一整座仙境，沉沉叠进了这池水里。',
+      expression: 'normal',
+      text: '（望着复原图，轻声）原来三座山这样遥遥相望……像把一整座仙境，叠进了这池水里。',
     },
     {
       id: 'tyc-9',
       actor: 'narrator',
-      text: '贺拾遗闲闲道：这套「一池三山」自秦汉而来，到唐时仍在沿用。可点开史料卡，看看它见载于何书。',
+      text: '贺拾遗闲闲道：这套「一池三山」的章法，自秦汉便沿用至今。',
       action: { type: 'open_source_card' },
     },
     {
       id: 'tyc-10',
       actor: 'narrator',
-      text: '船上笑声渐起，云阙却没跟着笑。她正望着蓬莱山在水中的倒影，出了神。',
+      text: '船上笑声渐起，云阙却没跟着笑。她望着蓬莱山在水中的倒影，出了神。',
     },
     {
       id: 'tyc-11',
       actor: 'yunque',
-      text: '（声音很轻）……这水现在真清啊，山亭的影子都照得见。我好像见过它另一个样子：也是这片水，却荒了——山平了，灯也一盏不剩。',
+      expression: 'daze',
+      text: '（声音很轻）……这水现在真清啊。我好像见过它另一个样子：也是这片水，却荒了——山平了，灯也不剩。',
     },
     {
       id: 'tyc-12',
       actor: 'narrator',
-      text: '她没再说下去，只是拢了拢衣袖，像把一段遥远的心事，悄悄放回了水里。',
+      text: '她没再说下去，只拢了拢衣袖，像把一段遥远的心事，悄悄放回了水里。',
     },
     {
       id: 'tyc-13',
       actor: 'yunque',
-      text: '（忽然抬头，掌心浮起一片温润青鳞）不想这些了。这片「池苑鳞」给你——你看，天已经全黑了。前头麟德殿今夜设宴，外邦的客人都到了。快些去，去晚了，舞马就要开场了。',
+      expression: 'happy',
+      text: '（忽然抬头，掌心浮起青鳞）这片「池苑鳞」给你——前头麟德殿设宴，舞马就要开场了，快些去。',
       action: { type: 'collect_scale' },
     },
   ],
