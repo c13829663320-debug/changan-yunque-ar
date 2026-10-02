@@ -19,3 +19,6 @@ Thumbs.db
 .env
 .env.local
 dist/
+
+# 录屏中间产物（最终成片在 media/）
+demo/raw/

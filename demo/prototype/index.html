@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>长安云阙 · 高保真交互原型</title>
+<style>
+:root{
+  --ivory:#f4ecdd; --moon:#e6ebea; --azurite:#8fa6ab; --celadon:#a6bfae;
+  --ochre:#c7a987; --gold:#a8893a; --gold-soft:#cdb57e; --cinnabar:#9e4a2a;
+  --ink:#463e36; --ink-soft:#6a5f52; --muted:#9a8e7e;
+  --card:#fbf6ec; --line:#e3d8c2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:"PingFang SC","Noto Serif SC",serif;
+  background:radial-gradient(120% 80% at 50% 0%,#2c3236,#1c2023);
+  display:flex;align-items:center;justify-content:center;min-height:100vh;
+}
+.phone{
+  position:relative;width:414px;height:896px;border-radius:46px;overflow:hidden;
+  background:var(--ivory);box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 12px #0d0f11,0 0 0 14px #33383c;
+}
+/* 状态栏 */
+.statusbar{
+  position:absolute;top:0;left:0;right:0;height:44px;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+  font-size:15px;font-weight:600;color:var(--ink);
+}
+.statusbar.dark{color:#fff;}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;}
+.screen.on{display:flex;animation:fade .45s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.scroll{flex:1;overflow-y:auto;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* tabbar */
+.tabbar{
+  height:78px;background:rgba(251,246,236,.96);border-top:1rpx solid var(--line);
+  display:flex;backdrop-filter:blur(8px);z-index:40;
+}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:11px;cursor:pointer;}
+.tab.on{color:var(--cinnabar);}
+.tab .ic{font-size:22px;}
+
+/* 通用 */
+.wrap{padding:54px 18px 16px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 22px rgba(70,62,54,.08);padding:16px;margin-bottom:14px;}
+.h2{font-size:17px;color:var(--ink);font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.btn{
+  border:none;cursor:pointer;font-family:inherit;width:100%;padding:14px;border-radius:14px;
+  font-size:16px;font-weight:600;letter-spacing:2px;
+}
+.btn-primary{background:linear-gradient(180deg,#b0563a,#92401f);color:#fbe9d6;box-shadow:0 10px 22px rgba(158,74,42,.32);}
+.btn-gold{background:linear-gradient(180deg,#b8964a,#9a7c33);color:#fdf4df;}
+.btn-ghost{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+.tag{display:inline-block;font-size:11px;color:var(--gold);border:1px solid var(--gold-soft);border-radius:999px;padding:2px 10px;margin:0 5px 5px 0;}
+.muted{color:var(--muted);font-size:12px;}
+
+/* ============ HOME ============ */
+#home .bg{position:absolute;inset:0;background:
+  radial-gradient(120% 55% at 15% 5%,rgba(166,191,174,.4),transparent 60%),
+  radial-gradient(120% 60% at 85% 10%,rgba(143,166,171,.35),transparent 55%),
+  linear-gradient(180deg,#efe7d6,#f4ecdd 50%,#f6efe2);}
+.hero{position:relative;display:flex;flex-direction:column;align-items:center;padding:58px 18px 0;}
+.hero-img{width:150px;height:200px;border-radius:80px 80px 16px 16px;border:2px solid var(--gold-soft);box-shadow:0 14px 34px rgba(70,62,54,.22);object-fit:cover;}
+.bubble{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:14px 6px 0;font-size:13.5px;line-height:1.7;color:var(--ink-soft);}
+.bubble::before{content:"";position:absolute;top:-7px;left:40px;width:14px;height:14px;background:var(--card);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);}
+.hero .btn{margin-top:14px;}
+.hint{font-size:11px;color:var(--muted);margin-top:9px;}
+.mode-grid{display:flex;gap:10px;padding:16px 18px 0;}
+.mode{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 8px;text-align:center;cursor:pointer;}
+.mode .w{font-size:22px;color:var(--cinnabar);letter-spacing:3px;}
+.mode:nth-child(2) .w{color:#5f7d84;}
+.mode .n{font-size:14px;font-weight:700;color:var(--ink);margin-top:4px;}
+.mode .d{font-size:10.5px;color:var(--muted);margin-top:3px;}
+.feat-scroll{display:flex;gap:10px;overflow-x:auto;padding:10px 18px;}
+.feat-scroll::-webkit-scrollbar{display:none;}
+.gmini{flex:0 0 110px;cursor:pointer;}
+.gmini img{width:110px;height:110px;border-radius:12px;object-fit:cover;border:1px solid var(--line);}
+.gmini .gn{font-size:11px;color:var(--ink);margin-top:5px;line-height:1.3;height:28px;overflow:hidden;}
+.gmini .gp{font-size:11px;color:var(--cinnabar);}
+
+/* ============ TOUR MAP ============ */
+#tour .bg{position:absolute;inset:0;background:linear-gradient(180deg,#e7dcc6,#f1e8d6);}
+.mapwrap{position:relative;flex:1;padding:54px 14px 12px;}
+.mapline{position:relative;margin:6px auto;width:340px;}
+.dot{position:relative;display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;}
+.dot .num{width:42px;height:42px;border-radius:50%;background:linear-gradient(180deg,#b8964a,#9a7c33);color:#fdf4df;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;box-shadow:0 6px 14px rgba(168,137,58,.4);z-index:2;}
+.dot.done .num{background:linear-gradient(180deg,#7d9a86,#5f7d6a);}
+.dot .dl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;flex:1;}
+.dot .dn{font-size:14px;font-weight:700;color:var(--ink);}
+.dot .ds{font-size:11px;color:var(--muted);}
+.dot .sc{font-size:10px;color:var(--gold);}
+.mapline::before{content:"";position:absolute;left:20px;top:20px;bottom:34px;width:3px;background:repeating-linear-gradient(180deg,var(--gold-soft) 0 8px,transparent 8px 14px);z-index:1;}
+.seg{display:flex;margin:0 18px 10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;}
+.seg div{flex:1;text-align:center;padding:8px;font-size:13px;border-radius:9px;cursor:pointer;color:var(--muted);}
+.seg div.on{background:var(--cinnabar);color:#fbe9d6;}
+
+/* ============ SCENE / 剧场 ============ */
+#scene{background:#222;}
+.stage{position:absolute;inset:0;}
+.stage .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.stage .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,12,.35),rgba(20,16,12,.15) 40%,rgba(20,16,12,.72));}
+.stage-top{position:absolute;top:52px;left:18px;right:18px;z-index:5;}
+.stage-name{color:#f6e9cf;font-size:20px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+.stage-sub{color:#e8d9b8;font-size:12px;margin-top:3px;}
+.scales-top{position:absolute;top:54px;right:18px;color:#f0d9a0;font-size:12px;z-index:6;}
+.dialog-zone{position:absolute;left:0;right:0;bottom:0;padding:14px 16px 22px;z-index:8;}
+.face-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:10px;}
+.face{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-soft);box-shadow:0 6px 16px rgba(0,0,0,.4);}
+.dbubble{background:rgba(251,246,236,.97);border-radius:16px;padding:12px 15px;font-size:14px;line-height:1.65;color:var(--ink);flex:1;box-shadow:0 10px 26px rgba(0,0,0,.35);}
+.dbubble .sp{color:var(--cinnabar);font-weight:700;margin-right:6px;}
+.choices{display:flex;flex-direction:column;gap:9px;margin-bottom:8px;}
+.choice{background:rgba(251,246,236,.95);border:1px solid var(--gold-soft);border-radius:13px;padding:12px 14px;font-size:14px;color:var(--ink);cursor:pointer;text-align:left;}
+.tap-hint{text-align:center;color:#f0e2c2;font-size:12px;margin-top:8px;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+.scene-actions{display:flex;gap:10px;margin-top:10px;}
+.scene-actions .btn{flex:1;padding:12px;font-size:14px;}
+
+/* AR overlay 全屏 */
+.overlay{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;}
+.overlay.on{display:flex;animation:fade .35s;}
+.ov-ar{background:#0c1418;}
+.ov-ar .arbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92;}
+.scanframe{position:absolute;inset:60px 28px 120px;border:2px solid var(--gold-soft);border-radius:18px;}
+.scanframe::before,.scanframe::after{content:"";position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#7fd6c6,transparent);animation:scan 2.2s linear infinite;}
+@keyframes scan{0%{top:0;}100%{top:100%;}}
+.ar-tag{position:absolute;top:66px;left:0;right:0;text-align:center;color:#bfe6dc;font-size:13px;z-index:3;}
+.ov-card{background:rgba(20,28,32,.86);}
+.source-card{position:absolute;inset:70px 22px 120px;background:linear-gradient(180deg,#fbf3e0,#f2e6cc);border:2px solid var(--gold);border-radius:18px;padding:22px 20px;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.5);}
+.source-card .sh{font-size:18px;color:var(--cinnabar);font-weight:700;text-align:center;margin-bottom:14px;letter-spacing:3px;}
+.source-card .sbody{font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
+.source-card .ref{margin-top:16px;padding-top:12px;border-top:1px dashed var(--gold-soft);font-size:12px;color:var(--gold);}
+.overlay .close{position:absolute;bottom:40px;left:22px;right:22px;z-index:5;}
+
+/* 集鳞动画 */
+.scale-pop{position:absolute;inset:0;z-index:25;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(15,12,8,.78);}
+.scale-pop.on{display:flex;}
+.scale-coin{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#f6e3ac,#c79a3e 70%,#9a7428);
+  display:flex;align-items:center;justify-content:center;color:#5f4310;font-size:15px;font-weight:700;
+  box-shadow:0 0 50px rgba(240,200,110,.8),inset 0 0 20px rgba(255,255,255,.4);animation:pop .6s cubic-bezier(.2,1.4,.4,1);}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.scale-label{color:#f3e2b6;font-size:18px;margin-top:20px;letter-spacing:4px;}
+
+/* ============ AR CAMERA ============ */
+#arcam{background:#0c1418;}
+.cam-feed{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;}
+.cam-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,12,14,.6),transparent 30%,rgba(6,12,14,.7));}
+.cam-top{position:absolute;top:54px;left:18px;right:18px;color:#cfe9e2;z-index:5;font-size:13px;text-align:center;}
+.cam-cross{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:200px;height:200px;border:2px dashed rgba(160,230,214,.6);border-radius:20px;display:flex;align-items:center;justify-content:center;}
+.cam-arobj{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:280px;border-radius:14px;display:none;box-shadow:0 20px 50px rgba(0,0,0,.5);border:1px solid var(--gold-soft);}
+.cam-arobj.on{display:block;animation:fade .6s;}
+.cam-bottom{position:absolute;bottom:30px;left:18px;right:18px;z-index:6;}
+.cam-status{position:absolute;bottom:120px;left:18px;right:18px;background:rgba(12,22,26,.8);border:1px solid rgba(160,230,214,.3);border-radius:12px;padding:10px 14px;color:#bfe0d8;font-size:12px;text-align:center;}
+
+/* ============ MALL ============ */
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;padding:54px 14px 8px;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tabs div{flex:0 0 auto;font-size:12.5px;padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;}
+.cat-tabs div.on{background:var(--cinnabar);color:#fbe9d6;border-color:var(--cinnabar);}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 16px 16px;}
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 6px 16px rgba(70,62,54,.08);}
+.gcard img{width:100%;height:150px;object-fit:cover;}
+.gcard .ginfo{padding:9px 11px;}
+.gcard .gname{font-size:13px;color:var(--ink);line-height:1.35;height:35px;overflow:hidden;}
+.gcard .grow{display:flex;align-items:center;justify-content:space-between;margin-top:7px;}
+.gcard .gprice{color:var(--cinnabar);font-weight:700;font-size:14px;}
+.gcard .gpre{font-size:9.5px;color:var(--gold);border:1px solid var(--gold-soft);border-radius:6px;padding:1px 6px;}
+
+/* detail */
+.det-hero{width:100%;height:340px;object-fit:cover;}
+.det-body{padding:16px 18px 100px;}
+.det-name{font-size:19px;color:var(--ink);font-weight:700;line-height:1.4;}
+.det-price{color:var(--cinnabar);font-size:24px;font-weight:700;margin:10px 0;}
+.det-price small{font-size:12px;color:var(--gold);font-weight:400;margin-left:8px;}
+.det-sec{font-size:14px;line-height:1.7;color:var(--ink-soft);margin:12px 0;}
+.cnote{background:#f6ecd6;border-left:3px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--gold);margin:12px 0;line-height:1.6;}
+.det-bar{position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px 24px;display:flex;gap:10px;z-index:15;}
+.det-bar .btn{flex:1;padding:13px;font-size:14px;}
+
+/* cart / intention form */
+.form-row{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.form-row label{font-size:13px;color:var(--ink-soft);}
+.form-row input{border:1px solid var(--line);border-radius:11px;padding:13px 14px;font-size:14px;background:#fff;font-family:inherit;}
+.cart-li{display:flex;gap:11px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
+.cart-li img{width:64px;height:64px;border-radius:10px;object-fit:cover;}
+.cart-li .ci{flex:1;}
+.cart-li .cn{font-size:13.5px;color:var(--ink);}
+.cart-li .cp{font-size:13px;color:var(--cinnabar);margin-top:4px;}
+.success-box{text-align:center;padding:40px 20px;}
+.success-box .si{font-size:60px;}
+.success-box .st{font-size:18px;color:var(--ink);margin:14px 0 6px;font-weight:700;}
+.cloud-badge{display:inline-block;font-size:10.5px;background:#e7f0ea;color:#4d7a63;border-radius:6px;padding:2px 8px;margin-left:6px;}
+
+/* mine */
+#mine .mbg{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 50% 0%,rgba(166,191,174,.35),transparent 65%),
+  linear-gradient(180deg,#ece1cd,#f4ecdd);}
+.mhead{position:relative;display:flex;flex-direction:column;align-items:center;padding:60px 0 20px;}
+.mhead img{width:80px;height:80px;border-radius:50%;border:2px solid var(--gold-soft);object-fit:cover;}
+.mhead .mn{font-size:18px;font-weight:700;color:var(--ink);margin-top:10px;}
+.mhead .ms{font-size:12px;color:var(--muted);margin-top:4px;}
+.stat-grid{display:flex;gap:10px;padding:6px 16px;}
+.stat-grid .st2{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 0;text-align:center;}
+.stat-grid .sn{font-size:24px;color:var(--gold);font-weight:700;}
+.stat-grid .sl{font-size:11px;color:var(--muted);margin-top:3px;}
+.spot-li{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer;}
+.spot-li:last-child{border-bottom:none;}
+.spot-li .spn{font-size:14px;color:var(--ink);}
+.spot-li .sps{font-size:11px;color:var(--muted);margin-top:2px;}
+.spot-li .spb{font-size:10.5px;border-radius:999px;padding:3px 11px;}
+.spb.on{color:var(--gold);border:1px solid var(--gold-soft);}
+.spb.soon{color:var(--muted);background:#efe7d6;}
+.menu-li{display:flex;align-items:center;justify-content:space-between;padding:15px 2px;border-bottom:1px solid var(--line);cursor:pointer;}
+.menu-li:last-child{border-bottom:none;}
+.menu-li .ml2{font-size:14px;color:var(--ink-soft);}
+.menu-li .ma2{color:var(--muted);}
+
+/* wish card */
+#wish{background:#3a2a20;}
+.wish-canvas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:60px 20px;}
+.wishcard{width:100%;max-width:330px;aspect-ratio:3/4.3;border-radius:16px;
+  background:linear-gradient(165deg,#a8452b,#7d2d18 60%,#6a2414);
+  border:3px double #e7c878;box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 0 40px rgba(231,200,120,.15);
+  padding:26px 22px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;}
+.wishcard::before{content:"";position:absolute;inset:9px;border:1px solid rgba(231,200,120,.55);border-radius:10px;pointer-events:none;}
+.wc-title{color:#f3dd9e;font-size:22px;letter-spacing:8px;font-weight:700;margin-top:6px;}
+.wc-sub{color:#e6c98a;font-size:11px;margin-top:8px;letter-spacing:2px;}
+.wc-scales{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:22px 0 8px;width:100%;padding:0 8px;}
+.wc-scales .s{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 36% 30%,#f6e3ac,#c79a3e);display:flex;align-items:center;justify-content:center;font-size:9px;color:#5f4310;font-weight:700;box-shadow:0 3px 8px rgba(0,0,0,.3);}
+.wc-wish{color:#f4e3b6;font-size:13px;line-height:1.9;text-align:center;margin-top:14px;letter-spacing:1px;}
+.wc-sign{color:#d9b96e;font-size:11px;margin-top:auto;align-self:flex-end;letter-spacing:2px;}
+.wish-actions{position:absolute;bottom:24px;left:20px;right:20px;display:flex;gap:10px;z-index:5;}
+.wish-actions .btn{flex:1;padding:12px;font-size:13.5px;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="statusbar" id="statusbar"><span>9:41</span><span>长安云阙 &nbsp; 5G &nbsp; 100%</span></div>
+
+  <!-- ============ HOME ============ -->
+  <section class="screen on" id="home">
+    <div class="bg"></div>
+    <div class="scroll">
+      <div class="hero">
+        <img class="hero-img" src="/assets/characters/yunque-girl.png" alt="云阙" />
+        <div class="bubble">你来了……我是云阙，一只从盛唐醒来的小走龙。随我入宫，一起去看看千宫之宫，还有那些少有人知的旧事，好不好？</div>
+        <button class="btn btn-primary" id="btn-enter">随我入宫</button>
+        <div class="hint">一键直达丹凤门 · 约2分钟体验首个剧场</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mode" id="mode-cloud"><div class="w">云游</div><div class="n">云游长安</div><div class="d">虚拟主线，随处可玩</div></div>
+        <div class="mode" id="mode-site"><div class="w">现场</div><div class="n">现场巡游</div><div class="d">人在大明宫 AR集章</div></div>
+      </div>
+      <div class="card" style="margin:14px 18px 0;" id="home-spot">
+        <div class="h2">大明宫国家遗址公园 <span style="font-size:20px;color:var(--muted);">›</span></div>
+        <div style="margin-top:8px;"><span class="tag">世界文化遗产</span><span class="tag">千宫之宫</span></div>
+        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:8px;line-height:1.7;">唐长安城三大内之一，634年始建、663年启用，十七帝在此理政二百余年。</div>
+      </div>
+      <div style="padding:16px 18px 0;"><div class="h2">云阙甄选 <span class="muted" id="home-go-mall" style="cursor:pointer;">进商城 ›</span></div></div>
+      <div class="feat-scroll" id="feat-scroll"></div>
+      <div style="height:14px;"></div>
+    </div>
+  </section>
+
+  <!-- ============ TOUR MAP ============ -->
+  <section class="screen" id="tour">
+    <div class="bg"></div>
+    <div class="mapwrap">
+      <div class="seg"><div id="seg-cloud" class="on">云游模式</div><div id="seg-site">现场模式</div></div>
+      <div class="mapline" id="mapline"></div>
+      <button class="btn btn-primary" id="btn-start-tour" style="margin:4px 18px;">从丹凤门开始巡游</button>
+    </div>
+  </section>
+
+  <!-- ============ SCENE ============ -->
+  <section class="screen" id="scene">
+    <div class="stage">
+      <img class="bgimg" id="sc-bg" src="" />
+      <div class="scrim"></div>
+    </div>
+    <div class="stage-top"><div class="stage-name" id="sc-name"></div><div class="stage-sub" id="sc-sub"></div></div>
+    <div class="scales-top" id="sc-scales">已集 0 鳞</div>
+
+    <div class="dialog-zone" id="dialog-zone">
+      <div class="face-row">
+        <img class="face" src="/assets/characters/yunque-girl.png" />
+        <div class="dbubble"><span class="sp">云阙</span><span id="sc-text"></span></div>
+      </div>
+      <div class="choices" id="sc-choices"></div>
+      <div class="scene-actions" id="sc-actions"></div>
+      <div class="tap-hint" id="tap-hint">轻触屏幕继续 ›</div>
+    </div>
+
+    <!-- AR overlay -->
+    <div class="overlay ov-ar" id="ov-ar">
+      <img class="arbg" id="ar-img" src="" />
+      <div class="ar-tag">AR 复原 · 盛唐原貌再现</div>
+      <div class="scanframe"></div>
+      <button class="btn btn-gold close" id="ar-close">收下复原，继续</button>
+    </div>
+    <!-- source overlay -->
+    <div class="overlay ov-card" id="ov-source">
+      <div class="source-card">
+        <div class="sh">史 料 卡</div>
+        <div class="sbody" id="src-body"></div>
+        <div class="ref" id="src-ref"></div>
+      </div>
+      <button class="btn btn-gold close" id="src-close">合上史料卡</button>
+    </div>
+    <!-- scale pop -->
+    <div class="scale-pop" id="scale-pop">
+      <div class="scale-coin" id="scale-coin"></div>
+      <div class="scale-label" id="scale-label"></div>
+    </div>
+  </section>
+
+  <!-- ============ AR CAMERA ============ -->
+  <section class="screen" id="arcam">
+    <img class="cam-feed" id="cam-feed" src="" />
+    <div class="cam-scrim"></div>
+    <div class="cam-top" id="cam-top">现场 AR · 请将镜头对准遗址说明牌</div>
+    <div class="cam-cross" id="cam-cross"><span style="color:#9fd8cc;font-size:12px;">移动手机扫描环境</span></div>
+    <img class="cam-arobj" id="cam-arobj" src="" />
+    <div class="cam-status" id="cam-status">正在初始化视觉定位（VIO）…</div>
+    <div class="cam-bottom">
+      <button class="btn btn-gold" id="cam-scan">识别说明牌（Marker）</button>
+      <button class="btn btn-ghost" id="cam-lbs" style="margin-top:9px;color:#cfe9e2;border-color:#5f7d84;">使用方位/LBS 兜底</button>
+    </div>
+  </section>
+
+  <!-- ============ MALL ============ -->
+  <section class="screen" id="mall">
+    <div class="cat-tabs" id="cat-tabs"></div>
+    <div class="scroll" style="padding-top:0;"><div class="ggrid" id="ggrid"></div></div>
+  </section>
+
+  <!-- ============ GOODS DETAIL ============ -->
+  <section class="screen" id="detail">
+    <div class="scroll">
+      <img class="det-hero" id="det-img" />
+      <div class="det-body">
+        <div class="det-name" id="det-name"></div>
+        <div class="det-price" id="det-price"></div>
+        <div id="det-tags"></div>
+        <div class="det-sec" id="det-desc"></div>
+        <div class="cnote" id="det-note"></div>
+      </div>
+    </div>
+    <div class="det-bar">
+      <button class="btn btn-ghost" id="det-ar">AR 预览</button>
+      <button class="btn btn-gold" id="det-cart">加入购物车</button>
+      <button class="btn btn-primary" id="det-pre">预售登记</button>
+    </div>
+    <!-- AR 预览 overlay -->
+    <div class="overlay ov-ar" id="det-ar-ov">
+      <img class="arbg" id="det-ar-img" />
+      <div class="ar-tag">AR 召唤 · 把文物带回家</div>
+      <div class="scanframe"></div>
+      <button class="btn btn-gold close" id="det-ar-close">收起 AR</button>
+    </div>
+  </section>
+
+  <!-- ============ CART ============ -->
+  <section class="screen" id="cart">
+    <div class="wrap" style="padding-top:54px;">
+      <div class="card"><div id="cart-list"></div><div id="cart-empty" class="muted" style="text-align:center;padding:20px;">购物车还是空的</div></div>
+      <div class="card" id="cart-total-card" style="display:none;">
+        <div class="h2">合计 <span id="cart-total" style="color:var(--cinnabar);"></span></div>
+      </div>
+      <button class="btn btn-primary" id="cart-checkout">结算 · 预售登记</button>
+    </div>
+  </section>
+
+  <!-- ============ INTENTION ============ -->
+  <section class="screen" id="intention">
+    <div class="wrap" style="padding-top:54px;">
+      <div id="int-form">
+        <div class="card">
+          <div class="h2" style="margin-bottom:12px;">我的意向单 <span class="cloud-badge" id="int-cloud">云端</span></div>
+          <div id="int-items"></div>
+        </div>
+        <div class="card">
+          <div class="form-row"><label>称呼</label><input id="f-name" placeholder="怎么称呼你" /></div>
+          <div class="form-row"><label>手机号（开售通知）</label><input id="f-phone" placeholder="11位手机号" maxlength="11" /></div>
+          <div class="form-row"><label>备注（选填）</label><input id="f-remark" placeholder="想对云阙说的话" /></div>
+          <button class="btn btn-primary" id="int-submit">提交意向 · 暂不扣款</button>
+          <div class="muted" style="text-align:center;margin-top:10px;">提交后由云函数落库，可随时查询</div>
+        </div>
+      </div>
+      <div id="int-success" style="display:none;">
+        <div class="card success-box">
+          <div class="si">🐉</div>
+          <div class="st">意向已登记</div>
+          <div class="muted">开售时云阙会第一时间通知你</div>
+          <button class="btn btn-gold" id="int-query" style="margin-top:18px;">查询我的意向（云端）</button>
+          <button class="btn btn-ghost" id="int-back-mall" style="margin-top:10px;">继续逛逛</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MINE ============ -->
+  <section class="screen" id="mine">
+    <div class="mbg"></div>
+    <div class="scroll" style="position:relative;">
+      <div class="mhead">
+        <img src="/assets/characters/yunque-girl.png" />
+        <div class="mn">云阙旅人</div>
+        <div class="ms">已集 <span id="m-scales">0</span> 片龙鳞 · 走过 <span id="m-stamps">0</span> 处</div>
+      </div>
+      <div class="stat-grid">
+        <div class="st2"><div class="sn" id="m-sn-scale">0</div><div class="sl">龙鳞</div></div>
+        <div class="st2"><div class="sn" id="m-sn-stamp">0</div><div class="sl">集章</div></div>
+        <div class="st2"><div class="sn">0</div><div class="sl">数藏</div></div>
+      </div>
+      <div style="padding:14px 16px 0;">
+        <div class="card">
+          <div class="h2" style="margin-bottom:6px;">全部景点</div>
+          <div id="m-spots"></div>
+        </div>
+        <div class="card">
+          <div class="menu-li" id="menu-intention"><span class="ml2">我的意向单</span><span class="ma2">›</span></div>
+          <div class="menu-li" id="menu-share"><span class="ml2">我的祈愿分享</span><span class="ma2">›</span></div>
+          <div class="menu-li" id="menu-about"><span class="ml2">关于长安云阙</span><span class="ma2">›</span></div>
+        </div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+  </section>
+
+  <!-- ============ WISH CARD ============ -->
+  <section class="screen" id="wish">
+    <div class="wish-canvas">
+      <div class="wishcard">
+        <div class="wc-title">长安祈愿</div>
+        <div class="wc-sub">七鳞归位 · 云阙相伴</div>
+        <div class="wc-scales" id="wc-scales"></div>
+        <div class="wc-wish" id="wc-wish">愿你我心中的长安，灯火不熄，山河无恙。</div>
+        <div class="wc-sign">云阙 · 于大明宫玄武门</div>
+      </div>
+    </div>
+    <div class="wish-actions">
+      <button class="btn btn-gold" id="wish-save">保存相册</button>
+      <button class="btn btn-primary" id="wish-share">分享好友</button>
+    </div>
+  </section>
+
+  <!-- ============ TABBAR ============ -->
+  <div class="tabbar" id="tabbar">
+    <div class="tab on" data-tab="home"><span class="ic">宫</span>首页</div>
+    <div class="tab" data-tab="tour"><span class="ic">巡</span>巡游</div>
+    <div class="tab" data-tab="mall"><span class="ic">市</span>商城</div>
+    <div class="tab" data-tab="mine"><span class="ic">我</span>我的</div>
+  </div>
+</div>
+
+<script>
+/* ============ 数据（与小程序同源） ============ */
+const SCENES=[
+ {id:'danfengmen',name:'丹凤门',sub:'大明宫正南门 · 启程',scale:'启程鳞',
+  steps:[
+   {sp:'云阙',t:'你看这座城门——丹凤门，大明宫的正南门。五门道、上建丹凤楼，是天子颁赦、改元、受朝贺的地方。'},
+   {sp:'云阙',t:'我叫云阙，是从盛唐醒来的小走龙。我好像把一些重要的东西弄丢了，散落在这座宫里……你愿意陪我找回来吗？'},
+   {choice:'这时候你想——',opts:[{o:'牵住云阙：我陪你一起找',r:'云阙眼睛一亮：“是七片龙鳞，也是七段故事。走吧，随我入宫！”'},{o:'先问问丢了什么',r:'云阙：“是七片龙鳞，每一片都藏着一段旧事。我们边走边找，好不好？”'}]},
+   {ar:'开启 AR 复原，看丹凤门盛唐原貌'},
+   {src:{b:'丹凤门为大明宫南墙正门，下开五门道，上建丹凤楼，是唐代皇帝举行大赦、改元、受朝贺等大典的重要场所。门前曾设宽百余米的横街与广场。',r:'据《唐六典》《长安志》及唐长安城考古发掘资料。'}},
+   {scale:'启程鳞',next:'前往含元殿'}]},
+ {id:'hanyuan',name:'含元殿',sub:'外朝正殿 · 大朝会',scale:'朝会鳞',
+  steps:[
+   {sp:'云阙',t:'这是含元殿，大明宫的正殿。殿前长长的坡道叫“龙尾道”，我们正跟着各国使臣，一步步登高。'},
+   {sp:'云阙',t:'“九天阊阖开宫殿，万国衣冠拜冕旒。”你看，殿上文武分列、外邦使臣云集，这是大朝会的盛况。'},
+   {choice:'大朝会之上，你要——',opts:[{o:'随百官山呼起舞',r:'云阙也跟着踮脚：“万岁声里，整座宫城都在回响。”'},{o:'驻足俯瞰长安',r:'云阙顺你目光望去：“坊市如棋盘，整座长安都在脚下。”'}]},
+   {ar:'开启 AR 复原，看含元殿大朝会'},
+   {src:{b:'含元殿是大明宫第一正殿，建于龙首原高地，以龙尾道登临，是举行元日、冬至大朝会与册立、改元等最重大典礼之所，可俯瞰长安城。',r:'据《唐六典》《旧唐书·礼仪志》，王维《和贾舍人早朝大明宫之作》。'}},
+   {scale:'朝会鳞',next:'前往宣政殿'}]},
+ {id:'xuanzheng',name:'宣政殿',sub:'中朝常朝 · 廊下食',scale:'廊下鳞',
+  steps:[
+   {sp:'云阙',t:'宣政殿是天子常朝、接见群臣的地方。退朝之后，文武百官还能在廊下吃一顿公家饭，叫“廊下食”。'},
+   {sp:'云阙',t:'你看，光禄寺的人按品级把食案摆好，大约四菜一汤，同僚们边吃边议国事。这可是难得的体面。'},
+   {choice:'廊下赐食，你想——',opts:[{o:'按品级入座，尝一口',r:'云阙小声：“贞观年间就有的规矩，四菜一汤，体面又实在。”'},{o:'问问廊下食的来历',r:'云阙：“贞观四年，光禄寺按品级供给朝官，从太极宫一直延续到了这里。”'}]},
+   {ar:'开启 AR 复原，看宣政殿廊下赐食'},
+   {src:{b:'廊下食始于贞观四年（630），由光禄寺于朝会退朝后在廊下按品级供给百官饮食，约四菜一汤，是唐代优待朝官的制度，先设于太极宫，后延续至大明宫。',r:'据《唐六典·光禄寺》《唐会要·廊下食》。'}},
+   {scale:'廊下鳞',next:'前往紫宸殿'}]},
+ {id:'zichen',name:'紫宸殿',sub:'内朝入閤 · 召对',scale:'召对鳞',
+  steps:[
+   {sp:'云阙',t:'紫宸殿是内朝正殿，君臣在此“入閤”召对，商议的多是军国机要，比前两朝更亲近，也更紧要。'},
+   {sp:'云阙',t:'只是到了晚唐，禁军与内侍的影子越来越重……云阙压低声音，有些话，史书也只敢轻轻写。'},
+   {choice:'内朝召对，你——',opts:[{o:'凝神听君臣奏对',r:'云阙：“三省议政、入閤奏事，制度原是极好的。”'},{o:'留意殿旁的内侍',r:'云阙轻声：“盛极而衰的伏笔，往往就藏在殿角。”'}]},
+   {ar:'开启 AR 复原，看紫宸殿入閤召对'},
+   {src:{b:'紫宸殿为大明宫内朝正殿，皇帝在此“入閤”召见宰臣、议决机要，与含元外朝、宣政中朝共同构成“三朝”制度。',r:'据《唐六典》《旧唐书·职官志》及唐大明宫考古资料。'}},
+   {scale:'召对鳞',next:'前往太液池'}]},
+ {id:'taiyechi',name:'太液池',sub:'后寝池苑 · 一池三山',scale:'池苑鳞',
+  steps:[
+   {sp:'云阙',t:'过了三朝，便是皇家的后寝。眼前这片水，就是太液池。池中筑山，取“一池三山”的仙境之意。'},
+   {sp:'云阙',t:'我们泛舟池上，看蓬莱、方丈、瀛洲三座小岛，皇帝与后妃、文人常在此临池赋诗、赏荷观鱼。'},
+   {choice:'太液池畔，你要——',opts:[{o:'泛舟临池赋诗',r:'云阙拍手：“水面风来，连诗句都带着荷香。”'},{o:'去看池中小山',r:'云阙：“一池三山，是把东海仙境搬进了宫城。”'}]},
+   {ar:'开启 AR 复原，看太液池一池三山'},
+   {src:{b:'太液池位于大明宫北部后寝，是皇家园林的核心，池中堆筑蓬莱等山，取“一池三山”之制，唐代帝王常在此游宴、赋诗、赏景。',r:'据《唐会要》《长安志》及大明宫太液池遗址考古资料。'}},
+   {scale:'池苑鳞',next:'前往麟德殿'}]},
+ {id:'linde',name:'麟德殿',sub:'国宴之所 · 舞马百戏',scale:'盛宴鳞',
+  steps:[
+   {sp:'云阙',t:'麟德殿在太液池西侧，前中后三殿相连，是天子大宴群臣、接见外邦使节、观看百戏的国宴之所。'},
+   {sp:'云阙',t:'你看，舞马披着锦绣、伴着乐曲衔杯祝寿，还有散乐杂技、觥筹交错——这是盛唐最热闹的一夜。'},
+   {choice:'国宴正酣，你——',opts:[{o:'看舞马衔杯',r:'云阙：“舞马听着《倾杯乐》，屈膝衔杯，真是盛景。”'},{o:'举杯向天子敬酒',r:'云阙也举杯：“愿这盛宴，能多留一会儿。”'}]},
+   {ar:'开启 AR 复原，看麟德殿舞马盛宴'},
+   {src:{b:'麟德殿为大明宫重要宴飨建筑，三殿相连、规模宏大，唐代帝王在此宴群臣、宴外邦、观百戏；盛唐宫廷有舞马随《倾杯乐》衔杯祝寿之俗。',r:'据《唐六典》《旧唐书·音乐志》及麟德殿遗址考古资料。'}},
+   {scale:'盛宴鳞',next:'前往玄武门'}]},
+ {id:'xuanwumen',name:'玄武门',sub:'北门终章 · 投龙祈愿',scale:'归愿鳞',
+  steps:[
+   {sp:'云阙',t:'玄武门，大明宫的北门。走到这里，云阙忽然停下——“等等，有件事我必须先说清楚。”'},
+   {sp:'云阙',t:'很多人以为“玄武门之变”发生在这座门。其实不是：武德九年（626）那场兄弟阋墙，发生在太极宫的玄武门，那时大明宫还没有建呢。'},
+   {choice:'听完这段纠偏，你——',opts:[{o:'原来如此，谢谢云阙',r:'云阙认真点头：“史实不能含糊，这是我陪你一路走来，最该说清的一件事。”'},{o:'那这里发生过什么',r:'云阙：“这里是大明宫北门，是禁军重地，也是我们投龙祈愿、为这段旅程收尾的地方。”'}]},
+   {ar:'开启 AR 复原，看玄武门与投龙仪式'},
+   {src:{b:'武德九年（626）的“玄武门之变”发生在太极宫玄武门；大明宫贞观八年（634）才始建。大明宫玄武门为其北门、禁军所守。唐代有投龙祈愿之俗，将祈愿玉简、金龙投于山水，祈求国泰民安。',r:'据《资治通鉴》武德九年、《旧唐书》及唐代投龙文物资料。'}},
+   {scale:'归愿鳞',wish:true}]}
+];
+
+const CATS=[{k:'all',n:'全部'},{k:'collection',n:'典藏复刻'},{k:'blindbox',n:'潮玩盲盒'},{k:'city',n:'城市限定'},{k:'jewelry',n:'唐妆首饰'},{k:'digital',n:'数字AR'},{k:'experience',n:'体验预约'}];
+const CATLABEL={collection:'典藏',blindbox:'盲盒',city:'城市',jewelry:'首饰',digital:'数藏',experience:'体验'};
+const GOODS=[
+ ['g-sx-nangnang','葡萄花鸟纹银香囊·典藏复刻','collection',3980,'依何家村窖藏银香囊复刻，镂空葡萄花鸟、内置陀螺仪同心环，附收藏证书。','文物灵感 / AIGC 再现，原型为陕历博何家村窖藏银香囊，非原文物。'],
+ ['g-yunque-blindbox','云阙萌龙·投龙祈愿盲盒','blindbox',69,'六款常规＋隐藏款，每只萌龙附一段投龙祈愿故事卡。','原创IP云阙，灵感源自唐代赤金走龙。'],
+ ['g-city-blindbox','西安城市限定盲盒','city',89,'大雁塔/城墙/钟楼/兵马俑/不夜城各一款，华山投龙为隐藏款。','城市限定，仅西安及联名渠道发售。'],
+ ['g-tongguan','长安通关文牒·集章护照','city',69,'内附大雁塔、城墙、钟楼、兵马俑、华山等篆刻集章，串联全城打卡。','城市限定文创。'],
+ ['g-yushou','城市限定御守套装','city',79,'石青/石绿/朱砂三色，金线绣萌龙祥云，可组祈福礼盒。','城市限定文创。'],
+ ['g-shihe','长安食盒·城市限定美食礼盒','city',199,'含萌龙绿豆糕、龙鳞酥、柿子饼及泡馍/肉夹馍象形点心。','城市限定美食伴手礼。'],
+ ['g-yinghua','青龙寺樱花限定礼盒','city',199,'含樱花御守、丝巾、香膏，淡粉暗金配色（春季限定）。','季节限定。'],
+ ['g-xuanzang','玄奘归唐书香礼盒','city',169,'书签、信笺、书香好物，取材大雁塔玄奘归唐（秋季限定）。','季节限定。'],
+ ['g-necklace','银香囊吊坠·轻奢首饰','jewelry',298,'925银镀金，化用银香囊镂空纹样，日常可佩戴。','文物灵感 / AIGC 再现，原型为何家村银香囊纹样。'],
+ ['g-digital-ar','盛唐文物3D数藏 · AR召唤','digital',39.9,'扫描实物唤醒赤金走龙AR投龙，召唤何家村四道具3D与讲解。','文物灵感 / AIGC 再现。'],
+ ['g-ar-theater','AR沉浸剧场·体验预约','experience',128,'AR重现何家村窖藏、投龙仪式与盛唐长安的沉浸叙事。','体验场次预约，意境再现非实景录像。'],
+ ['g-makeup','盛唐妆造旅拍·体验预约','experience',199,'唐制妆造＋汉服＋实景旅拍，体验馆场次定金预约。','体验预约。'],
+ ['g-shanhe-set','云阙萌龙·山河祈愿套装','collection',899,'萌龙行走青绿山水台座，含玉简、祥云、防尘罩与收藏卡。','原创IP云阙，灵感源自赤金走龙与青绿山水。'],
+ ['g-girl-figure','云阙少女·山河祈愿手办','collection',699,'少女捧玉简、金龙盘旋，电影级涂装手办。','原创IP云阙少女，官方立绘衍生。']
+].map(g=>({id:g[0],name:g[1],cat:g[2],price:g[3],desc:g[4],note:g[5],cover:'/assets/goods/'+g[0]+'.png'}));
+
+/* ============ 状态 ============ */
+const S={tab:'home',mode:'cloud',si:0,step:0,scales:[],stamps:[],cart:[],gid:null,cat:'all'};
+const $=id=>document.getElementById(id);
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  $(id).classList.add('on');
+  const dark=['scene','arcam','wish'];
+  $('statusbar').classList.toggle('dark',dark.includes(id));
+  $('tabbar').style.display=['home','tour','mall','mine'].includes(id)?'flex':'none';
+}
+function toast(t){const e=document.createElement('div');e.textContent=t;
+  e.style.cssText='position:absolute;left:30px;right:30px;bottom:120px;background:rgba(20,16,12,.88);color:#f4e8cc;padding:13px;border-radius:12px;text-align:center;font-size:13px;z-index:99;';
+  document.querySelector('.phone').appendChild(e);setTimeout(()=>e.remove(),1600);}
+
+/* ============ tab ============ */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  const tab=t.dataset.tab;S.tab=tab;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  show(tab);
+});
+
+/* ============ HOME actions ============ */
+$('btn-enter').onclick=()=>{S.si=0;S.step=0;renderScene();};
+$('mode-cloud').onclick=()=>{S.mode='cloud';openTour();};
+$('mode-site').onclick=()=>{S.mode='site';openTour();};
+$('home-spot').onclick=()=>openSpot('daminggong');
+$('home-go-mall').onclick=()=>document.querySelector('.tab[data-tab=mall]').click();
+function openTour(){document.querySelector('.tab[data-tab=tour]').click();renderMap();}
+$('btn-start-tour').onclick=()=>{S.si=0;S.step=0;renderScene();};
+$('seg-cloud').onclick=()=>{S.mode='cloud';$('seg-cloud').classList.add('on');$('seg-site').classList.remove('on');};
+$('seg-site').onclick=()=>{S.mode='site';$('seg-site').classList.add('on');$('seg-cloud').classList.remove('on');};
+
+/* map */
+function renderMap(){
+  const ml=$('mapline');ml.innerHTML='';
+  SCENES.forEach((s,i)=>{
+    const got=S.scales.includes(s.scale);
+    const d=document.createElement('div');d.className='dot'+(got?' done':'');
+    d.innerHTML=`<div class="num">${i+1}</div><div class="dl"><div class="dn">${s.name}</div><div class="ds">${s.sub}</div><div class="sc">${got?'已得 · '+s.scale:'龙鳞 · '+s.scale}</div></div>`;
+    d.onclick=()=>{S.si=i;S.step=0;renderScene();};
+    ml.appendChild(d);
+  });
+}
+
+/* ============ 剧场引擎 ============ */
+function renderScene(){
+  show('scene');
+  const sc=SCENES[S.si];
+  $('sc-bg').src='/assets/scenes/'+sc.id+'/bg.png';
+  $('sc-name').textContent=sc.name;$('sc-sub').textContent=sc.sub;
+  $('sc-scales').textContent='已集 '+S.scales.length+' 鳞';
+  $('ov-ar')&&($('ov-ar').classList.remove('on'));
+  $('ov-source').classList.remove('on');$('scale-pop').classList.remove('on');
+  $('sc-choices').innerHTML='';$('sc-actions').innerHTML='';
+  const st=sc.steps[S.step];
+  const zone=$('dialog-zone');
+  if(st.sp){
+    $('sc-text').textContent=st.t;
+    $('tap-hint').style.display='block';
+  } else if(st.choice){
+    $('sc-text').textContent=st.choice;
+    $('tap-hint').style.display='none';
+    st.opts.forEach(o=>{
+      const b=document.createElement('button');b.className='choice';b.textContent=o.o;
+      b.onclick=()=>{$('sc-choices').innerHTML='';$('sc-text').textContent=o.r;$('tap-hint').style.display='block';window._chose=true;};
+      $('sc-choices').appendChild(b);
+    });
+  } else if(st.ar){
+    $('sc-text').textContent=st.ar;$('tap-hint').style.display='none';
+    $('sc-actions').innerHTML='<button class="btn btn-gold" id="sa-ar">开启 AR 复原</button><button class="btn btn-ghost" id="sa-skip">先看史料</button>';
+    $('sa-ar').onclick=()=>{$('ar-img').src='/assets/scenes/'+sc.id+'/ar-restore.png';$('ov-ar').classList.add('on');};
+    $('sa-skip').onclick=()=>advance();
+  } else if(st.src){
+    $('sc-text').textContent='这一幕，史书上是这样记载的——';$('tap-hint').style.display='none';
+    $('sc-actions').innerHTML='<button class="btn btn-gold" id="sa-src">展开史料卡</button>';
+    $('sa-src').onclick=()=>{$('src-body').textContent=st.src.b;$('src-ref').textContent='出处：'+st.src.r;$('ov-source').classList.add('on');};
+  } else if(st.scale){
+    $('sc-text').textContent=st.wish?'七片龙鳞，尽数归位！':'又一片龙鳞，归你了。';$('tap-hint').style.display='none';
+    $('sc-actions').innerHTML='<button class="btn btn-gold" id="sa-scale">'+(st.wish?'集齐七鳞 · 投龙祈愿':'接过「'+st.scale+'」')+'</button>';
+    $('sa-scale').onclick=()=>{
+      $('scale-coin').textContent=st.scale;$('scale-label').textContent=st.scale;
+      $('scale-pop').classList.add('on');
+      if(!S.scales.includes(st.scale))S.scales.push(st.scale);
+      if(!S.stamps.includes(sc.id))S.stamps.push(sc.id);
+      setTimeout(()=>{
+        $('scale-pop').classList.remove('on');
+        if(st.wish){renderWish();}
+        else{$('sc-actions').innerHTML='<button class="btn btn-primary" id="sa-next">'+st.next+'</button>';
+          $('sa-next').onclick=()=>{S.si++;S.step=0;renderScene();};}
+      },2100);
+    };
+  }
+}
+/* 点对话区前进（跳过已处理） */
+$('dialog-zone').addEventListener('click',e=>{
+  if(e.target.closest('button')||e.target.closest('.choice'))return;
+  const sc=SCENES[S.si],st=sc.steps[S.step];
+  if(st&&(st.sp||window._chose)){window._chose=false;advance();}
+});
+function advance(){S.step++;if(S.step>=SCENES[S.si].steps.length)S.step=SCENES[S.si].steps.length-1;renderScene();}
+$('ar-close').onclick=()=>{$('ov-ar').classList.remove('on');advance();};
+$('src-close').onclick=()=>{$('ov-source').classList.remove('on');advance();};
+
+/* ============ AR CAMERA ============ */
+function openArCam(){
+  const sc=SCENES[S.si]||SCENES[0];
+  $('cam-feed').src='/assets/scenes/'+sc.id+'/bg.png';
+  $('cam-arobj').classList.remove('on');$('cam-arobj').src='';
+  $('cam-status').textContent='正在初始化视觉定位（VIO）…请平移手机';
+  show('arcam');
+}
+$('cam-scan').onclick=()=>{
+  const sc=SCENES[S.si]||SCENES[0];
+  $('cam-status').textContent='已识别说明牌 Marker，正在叠加复原…';
+  $('cam-cross').style.display='none';
+  setTimeout(()=>{$('cam-arobj').src='/assets/scenes/'+sc.id+'/ar-restore.png';$('cam-arobj').classList.add('on');
+    $('cam-status').textContent='AR 叠加成功 · 殿宇原貌已复原于遗址之上';},1400);
+};
+$('cam-lbs').onclick=()=>{
+  const sc=SCENES[S.si]||SCENES[0];
+  $('cam-status').textContent='已进入点位触发半径（LBS+罗盘），叠加复原图';
+  $('cam-cross').style.display='none';
+  setTimeout(()=>{$('cam-arobj').src='/assets/scenes/'+sc.id+'/ar-restore.png';$('cam-arobj').classList.add('on');},1300);
+};
+
+/* ============ MALL ============ */
+function renderCats(){
+  const ct=$('cat-tabs');ct.innerHTML='';
+  CATS.forEach(c=>{const d=document.createElement('div');if(c.k===S.cat)d.className='on';d.textContent=c.n;
+    d.onclick=()=>{S.cat=c.k;renderCats();renderGoods();};ct.appendChild(d);});
+}
+function renderGoods(){
+  const grid=$('ggrid');grid.innerHTML='';
+  GOODS.filter(g=>S.cat==='all'||g.cat===S.cat).forEach(g=>{
+    const d=document.createElement('div');d.className='gcard';
+    d.innerHTML=`<img src="${g.cover}"/><div class="ginfo"><div class="gname">${g.name}</div><div class="grow"><span class="gprice">¥${g.price}</span><span class="gpre">预售</span></div></div>`;
+    d.onclick=()=>openDetail(g.id);grid.appendChild(d);
+  });
+}
+function c(){return S.cat;}
+function openDetail(id){
+  const g=GOODS.find(x=>x.id===id);S.gid=id;
+  $('det-img').src=g.cover;$('det-name').textContent=g.name;
+  $('det-price').innerHTML='¥'+g.price+'<small>预售 · 暂不扣款</small>';
+  $('det-tags').innerHTML='<span class="tag">'+CATLABEL[g.cat]+'</span><span class="tag">文物灵感/AIGC</span>';
+  $('det-desc').textContent=g.desc;$('det-note').textContent=g.note;
+  $('det-ar-ov').classList.remove('on');
+  show('detail');
+}
+$('det-ar').onclick=()=>{$('det-ar-img').src=GOODS.find(x=>x.id===S.gid).cover;$('det-ar-ov').classList.add('on');};
+$('det-ar-close').onclick=()=>$('det-ar-ov').classList.remove('on');
+$('det-cart').onclick=()=>{if(!S.cart.includes(S.gid))S.cart.push(S.gid);toast('已加入购物车');};
+$('det-pre').onclick=()=>{if(!S.cart.includes(S.gid))S.cart.push(S.gid);openIntention();};
+
+/* cart */
+$('cart-checkout') && ($('cart-checkout').onclick=openIntention);
+function renderCart(){
+  const list=$('cart-list');list.innerHTML='';
+  const items=S.cart.map(id=>GOODS.find(x=>x.id===id)).filter(Boolean);
+  $('cart-empty').style.display=items.length?'none':'block';
+  $('cart-total-card').style.display=items.length?'block':'none';
+  let tot=0;
+  items.forEach(g=>{tot+=g.price;
+    const d=document.createElement('div');d.className='cart-li';
+    d.innerHTML=`<img src="${g.cover}"/><div class="ci"><div class="cn">${g.name}</div><div class="cp">¥${g.price} · 预售</div></div>`;
+    list.appendChild(d);});
+  $('cart-total').textContent='¥'+tot+'（预售登记，暂不扣款）';
+}
+
+/* intention */
+function openIntention(){
+  renderIntItems();$('int-form').style.display='block';$('int-success').style.display='none';
+  $('f-name').value='';$('f-phone').value='';$('f-remark').value='';
+  show('intention');
+}
+function renderIntItems(){
+  const box=$('int-items');box.innerHTML='';
+  const items=S.cart.map(id=>GOODS.find(x=>x.id===id)).filter(Boolean);
+  if(!items.length){box.innerHTML='<div class="muted" style="padding:8px;">暂无意向商品，可去商城挑选</div>';return;}
+  items.forEach(g=>{const d=document.createElement('div');d.className='cart-li';
+    d.innerHTML=`<img src="${g.cover}"/><div class="ci"><div class="cn">${g.name}</div><div class="cp">¥${g.price}</div></div>`;box.appendChild(d);});
+}
+$('int-submit').onclick=()=>{
+  const name=$('f-name').value.trim(),phone=$('f-phone').value;
+  if(!name){toast('请填写称呼');return;}
+  if(!/^1[3-9]\d{9}$/.test(phone)){toast('请填写正确手机号');return;}
+  // 演示：模拟云函数 create 成功
+  $('int-form').style.display='none';$('int-success').style.display='block';
+  S.cart=[];
+};
+$('int-query').onclick=()=>toast('云端查询：已为你找到 '+ (S.scales.length) +' 段旅程记录');
+$('int-back-mall').onclick=()=>document.querySelector('.tab[data-tab=mall]').click();
+
+/* mine */
+function renderMine(){
+  $('m-scales').textContent=S.scales.length;$('m-stamps').textContent=S.stamps.length;
+  $('m-sn-scale').textContent=S.scales.length;$('m-sn-stamp').textContent=S.stamps.length;
+  const box=$('m-spots');box.innerHTML='';
+  [{id:'daminggong',name:'大明宫国家遗址公园',sub:'七点位 AR 巡游',on:true},
+   {id:'dayanta',name:'大雁塔 · 大慈恩寺',sub:'玄奘译经 · 即将上线',on:false}].forEach(sp=>{
+    const d=document.createElement('div');d.className='spot-li';
+    d.innerHTML=`<div><div class="spn">${sp.name}</div><div class="sps">${sp.sub}</div></div><span class="spb ${sp.on?'on':'soon'}">${sp.on?'可巡游':'即将上线'}</span>`;
+    d.onclick=()=>sp.on?openTour():toast('大雁塔剧场即将上线');
+    box.appendChild(d);
+  });
+}
+$('menu-intention').onclick=openIntention;
+$('menu-share').onclick=()=>S.scales.length===7?show('wish'):toast('集齐七鳞后可生成祈愿分享');
+$('menu-about').onclick=()=>toast('长安云阙 v0.1.0 · 盛唐文物活化 AR文旅助手');
+
+/* wish */
+function renderWish(){
+  const box=$('wc-scales');box.innerHTML='';
+  S.scales.forEach(s=>{const d=document.createElement('div');d.className='s';d.textContent=s.replace('鳞','');box.appendChild(d);});
+  show('wish');
+}
+$('wish-save').onclick=()=>toast('祈愿卡已保存到相册');
+$('wish-share').onclick=()=>toast('已调起分享 · onShareAppMessage');
+
+/* ============ 初始化商城/首页 ============ */
+renderCats();renderGoods();
+$('feat-scroll').innerHTML=GOODS.slice(0,6).map(g=>
+ `<div class="gmini" data-id="${g.id}"><img src="${g.cover}"/><div class="gn">${g.name}</div><div class="gp">¥${g.price} 预售</div></div>`).join('');
+$('feat-scroll').querySelectorAll('.gmini').forEach(el=>el.onclick=()=>openDetail(el.dataset.id));
+
+/* 对外钩子（供自动化/调试） */
+window.APP={S,show,openTour,renderMap,renderScene,openArCam,openDetail,renderCart,openIntention,renderMine,renderWish,
+  gotoScene(i){S.si=i;S.step=0;renderScene();}};
+</script>
+</body>
+</html>
