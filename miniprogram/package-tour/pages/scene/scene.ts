@@ -24,6 +24,10 @@ Page({
     nextLabel: '继续',
     actorDisplay: '',
     figureLabel: '',
+    // 终章祈愿分享卡（仅 xuanwumen 结算后出现，数据驱动，不影响其余剧场）
+    showShareCard: false,
+    wishText: '',
+    shareImagePath: '',
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -97,7 +101,8 @@ Page({
     const choiceId = (e.currentTarget.dataset as { id: string }).id;
     const choice = this.data.node.choices?.find((c) => c.id === choiceId);
     if (!choice) return;
-    this.setData({ showChoices: false, showFeedback: true, feedback: choice.feedback });
+    // 记录用户所选祈愿取向，供终章分享卡使用（泛化：取所选文案）
+    this.setData({ showChoices: false, showFeedback: true, feedback: choice.feedback, wishText: choice.text });
   },
 
   dismissFeedback() {
@@ -165,5 +170,28 @@ Page({
 
   backMap() {
     wx.switchTab({ url: '/pages/tour/tour' });
+  },
+
+  // ===== 终章祈愿分享卡 =====
+  openShareCard() {
+    this.setData({ showShareCard: true });
+  },
+
+  onShareCardReady(e: WechatMiniprogram.CustomEvent<{ tempFilePath: string }>) {
+    // 记录分享卡临时图，供 onShareAppMessage 使用
+    this.setData({ shareImagePath: e.detail.tempFilePath });
+  },
+
+  onShareCardClose() {
+    this.setData({ showShareCard: false });
+  },
+
+  onShareAppMessage() {
+    const wish = this.data.wishText || '愿此刻长安，久一点。';
+    return {
+      title: `我在大明宫玄武门投了一愿：「${wish}」，你也来云阙巡游集齐七鳞吧`,
+      imageUrl: this.data.shareImagePath || undefined,
+      path: '/pages/tour/tour',
+    };
   },
 });

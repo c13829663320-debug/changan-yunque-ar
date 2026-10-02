@@ -1,36 +1,97 @@
 .gd-cover {
   position: relative;
   height: 560rpx;
+  background: linear-gradient(160deg, #ece1cd, #ddcba9);
   overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
 }
-.gd-cover-img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gd-cover-img { width: 100%; height: 100%; }
 .gd-cat {
-  position: relative; z-index: 2;
-  margin: 24rpx; padding: 6rpx 20rpx;
-  font-size: var(--fs-small); color: #f6ecd9; letter-spacing: 3rpx;
-  background: rgba(70, 62, 54, 0.55); border-radius: 999rpx;
+  position: absolute;
+  top: 24rpx;
+  left: 24rpx;
+  padding: 6rpx 20rpx;
+  font-size: var(--fs-mini);
+  color: #fbf3e4;
+  letter-spacing: 2rpx;
+  background: rgba(70, 62, 54, 0.42);
+  backdrop-filter: blur(6rpx);
+  border-radius: 999rpx;
 }
+/* gallery 缩略条 */
+.gd-gallery {
+  position: absolute;
+  left: 24rpx;
+  bottom: 20rpx;
+  display: flex;
+  gap: 12rpx;
+}
+.gd-thumb {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2rpx solid rgba(251, 246, 236, 0.7);
+  opacity: 0.75;
+}
+.gd-thumb.on { border-color: var(--dark-gold-soft); opacity: 1; }
+.gd-thumb-img { width: 100%; height: 100%; }
 
-.gd-body { padding-top: 24rpx; padding-bottom: 160rpx; }
-.gd-name { font-size: 40rpx; color: var(--ink); font-weight: 700; line-height: 1.4; display:block; }
+.gd-body { padding-top: 24rpx; padding-bottom: 180rpx; }
+.gd-name { font-size: 40rpx; color: var(--ink); font-weight: 700; line-height: 1.4; display: block; }
 .gd-price-row { display: flex; align-items: baseline; gap: 18rpx; margin: 18rpx 0; }
-.gd-price { font-size: 44rpx; color: var(--cinnabar); font-weight: 700; }
+.gd-price { font-size: 46rpx; color: var(--cinnabar); font-weight: 700; }
 .gd-presale { font-size: var(--fs-small); color: var(--ink-muted); border:1rpx solid var(--line); border-radius:999rpx; padding:4rpx 16rpx; }
 .gd-tags { display: flex; flex-wrap: wrap; gap: 8rpx; }
 .para { display:block; margin-top:12rpx; }
-.ar-btn { margin-top: 4rpx; }
 
-/* AR */
-.ar-mask { position:fixed; inset:0; background:rgba(58,50,40,0.55); display:flex; align-items:center; justify-content:center; z-index:40; padding:40rpx; }
-.ar-frame { width:100%; background:linear-gradient(180deg,#dfe7e4,#eef0ea); border-radius:var(--radius-lg); padding:50rpx 36rpx 36rpx; display:flex; flex-direction:column; align-items:center; }
-.ar-stage { width:300rpx; height:300rpx; border-radius:50%; overflow:hidden; border:3rpx solid var(--dark-gold-soft); box-shadow:0 16rpx 40rpx rgba(70,62,54,0.25); margin-bottom:26rpx; animation:spin 9s linear infinite; }
-.ar-object-img { width:100%; height:100%; }
-@keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-.ar-title { font-size:var(--fs-h2); color:var(--ink); font-weight:600; }
-.ar-tip { font-size:var(--fs-small); color:var(--ink-muted); text-align:center; line-height:1.6; margin:14rpx 0 26rpx; }
+/* 文物灵感卡 */
+.relic-card { border-left: 6rpx solid var(--dark-gold); }
+.relic-head { display: flex; align-items: center; gap: 14rpx; }
+.relic-icon {
+  width: 44rpx; height: 44rpx; border-radius: 50%;
+  background: rgba(168, 137, 58, 0.16);
+  color: var(--dark-gold); font-size: 24rpx;
+  display: flex; align-items: center; justify-content: center;
+}
+.relic-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
+.relic-badge {
+  margin-left: auto; font-size: var(--fs-mini);
+  color: var(--dark-gold); background: rgba(168,137,58,0.12);
+  padding: 4rpx 14rpx; border-radius: 999rpx;
+}
+
+.ar-btn { margin-top: 4rpx; }
+.ar-btn-icon { color: var(--azurite-deep); margin-right: 8rpx; }
+
+/* AR 预览层 */
+.ar-mask { position:fixed; inset:0; background:rgba(46,40,33,0.7); display:flex; align-items:center; justify-content:center; z-index:40; padding:40rpx; }
+.ar-frame { width:100%; background:linear-gradient(180deg,#2c3230,#3a3f3a); border-radius:var(--radius-lg); padding:44rpx 36rpx 36rpx; display:flex; flex-direction:column; align-items:center; }
+.ar-viewfinder {
+  position: relative;
+  width: 440rpx; height: 440rpx;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom: 26rpx;
+}
+.corner { position:absolute; width:48rpx; height:48rpx; border:4rpx solid var(--dark-gold-soft); }
+.corner.tl { top:0; left:0; border-right:none; border-bottom:none; border-radius:8rpx 0 0 0; }
+.corner.tr { top:0; right:0; border-left:none; border-bottom:none; border-radius:0 8rpx 0 0; }
+.corner.bl { bottom:0; left:0; border-right:none; border-top:none; border-radius:0 0 0 8rpx; }
+.corner.br { bottom:0; right:0; border-left:none; border-top:none; border-radius:0 0 8rpx 0; }
+.ar-product { width:260rpx; height:260rpx; border-radius:50%; border:2rpx solid rgba(194,166,104,0.6); box-shadow:0 0 40rpx rgba(194,166,104,0.35); }
+.ar-ring {
+  position:absolute; width:360rpx; height:360rpx; border-radius:50%;
+  border:2rpx dashed rgba(194,166,104,0.55);
+}
+.ar-ring.spin { animation: spin 2.4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.ar-beam {
+  position:absolute; left:30rpx; right:30rpx; height:6rpx;
+  background: linear-gradient(90deg, transparent, rgba(194,166,104,0.9), transparent);
+  animation: beam 1.4s ease-in-out infinite;
+}
+@keyframes beam { 0%,100%{ top:60rpx; opacity:0.2; } 50%{ top:380rpx; opacity:1; } }
+.ar-title { font-size:var(--fs-h2); color:#f3ead6; font-weight:600; }
+.ar-tip { font-size:var(--fs-small); color:#c9bda6; text-align:center; line-height:1.6; margin:14rpx 0 26rpx; }
 .ar-done { width:100%; }
 
 /* 底部操作栏 */
@@ -41,8 +102,9 @@
   padding:16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
   z-index:30;
 }
-.bar-side { padding:0 14rpx; }
-.side-text { font-size:var(--fs-mini); color:var(--ink-soft); }
+.bar-side { padding:0 10rpx; display:flex; flex-direction:column; align-items:center; }
+.side-ico { font-size:30rpx; color:var(--ink-soft); }
+.side-text { font-size:var(--fs-mini); color:var(--ink-soft); margin-top:4rpx; }
 .bar-cart, .bar-buy { flex:1; height:80rpx; border-radius:999rpx; font-size:28rpx; display:flex; align-items:center; justify-content:center; margin:0; padding:0; line-height:80rpx; }
 .bar-cart { background:var(--bg-card-deep); color:var(--ink-soft); border:1rpx solid var(--line); }
 .bar-buy { background:linear-gradient(135deg,var(--cinnabar),var(--ochre-deep)); color:#fbf3e4; }

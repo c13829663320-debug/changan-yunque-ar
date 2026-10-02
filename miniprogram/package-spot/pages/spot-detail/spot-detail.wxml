@@ -1,20 +1,26 @@
 <view class="spot-detail" wx:if="{{spot}}">
-  <view class="hero">
-    <text class="hero-name">{{spot.name}}</text>
-    <text class="hero-sub">{{spot.subtitle}}</text>
-    <view class="hero-tags">
-      <text class="tag tag-gold" wx:for="{{spot.tags}}" wx:key="*this">{{item}}</text>
+  <view class="hero {{spot.cover ? 'hero-img' : ''}}">
+    <image wx:if="{{spot.cover}}" class="hero-bg" src="{{spot.cover}}" mode="aspectFill" />
+    <view class="hero-scrim"></view>
+    <view class="hero-inner">
+      <text class="hero-name">{{spot.name}}</text>
+      <text class="hero-sub">{{spot.subtitle}}</text>
+      <view class="hero-tags">
+        <text class="tag tag-gold" wx:for="{{spot.tags}}" wx:key="*this">{{item}}</text>
+      </view>
     </view>
   </view>
 
   <view class="page-wrap body">
     <view class="card">
       <text class="title-h2">景点概览</text>
+      <image wx:if="{{spot.overviewImage}}" class="ov-img" src="{{spot.overviewImage}}" mode="widthFix" />
       <text class="text-body para">{{spot.summary}}</text>
     </view>
 
     <view class="card">
       <text class="title-h2">历史时间线</text>
+      <image wx:if="{{spot.timelineImage}}" class="tl-banner" src="{{spot.timelineImage}}" mode="widthFix" />
       <view class="timeline">
         <view class="tl-item" wx:for="{{spot.timeline}}" wx:key="year">
           <view class="tl-dot"></view>
@@ -30,6 +36,7 @@
     <view class="card">
       <text class="title-h2">主要看点</text>
       <view class="relic" wx:for="{{spot.relics}}" wx:key="name">
+        <image wx:if="{{item.image}}" class="relic-img" src="{{item.image}}" mode="widthFix" />
         <text class="relic-name">{{item.name}}</text>
         <text class="relic-desc">{{item.desc}}</text>
       </view>
@@ -48,7 +55,10 @@
       <text class="title-h2">相关文创</text>
       <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="rel-scroll">
         <view class="rel-item" wx:for="{{relatedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="goGoods">
-          <view class="rel-cover"><text>{{item.categoryLabel}}</text></view>
+          <view class="rel-cover">
+            <image wx:if="{{item.cover}}" class="rel-cover-img" src="{{item.cover}}" mode="aspectFill" />
+            <text wx:else>{{item.categoryLabel}}</text>
+          </view>
           <text class="rel-name">{{item.name}}</text>
           <text class="rel-price">¥{{item.price}}</text>
         </view>

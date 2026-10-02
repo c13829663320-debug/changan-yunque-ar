@@ -13,28 +13,47 @@
 
 /* 云阙开场 */
 .hero {
+  position: relative;
   background: var(--bg-card);
   border: 1rpx solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-deep);
-  padding: 36rpx 30rpx 30rpx;
+  padding: 40rpx 30rpx 30rpx;
   margin-bottom: 26rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  transform: translateY(24rpx);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
+.hero.entered { opacity: 1; transform: translateY(0); }
 .yunque-badge {
-  width: 132rpx;
-  height: 132rpx;
+  position: relative;
+  width: 156rpx;
+  height: 156rpx;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fbf6ec, #e7dcc6);
-  border: 2rpx solid var(--dark-gold-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 22rpx;
+  overflow: hidden;
+  border: 3rpx solid var(--dark-gold-soft);
+  box-shadow: var(--shadow-deep);
+  margin-bottom: 24rpx;
+  animation: breathe 3.6s ease-in-out infinite;
 }
-.yb-text { color: var(--dark-gold); font-size: 36rpx; letter-spacing: 6rpx; }
+.yunque-portrait { width: 100%; height: 100%; }
+.yunque-halo {
+  position: absolute; inset: -6rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(194, 166, 104, 0.4);
+  animation: halo 3.6s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+@keyframes halo {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
 .bubble {
   position: relative;
   background: var(--bg-card-deep);
@@ -97,6 +116,7 @@
   margin-bottom: 12rpx;
 }
 .goods-cat { font-size: var(--fs-mini); color: var(--dark-gold); }
+.goods-cover-img { width: 100%; height: 100%; border-radius: var(--radius); }
 .goods-name {
   font-size: var(--fs-small);
   color: var(--ink);
