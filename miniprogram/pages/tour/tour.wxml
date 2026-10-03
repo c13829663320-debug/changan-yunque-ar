@@ -83,7 +83,7 @@
                 <text class="route-cta-text">前往</text>
                 <line-icon name="arrow" size="{{26}}" theme="gold"></line-icon>
               </view>
-              <line-icon class="route-lock" size="{{30}}" wx:if="{{item.state==='locked'}}"></line-icon>
+              <line-icon name="lock" size="{{30}}" wx:if="{{item.state==='locked'}}"></line-icon>
             </view>
           </view>
         </view>
