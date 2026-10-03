@@ -17,7 +17,7 @@ const timing: ScenePoint = {
   bg: 'https://aka.doubaocdn.com/s/HiDoizhVxk',
   arRestoreImage: 'https://aka.doubaocdn.com/s/WVG2YtIceP',
   restoreVideo: 'https://aka.doubaocdn.com/s/AvAzGYxoZl',
-  poster: 'https://aka.doubaocdn.com/s/oI2C2F606b',
+  poster: 'https://aka.doubaocdn.com/s/7xX16L0cug',
   intro: '新科进士曲江赐宴后，同至大慈恩寺塔下题名留姓——这便是千年传为佳话的“雁塔题名”。',
   sourceCard: {
     title: '雁塔题名与塔之沿革',

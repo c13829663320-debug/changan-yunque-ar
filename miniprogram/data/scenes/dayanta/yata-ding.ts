@@ -18,7 +18,7 @@ const yataDing: ScenePoint = {
   bg: 'https://aka.doubaocdn.com/s/FA53ALMmmM',
   arRestoreImage: 'https://aka.doubaocdn.com/s/90kVlKVw23',
   restoreVideo: 'https://aka.doubaocdn.com/s/zWO8DXVeau',
-  poster: 'https://aka.doubaocdn.com/s/7s6UKAUlun',
+  poster: 'https://aka.doubaocdn.com/s/aBEwfMxsPU',
   intro: '本景点终章——登塔远眺长安，并解开“雁塔”之名，自印度远来东土的由来。',
   sourceCard: {
     title: '“雁塔”之名——印度本生与玄奘亲记',
