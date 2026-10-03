@@ -1,0 +1,32 @@
+<view class="dd">
+  <view class="page-wrap">
+    <view class="dd-head">
+      <text class="dd-title">{{title}}</text>
+      <text class="dd-hint">{{hint}}</text>
+      <text class="dd-count">已得 {{totalGot}} 项</text>
+    </view>
+
+    <view class="dd-empty" wx:if="{{isEmpty}}">
+      <text class="dd-empty-glyph">❖</text>
+      <text class="dd-empty-text">{{type === 'stamps' ? '还没有通关文牒章' : '还没有龙鳞'}}</text>
+      <text class="dd-empty-sub">{{type === 'stamps' ? '到现场 AR 讲解点位后即可盖章' : '完成点位剧场后即可收入龙鳞'}}</text>
+    </view>
+
+    <block wx:for="{{groups}}" wx:key="spotId" wx:for-item="g">
+      <view class="dd-group">
+        <view class="dd-group-head">
+          <text class="dd-group-name">{{g.spotName}}</text>
+          <text class="dd-group-count">{{g.got}}/{{g.total}}</text>
+        </view>
+        <view class="dd-row {{r.got ? 'got' : ''}}" wx:for="{{g.rows}}" wx:for-item="r" wx:key="name">
+          <view class="dd-dot {{r.got ? 'on' : ''}}"></view>
+          <view class="dd-row-text">
+            <text class="dd-row-name {{r.got ? 'on' : ''}}">{{r.name}}</text>
+            <text class="dd-row-sub">{{r.got ? r.sub : '未获得'}}</text>
+          </view>
+          <text class="dd-row-tag {{r.got ? 'on' : ''}}">{{r.got ? '已得' : '未得'}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

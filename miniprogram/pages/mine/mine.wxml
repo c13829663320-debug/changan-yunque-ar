@@ -7,31 +7,39 @@
   </view>
 
   <view class="page-wrap mine-body">
-    <!-- 统计 -->
+    <!-- 统计（三格均可点击） -->
     <view class="stat-grid rise" style="animation-delay:.02s">
-      <view class="stat"><text class="stat-num">{{scaleCount}}</text><text class="stat-label">龙鳞</text></view>
-      <view class="stat"><text class="stat-num">{{stampCount}}</text><text class="stat-label">集章</text></view>
-      <view class="stat"><text class="stat-num">{{relicCount}}</text><text class="stat-label">文物</text></view>
+      <view class="stat" data-type="scales" bindtap="goDetail"><text class="stat-num">{{scaleCount}}</text><text class="stat-label">龙鳞</text></view>
+      <view class="stat" data-type="stamps" bindtap="goDetail"><text class="stat-num">{{stampCount}}</text><text class="stat-label">集章</text></view>
+      <view class="stat" bindtap="goAlbum"><text class="stat-num">{{relicCount}}</text><text class="stat-label">文物</text></view>
     </view>
 
-    <!-- 龙鳞集章墙 -->
+    <!-- 龙鳞集章墙（按景点分组） -->
     <view class="card scale-card rise" style="animation-delay:.08s">
       <view class="card-head">
         <view class="card-head-titles">
           <text class="title-h2">龙鳞集章</text>
-          <text class="card-sub">七鳞聚齐 · 云阙归愿</text>
+          <text class="card-sub">{{wallSummary}}</text>
         </view>
         <text class="scale-progress">{{scaleCount}} / {{scaleTotal}}</text>
       </view>
-      <view class="scale-wall">
-        <view class="scale-cell" wx:for="{{scaleWall}}" wx:key="name">
-          <view class="scale-medal {{item.got ? 'got' : ''}}">
-            <view class="scale-core"></view>
+      <block wx:for="{{scaleGroups}}" wx:key="spotId" wx:for-item="g">
+        <view class="wall-group">
+          <view class="wall-group-head">
+            <text class="wall-group-name">{{g.spotName}}</text>
+            <text class="wall-group-count">{{g.got}}/{{g.total}}</text>
           </view>
-          <text class="scale-name {{item.got ? 'on' : ''}}">{{item.name}}</text>
-          <text class="scale-hall">{{item.hall}}</text>
+          <view class="scale-wall">
+            <view class="scale-cell" wx:for="{{g.cells}}" wx:for-item="c" wx:key="name">
+              <view class="scale-medal {{c.got ? 'got' : ''}}">
+                <view class="scale-core"></view>
+              </view>
+              <text class="scale-name {{c.got ? 'on' : ''}}">{{c.name}}</text>
+              <text class="scale-hall">{{c.hall}}</text>
+            </view>
+          </view>
         </view>
-      </view>
+      </block>
     </view>
 
     <!-- 文物图鉴入口 -->
