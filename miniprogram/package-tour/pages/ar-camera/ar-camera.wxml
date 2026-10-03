@@ -10,7 +10,8 @@
   <!-- 顶部标题（扫描 / 识别时） -->
   <view class="cam-top" wx:if="{{phase !== 'briefing'}}">
     <text class="cam-kicker">现场 AR · 云阙识别</text>
-    <text class="cam-title">{{sceneName}}</text>
+    <text class="cam-title">{{targetName}}</text>
+    <text wx:if="{{targetKind === 'relic' && era}}" class="cam-era">{{era}}</text>
   </view>
 
   <!-- 扫描 / 识别取景框 -->
@@ -34,12 +35,13 @@
         <image class="yq-avatar" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image>
         <view class="yq-meta">
           <text class="yq-name">云阙</text>
-          <text class="yq-role">盛唐走龙 · 为你讲解</text>
+          <text class="yq-role">{{targetKind === 'relic' ? '盛唐走龙 · 为你讲文物' : '盛唐走龙 · 为你讲解'}}</text>
         </view>
-        <view class="yq-badge">AR</view>
+        <view class="yq-badge">{{targetKind === 'relic' ? '文物' : 'AR'}}</view>
       </view>
 
-      <view class="restore-box">
+      <!-- 景点：动态复原视频 -->
+      <view class="restore-box" wx:if="{{targetKind === 'spot'}}">
         <video
           id="briefVideo"
           class="restore-video"
@@ -57,9 +59,20 @@
         ></video>
         <view class="restore-chip"><text class="restore-dot"></text><text>AR 动态复原</text></view>
       </view>
+
+      <!-- 文物：文物配图 -->
+      <view class="relic-box" wx:if="{{targetKind === 'relic'}}">
+        <image class="relic-img" src="{{relicImage}}" mode="aspectFill"></image>
+        <view class="relic-chip"><text class="relic-dot"></text><text>{{era}}</text></view>
+      </view>
     </view>
 
     <scroll-view scroll-y class="brief-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="target-tag">
+        <text class="target-kind-label">{{targetKind === 'relic' ? '可扫描文物' : '长安点位'}}</text>
+        <text class="target-seq">{{seqIndex + 1}} / {{seqTotal}}</text>
+      </view>
+
       <view class="lines">
         <view class="line" wx:for="{{yunqueLines}}" wx:key="text">
           <text class="line-text">{{item.text}}</text>
@@ -67,8 +80,21 @@
       </view>
 
       <view class="intro-card">
-        <text class="block-title">历史背景</text>
+        <text class="block-title">{{targetKind === 'relic' ? '文物档案' : '历史背景'}}</text>
         <text class="intro-text">{{intro}}</text>
+      </view>
+
+      <view wx:if="{{culturalNote}}" class="cultural-note">
+        <text>{{culturalNote}}</text>
+      </view>
+
+      <!-- 文物 → 商城导流 -->
+      <view wx:if="{{targetKind === 'relic' && goodsId}}" class="mall-entry" bindtap="onViewGoods">
+        <view class="mall-entry-left">
+          <text class="mall-entry-title">把这件「长安」带回家</text>
+          <text class="mall-entry-sub">商城查看典藏复刻 · 附收藏证书</text>
+        </view>
+        <text class="mall-entry-arrow">›</text>
       </view>
 
       <view class="source-toggle" bindtap="onToggleSource">
@@ -87,10 +113,17 @@
 
     <view class="brief-actions">
       <button class="act-ghost" bindtap="onRescan">重扫</button>
-      <button class="act-collect {{collected ? 'done' : ''}}" bindtap="onCollect">
-        {{collected ? '已集龙鳞' : '收集「' + scaleName + '」'}}
-      </button>
-      <button class="act-primary" bindtap="onNext">下一景点 ›</button>
+      <button
+        wx:if="{{targetKind === 'spot'}}"
+        class="act-collect {{collected ? 'done' : ''}}"
+        bindtap="onCollect"
+      >{{collected ? '已集龙鳞' : '收集「' + scaleName + '」'}}</button>
+      <button
+        wx:if="{{targetKind === 'relic'}}"
+        class="act-collect {{relicInAlbum ? 'done' : ''}}"
+        bindtap="onCollect"
+      >{{relicInAlbum ? '已入图鉴' : '收入图鉴'}}</button>
+      <button class="act-primary" bindtap="onNext">下一目标 ›</button>
     </view>
   </view>
 

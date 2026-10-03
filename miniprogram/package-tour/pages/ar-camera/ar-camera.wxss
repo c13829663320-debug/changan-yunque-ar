@@ -24,6 +24,10 @@
   font-size: 40rpx; font-weight: 700; color: #fff; margin-top: 6rpx;
   text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.4);
 }
+.cam-era {
+  font-size: 22rpx; color: rgba(255, 236, 205, 0.92); margin-top: 8rpx;
+  background: rgba(216, 168, 106, 0.22); padding: 5rpx 18rpx; border-radius: 24rpx;
+}
 
 /* 取景框 */
 .reticle { position: absolute; top: 50%; left: 50%; width: 520rpx; height: 520rpx; transform: translate(-50%, -56%); }
@@ -98,8 +102,33 @@
 .restore-chip text { font-size: 20rpx; color: #f6e6c8; }
 .restore-dot { width: 12rpx; height: 12rpx; border-radius: 50%; background: #e6b878; margin-right: 12rpx; animation: pulse 1.2s infinite; }
 
+/* 文物配图 */
+.relic-box {
+  position: relative; margin-top: 22rpx; border-radius: 20rpx; overflow: hidden;
+  height: 420rpx; box-shadow: 0 10rpx 26rpx rgba(120, 90, 50, 0.22);
+  background: #ece2cf;
+}
+.relic-img { width: 100%; height: 100%; }
+.relic-chip {
+  position: absolute; left: 16rpx; bottom: 16rpx; display: flex; align-items: center;
+  background: rgba(30, 22, 14, 0.55); padding: 8rpx 18rpx; border-radius: 30rpx;
+}
+.relic-chip text { font-size: 20rpx; color: #f6e6c8; }
+.relic-dot { width: 12rpx; height: 12rpx; border-radius: 50%; background: #d9a86a; margin-right: 12rpx; }
+
+/* 滚动区：目标标签行 */
+.target-tag {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 4rpx;
+}
+.target-kind-label {
+  font-size: 22rpx; color: #a8893a; font-weight: 700; letter-spacing: 2rpx;
+  background: rgba(200, 166, 104, 0.14); padding: 6rpx 18rpx; border-radius: 24rpx;
+}
+.target-seq { font-size: 22rpx; color: #a99a84; }
+
 .lines {
-  margin-top: 26rpx; background: #f1e7d4; border: 1rpx solid #e3d6bd;
+  margin-top: 18rpx; background: #f1e7d4; border: 1rpx solid #e3d6bd;
   border-radius: 18rpx; padding: 22rpx 24rpx;
 }
 .line { border-left: 5rpx solid #c2a668; padding-left: 18rpx; margin-bottom: 14rpx; }
@@ -116,6 +145,24 @@
   width: 7rpx; border-radius: 4rpx; background: linear-gradient(180deg, #c2a668, #a8893a);
 }
 .intro-text { font-size: 26rpx; line-height: 1.7; color: #6f5f4d; }
+
+/* 文物合规标注 */
+.cultural-note {
+  margin-top: 18rpx; background: #f3ede2; border-radius: 12rpx; padding: 14rpx 20rpx;
+}
+.cultural-note text { font-size: 21rpx; line-height: 1.55; color: #9a8c78; }
+
+/* 商城导流卡片 */
+.mall-entry {
+  margin-top: 20rpx; display: flex; align-items: center;
+  background: linear-gradient(135deg, #f7ecd4, #efdfba);
+  border: 1rpx solid #d9bd85; border-radius: 18rpx; padding: 22rpx 24rpx;
+  box-shadow: 0 6rpx 18rpx rgba(160, 130, 70, 0.16);
+}
+.mall-entry-left { flex: 1; display: flex; flex-direction: column; }
+.mall-entry-title { font-size: 27rpx; font-weight: 700; color: #8a5f2e; }
+.mall-entry-sub { font-size: 22rpx; color: #a08a68; margin-top: 6rpx; }
+.mall-entry-arrow { font-size: 40rpx; color: #b08a4a; margin-left: 12rpx; }
 
 .source-toggle {
   margin-top: 24rpx; display: flex; justify-content: space-between; align-items: center;

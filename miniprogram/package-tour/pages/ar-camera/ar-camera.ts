@@ -1,6 +1,8 @@
-import { getScene, getScenesBySpot, getNextScene } from '../../../data/repositories/sceneRepo';
+import { getScene, getScenesBySpot } from '../../../data/repositories/sceneRepo';
+import { getRelic, getRelicsByScene } from '../../../data/repositories/relicRepo';
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, SourceCard } from '../../../data/types/scene';
+import { Relic } from '../../../data/types/relic';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let vkSession: WechatMiniprogram.VKSession | null = null;
@@ -9,33 +11,67 @@ let recTimer: ReturnType<typeof setTimeout> | null = null;
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 
 type Phase = 'scanning' | 'recognizing' | 'briefing';
+type TargetKind = 'spot' | 'relic';
 
 interface YunqueLine {
   text: string;
   audio?: string;
 }
 
+interface SeqItem {
+  kind: TargetKind;
+  id: string;
+}
+
+/** 演示扫描序列：每个景点后跟其关联文物，景点与文物交替出现 */
+function buildSequence(spotId = 'daminggong'): SeqItem[] {
+  const seq: SeqItem[] = [];
+  getScenesBySpot(spotId).forEach((s) => {
+    seq.push({ kind: 'spot', id: s.id });
+    getRelicsByScene(s.id).forEach((r) => seq.push({ kind: 'relic', id: r.id }));
+  });
+  return seq;
+}
+
 Page({
   data: {
     phase: 'scanning' as Phase,
     hasVK: false,
-    scene: null as unknown as ScenePoint,
-    sceneName: '',
-    restoreVideo: '',
-    poster: '',
+    targetKind: 'spot' as TargetKind,
+    // 通用
+    targetName: '',
+    era: '',
     intro: '',
     yunqueLines: [] as YunqueLine[],
     sourceCard: null as SourceCard | null,
+    culturalNote: '',
     showSource: false,
+    statusText: '将镜头对准宫殿 / 文物，云阙将为你讲解',
+    // 景点
+    scene: null as ScenePoint | null,
+    restoreVideo: '',
+    poster: '',
     scaleName: '',
     collected: false,
-    statusText: '将镜头对准宫殿 / 文物，云阙将为你讲解',
+    // 文物
+    relic: null as Relic | null,
+    relicImage: '',
+    relicInAlbum: false,
+    goodsId: '',
+    // 序列
+    seqIndex: 0,
+    seqTotal: 0,
   },
 
   onLoad(query: Record<string, string | undefined>) {
-    const scenes = getScenesBySpot('daminggong');
-    const startId = query?.id || getProgressStore().snapshot.currentSceneId || scenes[0].id;
-    this.loadTarget(startId);
+    const seq = buildSequence();
+    let startIdx = 0;
+    if (query?.id) {
+      const k = seq.findIndex((t) => t.id === query.id);
+      if (k >= 0) startIdx = k;
+    }
+    this.setData({ seqTotal: seq.length });
+    this.loadSeqIndex(startIdx);
 
     const hasVK = typeof (wx as any).createVKSession === 'function';
     this.setData({ hasVK });
@@ -47,8 +83,18 @@ Page({
     }
   },
 
-  /** 加载识别目标（景点），组装云阙讲解内容 */
-  loadTarget(id: string) {
+  /** 加载序列指定位置目标 */
+  loadSeqIndex(i: number) {
+    const seq = buildSequence();
+    const idx = Math.max(0, Math.min(i, seq.length - 1));
+    const t = seq[idx];
+    this.setData({ seqIndex: idx });
+    if (t.kind === 'spot') this.loadSpot(t.id);
+    else this.loadRelic(t.id);
+  },
+
+  /** 加载景点，组装云阙讲解（复原视频 + 配音 + 龙鳞） */
+  loadSpot(id: string) {
     const scene = getScene(id);
     if (!scene) return;
     const yunqueLines: YunqueLine[] = scene.dialogs
@@ -56,17 +102,51 @@ Page({
       .slice(0, 3)
       .map((d) => ({ text: d.text, audio: d.audio }));
     this.setData({
+      targetKind: 'spot',
       scene,
-      sceneName: scene.name,
+      targetName: scene.name,
+      era: '',
       restoreVideo: scene.restoreVideo || '',
       poster: scene.poster || '',
       intro: scene.intro,
       yunqueLines,
       sourceCard: scene.sourceCard,
+      culturalNote: '',
       scaleName: scene.scaleName,
       collected: getProgressStore().isCompleted(scene.id),
+      relic: null,
+      relicImage: '',
+      relicInAlbum: false,
+      goodsId: '',
       showSource: false,
       statusText: `将镜头对准「${scene.name}」，云阙将为你讲解`,
+    });
+  },
+
+  /** 加载文物，组装云阙讲解（文物图 + 文字 + 图鉴，无视频/配音） */
+  loadRelic(id: string) {
+    const relic = getRelic(id);
+    if (!relic) return;
+    const yunqueLines: YunqueLine[] = relic.yunqueLines.map((t) => ({ text: t }));
+    this.setData({
+      targetKind: 'relic',
+      relic,
+      targetName: relic.name,
+      era: relic.era,
+      relicImage: relic.image,
+      relicInAlbum: getProgressStore().isRelicCollected(relic.id),
+      goodsId: relic.goodsId || '',
+      intro: relic.intro,
+      yunqueLines,
+      sourceCard: relic.sourceCard || null,
+      culturalNote: relic.culturalNote || '',
+      restoreVideo: '',
+      poster: '',
+      scene: null,
+      scaleName: '',
+      collected: false,
+      showSource: false,
+      statusText: `将镜头对准「${relic.name}」，云阙将为你讲解`,
     });
   },
 
@@ -92,7 +172,7 @@ Page({
     }
   },
 
-  /* ---------- 兜底：LBS 进入触发半径 ---------- */
+  /* ---------- 兜底：LBS 进入触发半径（仅景点有坐标） ---------- */
   initLBSFallback() {
     wx.getLocation({
       type: 'gcj02',
@@ -112,7 +192,7 @@ Page({
     });
   },
 
-  /* ---------- 演示：自动模拟对准识别（评委任何环境可体验） ---------- */
+  /* ---------- 演示：自动模拟对准识别 ---------- */
   scheduleDemoScan() {
     this.clearTimers();
     scanTimer = setTimeout(() => this.startRecognize(), 2600);
@@ -128,14 +208,17 @@ Page({
   onRecognized() {
     if (this.data.phase === 'briefing') return;
     this.clearTimers();
+    const isSpot = this.data.targetKind === 'spot';
     this.setData({ phase: 'briefing' }, () => {
-      setTimeout(() => {
-        try {
-          wx.createVideoContext('briefVideo', this).play();
-        } catch (e) {
-          /* noop */
-        }
-      }, 120);
+      if (isSpot) {
+        setTimeout(() => {
+          try {
+            wx.createVideoContext('briefVideo', this).play();
+          } catch (e) {
+            /* noop */
+          }
+        }, 120);
+      }
     });
     try {
       (wx as any).vibrateShort?.({ type: 'light' });
@@ -170,10 +253,15 @@ Page({
 
   /* ---------- 讲解面板操作 ---------- */
   onCollect() {
-    if (!this.data.scene) return;
-    getProgressStore().completeScene(this.data.scene);
-    this.setData({ collected: true });
-    wx.showToast({ title: `已集「${this.data.scaleName}」`, icon: 'none' });
+    if (this.data.targetKind === 'spot' && this.data.scene) {
+      getProgressStore().completeScene(this.data.scene);
+      this.setData({ collected: true });
+      wx.showToast({ title: `已集「${this.data.scaleName}」`, icon: 'none' });
+    } else if (this.data.targetKind === 'relic' && this.data.relic) {
+      getProgressStore().collectRelic(this.data.relic.id);
+      this.setData({ relicInAlbum: true });
+      wx.showToast({ title: '已收入文物图鉴', icon: 'none' });
+    }
   },
 
   onToggleSource() {
@@ -188,14 +276,22 @@ Page({
 
   onNext() {
     this.stopAudio();
-    const next = getNextScene(this.data.scene.id);
-    this.setData({ phase: 'scanning', showSource: false });
-    if (next) {
-      this.loadTarget(next.id);
+    const next = this.data.seqIndex + 1;
+    if (next < this.data.seqTotal) {
+      this.setData({ phase: 'scanning', showSource: false });
+      this.loadSeqIndex(next);
       this.scheduleDemoScan();
     } else {
-      wx.showToast({ title: '七点位已扫描完成', icon: 'none' });
+      this.setData({ phase: 'scanning', showSource: false });
+      wx.showToast({ title: '景点与文物已全部扫描完成', icon: 'none' });
     }
+  },
+
+  /** 文物 → 商城查看复刻 / 实物 */
+  onViewGoods() {
+    const id = this.data.goodsId;
+    if (!id) return;
+    wx.navigateTo({ url: `/package-mall/pages/goods-detail/goods-detail?id=${id}` });
   },
 
   onManualDetect() {

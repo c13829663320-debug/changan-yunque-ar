@@ -4,6 +4,7 @@ export interface ProgressState {
   completedSceneIds: string[];
   scales: string[];
   stamps: string[];
+  collectedRelicIds: string[];
   currentSceneId: string;
 }
 
@@ -13,6 +14,7 @@ const createDefault = (): ProgressState => ({
   completedSceneIds: [],
   scales: [],
   stamps: [],
+  collectedRelicIds: [],
   currentSceneId: 'danfengmen',
 });
 
@@ -51,6 +53,18 @@ class ProgressStore {
     return this.state.completedSceneIds.includes(sceneId);
   }
 
+  /** 收入文物图鉴 */
+  collectRelic(relicId: string): void {
+    if (!this.state.collectedRelicIds.includes(relicId)) {
+      this.state.collectedRelicIds.push(relicId);
+    }
+    this.persist();
+  }
+
+  isRelicCollected(relicId: string): boolean {
+    return this.state.collectedRelicIds.includes(relicId);
+  }
+
   setCurrent(sceneId: string): void {
     this.state.currentSceneId = sceneId;
     this.persist();
@@ -62,6 +76,10 @@ class ProgressStore {
 
   get scaleCount(): number {
     return this.state.scales.length;
+  }
+
+  get relicCount(): number {
+    return this.state.collectedRelicIds.length;
   }
 
   reset(): void {
