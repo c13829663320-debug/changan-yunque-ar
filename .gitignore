@@ -22,3 +22,8 @@ dist/
 
 # 录屏中间产物（最终成片在 media/）
 demo/raw/
+
+# 配音中间产物（成品 mp3 已入 package-tour/assets/audio）
+demo/raw_audio/
+demo/refs/
+demo/audio_manifest.json
