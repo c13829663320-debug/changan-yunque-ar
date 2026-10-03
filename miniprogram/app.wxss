@@ -4,3 +4,10 @@
 /* 全局基础 */
 view, text { box-sizing: border-box; }
 image { display: block; }
+
+/* 全局页面转场（新建页面淡入，克制） */
+page { animation: pageEnter 0.32s ease both; }
+@keyframes pageEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
