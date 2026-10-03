@@ -44,7 +44,9 @@ Page({
       return;
     }
     const voiceMuted = wx.getStorageSync(MUTED_KEY) === true;
-    this.setData({ mode, scene, total: scene.dialogs.length, voiceMuted });
+    this.setData({ mode, scene, total: scene.dialogs.length, voiceMuted }, () => {
+      this.playStageVideo();
+    });
     this.renderNode(0);
   },
 
@@ -130,7 +132,13 @@ Page({
       this.data.mode === 'onsite'
         ? '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）'
         : '示意复原；M1接入XRFrame后呈现完整3D殿宇与光影';
-    this.setData({ showAR: true, arTip });
+    this.setData({ showAR: true, arTip }, () => {
+      try {
+        wx.createVideoContext('arVideo').play();
+      } catch (e) {
+        /* noop */
+      }
+    });
   },
 
   closeAR() {
@@ -146,6 +154,15 @@ Page({
   },
 
   noop() {},
+
+  // 主动播放舞台视频（模拟器 autoplay 可能不生效；poster 已保证有画面）
+  playStageVideo() {
+    try {
+      wx.createVideoContext('stageVideo').play();
+    } catch (e) {
+      /* noop */
+    }
+  },
 
   playAudio(src?: string) {
     try {

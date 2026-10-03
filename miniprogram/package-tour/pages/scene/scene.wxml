@@ -3,8 +3,10 @@
   <view class="stage has-video">
     <video
       wx:if="{{scene.restoreVideo}}"
+      id="stageVideo"
       class="stage-video"
       src="{{scene.restoreVideo}}"
+      poster="{{scene.poster}}"
       autoplay
       loop
       muted
@@ -44,8 +46,10 @@
     <view class="ar-frame" catchtap="noop">
       <video
         wx:if="{{scene.restoreVideo}}"
+        id="arVideo"
         class="ar-restore"
         src="{{scene.restoreVideo}}"
+        poster="{{scene.poster}}"
         autoplay
         loop
         muted

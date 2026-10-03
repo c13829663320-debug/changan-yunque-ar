@@ -17,6 +17,7 @@
         wx:if="{{restoreVideo}}"
         class="ov-restore"
         src="{{restoreVideo}}"
+        poster="{{scene.poster}}"
         autoplay
         loop
         muted

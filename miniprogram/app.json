@@ -50,10 +50,10 @@
     "backgroundColor": "#FBF6EC",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/home/home", "text": "长安" },
-      { "pagePath": "pages/tour/tour", "text": "巡游" },
-      { "pagePath": "pages/mall/mall", "text": "云阙商城" },
-      { "pagePath": "pages/mine/mine", "text": "我的" }
+      { "pagePath": "pages/home/home", "text": "长安", "iconPath": "assets/tabbar/tab-home.png", "selectedIconPath": "assets/tabbar/tab-home-active.png" },
+      { "pagePath": "pages/tour/tour", "text": "巡游", "iconPath": "assets/tabbar/tab-tour.png", "selectedIconPath": "assets/tabbar/tab-tour-active.png" },
+      { "pagePath": "pages/mall/mall", "text": "云阙商城", "iconPath": "assets/tabbar/tab-mall.png", "selectedIconPath": "assets/tabbar/tab-mall-active.png" },
+      { "pagePath": "pages/mine/mine", "text": "我的", "iconPath": "assets/tabbar/tab-mine.png", "selectedIconPath": "assets/tabbar/tab-mine-active.png" }
     ]
   },
   "permission": {
@@ -62,9 +62,7 @@
     }
   },
   "requiredPrivateInfos": [
-    "getLocation",
-    "onLocationChange",
-    "startCompass"
+    "getLocation"
   ],
   "cloud": true,
   "sitemapLocation": "sitemap.json",

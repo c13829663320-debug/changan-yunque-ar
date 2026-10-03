@@ -9,7 +9,7 @@
     <!-- 云阙互动开场 -->
     <view class="hero {{entered ? 'entered' : ''}}">
       <view class="yunque-badge">
-        <image class="yunque-portrait" src="/assets/characters/yunque-dragon.jpg" mode="aspectFill"></image>
+        <image class="yunque-portrait" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image>
         <view class="yunque-halo"></view>
         <view class="yunque-ring"></view>
       </view>

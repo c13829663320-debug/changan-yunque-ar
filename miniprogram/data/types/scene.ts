@@ -88,6 +88,8 @@ export interface ScenePoint {
   arRestoreImage?: string;
   /** 动态复原视频（包内路径），无 3D 时以视频替代；舞台背景 / AR 层 / AR 相机共用 */
   restoreVideo?: string;
+  /** 视频首帧封面（未播放/模拟器黑屏时兜底显示） */
+  poster?: string;
   cover?: string;
   intro: string;
   sourceCard: SourceCard;
