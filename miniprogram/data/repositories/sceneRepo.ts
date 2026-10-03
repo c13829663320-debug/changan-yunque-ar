@@ -1,5 +1,6 @@
 import daminggongScenes from '../scenes/daminggong/index';
 import dayantaScenes from '../scenes/dayanta/index';
+import qinglongsiScenes from '../scenes/qinglongsi/index';
 import { ScenePoint } from '../types/scene';
 
 /** 复原视频已上传 CDN（不进小程序包、在线播放）；加载失败由 poster 运镜兜底 */
@@ -17,9 +18,15 @@ const RESTORE_VIDEO: Record<string, string> = {
   shengjiaobei: 'https://aka.doubaocdn.com/s/befUUj2CXh',
   timing: 'https://aka.doubaocdn.com/s/AvAzGYxoZl',
   'yata-ding': 'https://aka.doubaocdn.com/s/zWO8DXVeau',
+  // 青龙寺 5 点位复原视频（Seedance 2.5）
+  'qinglong-shanmen': 'https://aka.doubaocdn.com/s/dVGgzVdkYM',
+  'qinglong-guanding': 'https://aka.doubaocdn.com/s/H8oHk3Msx6',
+  'qinglong-mantuluo': 'https://aka.doubaocdn.com/s/9QVJ3BDJcw',
+  'qinglong-fufa': 'https://aka.doubaocdn.com/s/4ROPgR3auU',
+  'qinglong-donggui': 'https://aka.doubaocdn.com/s/fGhNyN4DUm',
 };
 
-const allScenes: ScenePoint[] = [...daminggongScenes, ...dayantaScenes];
+const allScenes: ScenePoint[] = [...daminggongScenes, ...dayantaScenes, ...qinglongsiScenes];
 
 export function getScenesBySpot(spotId: string): ScenePoint[] {
   return allScenes

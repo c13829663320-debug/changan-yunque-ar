@@ -1,8 +1,9 @@
 import relics from '../relics/daminggong';
 import dayantaRelics from '../relics/dayanta';
+import qinglongRelics from '../relics/qinglongsi';
 import { Relic } from '../types/relic';
 
-const allRelics: Relic[] = [...relics, ...dayantaRelics];
+const allRelics: Relic[] = [...relics, ...dayantaRelics, ...qinglongRelics];
 
 export function getRelicsBySpot(spotId: string): Relic[] {
   return allRelics.filter((r) => r.spotId === spotId);

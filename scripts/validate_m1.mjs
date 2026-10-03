@@ -45,6 +45,16 @@ const SPOTS = [
       ['yata-ding', '归雁鳞'],
     ],
   },
+  {
+    id: 'qinglongsi',
+    pairs: [
+      ['qinglong-shanmen', '寻师鳞'],
+      ['qinglong-guanding', '灌顶鳞'],
+      ['qinglong-mantuluo', '曼荼鳞'],
+      ['qinglong-fufa', '付法鳞'],
+      ['qinglong-donggui', '东归鳞'],
+    ],
+  },
 ];
 
 // 1. 页面四件套
