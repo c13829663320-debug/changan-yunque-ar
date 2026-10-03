@@ -95,9 +95,47 @@
 .work-quote { font-size: var(--fs-small); color: var(--ink-soft); display: block; margin-top: 8rpx; line-height: 1.6; }
 .s-note { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.7; display: block; margin: 16rpx 0 24rpx; }
 
-/* 结算 */
-.end-panel { width: 100%; background: var(--bg-card); border-radius: var(--radius-lg); padding: 44rpx 34rpx 30rpx; display: flex; flex-direction: column; align-items: center; }
-.scale-circle { width: 180rpx; height: 180rpx; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fbf6ec, #e2d4bb); border: 2rpx solid var(--dark-gold); display: flex; align-items: center; justify-content: center; margin-bottom: 22rpx; }
+/* 结算：统一电影感弹窗 + 龙鳞仪式 */
+.end-mask { animation: endFade 0.35s ease both; }
+@keyframes endFade { from { opacity: 0; } to { opacity: 1; } }
+.end-panel {
+  width: 100%;
+  background: linear-gradient(180deg, var(--bg-card) 0%, #f6ecd8 100%);
+  border-radius: var(--radius-lg);
+  padding: 48rpx 34rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 20rpx 60rpx rgba(50, 38, 22, 0.35);
+  animation: endRise 0.45s cubic-bezier(0.2, 1, 0.3, 1) both;
+}
+@keyframes endRise {
+  from { opacity: 0; transform: translateY(40rpx) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.end-spot {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  letter-spacing: 3rpx;
+  margin-bottom: 26rpx;
+}
+.scale-circle {
+  position: relative;
+  width: 180rpx; height: 180rpx; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fbf6ec, #e2d4bb);
+  border: 2rpx solid var(--dark-gold);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22rpx;
+}
+.scale-halo {
+  position: absolute; inset: -14rpx; border-radius: 50%;
+  border: 1rpx solid rgba(168, 137, 58, 0.35);
+  animation: haloPulse 2.6s ease-in-out infinite;
+}
+@keyframes haloPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
 .scale-word { color: var(--dark-gold); font-size: 34rpx; letter-spacing: 2rpx; }
 .end-title { font-size: var(--fs-h2); color: var(--ink); font-weight: 600; }
 .end-sub { font-size: var(--fs-small); color: var(--ink-muted); margin: 10rpx 0 28rpx; }

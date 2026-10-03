@@ -1,4 +1,5 @@
-import { getScene, getNextScene, getTotalCount } from '../../../data/repositories/sceneRepo';
+import { getScene, getNextScene, getTotalCount, getScenesBySpot } from '../../../data/repositories/sceneRepo';
+import { getSpot } from '../../../data/repositories/spotRepo';
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scene';
 
@@ -16,6 +17,8 @@ Page({
     dialogIndex: 0,
     dialogTotal: 0,
     scaleTotal: 0,
+    /** 当前景点名（数据驱动，用于结算与分享文案，不写死大明宫） */
+    spotName: '',
     showChoices: false,
     showFeedback: false,
     feedback: {} as ChoiceFeedback,
@@ -61,8 +64,9 @@ Page({
     const voiceMuted = wx.getStorageSync(MUTED_KEY) === true;
     // 龙鳞分母 = 当前景点的点位(场景)数（每个场景集一片鳞），不写死、支持多景点扩展
     const scaleTotal = getTotalCount(scene.spotId);
+    const spotName = getSpot(scene.spotId)?.name || '长安';
     this.setData(
-      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, voiceMuted, isDevtools },
+      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, spotName, voiceMuted, isDevtools },
       () => {
         this.startStagePlayback();
       }
@@ -333,7 +337,11 @@ Page({
     const store = getProgressStore();
     store.completeScene(this.data.scene);
     const next = getNextScene(this.data.scene.id);
-    this.setData({ finished: true, scaleCount: store.scaleCount, hasNext: !!next });
+    // 结算龙鳞计数按「当前景点」统计，与分母 scaleTotal(本景点) 一致，跨景点不错位
+    const spotDone = getScenesBySpot(this.data.scene.spotId).filter((s) =>
+      store.isCompleted(s.id)
+    ).length;
+    this.setData({ finished: true, scaleCount: spotDone, hasNext: !!next });
   },
 
   goNext() {
@@ -367,8 +375,11 @@ Page({
 
   onShareAppMessage() {
     const wish = this.data.wishText || '愿此刻长安，久一点。';
+    // 文案依据当前景点与点位动态生成，不写死「大明宫玄武门」，多景点通用
+    const spot = this.data.spotName || '长安';
+    const point = this.data.scene?.name || '巡游';
     return {
-      title: `我在大明宫玄武门投了一愿：「${wish}」，你也来云阙巡游集齐七鳞吧`,
+      title: `我在${spot}·${point}投了一愿：「${wish}」，你也来云阙巡游集齐龙鳞吧`,
       imageUrl: this.data.shareImagePath || undefined,
       path: '/pages/tour/tour',
     };
