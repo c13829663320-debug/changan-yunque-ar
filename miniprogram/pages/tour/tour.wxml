@@ -7,8 +7,8 @@
         <text class="head-sub">{{headSub}}</text>
       </view>
       <view class="seg-group">
-        <view class="seg {{mode==='cloud'?'on':''}}" data-mode="cloud" bindtap="switchMode">云游</view>
-        <view class="seg {{mode==='onsite'?'on':''}}" data-mode="onsite" bindtap="switchMode">现场</view>
+        <view class="seg {{mode==='cloud'?'on':''}}" data-mode="cloud" bindtap="switchMode" hover-class="seg-hover" hover-stay-time="80">云游</view>
+        <view class="seg {{mode==='onsite'?'on':''}}" data-mode="onsite" bindtap="switchMode" hover-class="seg-hover" hover-stay-time="80">现场</view>
       </view>
     </view>
 
@@ -28,21 +28,21 @@
       <view class="spot-switch-line"></view>
     </view>
 
-    <!-- 龙鳞七片 -->
+    <!-- 龙鳞集录 -->
     <view class="scale-line">
       <view class="row-between scale-head">
         <text class="scale-text">龙鳞集录</text>
         <text class="scale-num">{{scaleCount}}<text class="scale-num-sep"> / </text>{{total}}</text>
       </view>
       <view class="scale-row">
-        <view
-          class="scale-chip {{cell.got?'got':''}}"
+        <dragon-scale
           wx:for="{{scaleCells}}"
           wx:for-item="cell"
           wx:key="n"
-        >
-          <view class="scale-face"></view>
-        </view>
+          size="sm"
+          got="{{cell.got}}"
+          enamel="{{cell.enamel}}"
+        ></dragon-scale>
       </view>
       <text class="scale-hint">{{modeHint}}</text>
     </view>
@@ -66,7 +66,6 @@
       >
         <view class="node">
           <text class="node-index">{{item.index}}</text>
-          <view class="node-badge"></view>
         </view>
         <view class="route-card">
           <view class="row-between">
@@ -75,9 +74,17 @@
           </view>
           <text class="route-role">你将成为：{{item.role}}</text>
           <view class="route-foot">
-            <text class="route-scale">◈ {{item.scaleName}}</text>
-            <text class="route-cta" wx:if="{{item.state==='unlocked'}}">前往 →</text>
-            <text class="route-lock" wx:if="{{item.state==='locked'}}">未解锁</text>
+            <view class="route-scale">
+              <line-icon name="scale" size="{{26}}"></line-icon>
+              <text class="route-scale-name">{{item.scaleName}}</text>
+            </view>
+            <view class="route-action">
+              <view class="route-cta" wx:if="{{item.state==='unlocked'}}">
+                <text class="route-cta-text">前往</text>
+                <line-icon name="arrow" size="{{26}}" theme="gold"></line-icon>
+              </view>
+              <line-icon class="route-lock" size="{{30}}" wx:if="{{item.state==='locked'}}"></line-icon>
+            </view>
           </view>
         </view>
       </view>

@@ -1,4 +1,8 @@
 {
   "navigationBarTitleText": "云阙巡游",
-  "enablePullDownRefresh": false
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "dragon-scale": "/components/dragon-scale/dragon-scale",
+    "line-icon": "/components/line-icon/line-icon"
+  }
 }
