@@ -1,50 +1,149 @@
-.progress-head { padding-bottom: 30rpx; }
+/* ============================================================
+   云阙巡游 · tour 页打磨
+   盛唐敦煌长卷美学：低饱和、沉静华贵；暗金仅用于龙鳞，朱砂克制
+   全部颜色/字号/圆角/间距/阴影均引用 tokens.wxss
+   ============================================================ */
 
+.tour { padding-top: 20rpx; }
+
+/* ---------- 顶部卡片：标题 + 模式切换 ---------- */
+.progress-head { padding-bottom: 30rpx; }
+.head-row { align-items: flex-start; }
+.head-title { display: flex; flex-direction: column; }
+.head-sub {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  letter-spacing: 3rpx;
+  margin-top: 6rpx;
+}
+
+/* 云游 / 现场 分段控件 */
 .seg-group {
   display: flex;
   background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
   border-radius: 999rpx;
-  padding: 4rpx;
+  padding: 5rpx;
 }
 .seg {
   padding: 10rpx 28rpx;
   font-size: var(--fs-small);
+  letter-spacing: 2rpx;
   color: var(--ink-muted);
   border-radius: 999rpx;
+  transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
 }
-.seg.on { background: #fff; color: var(--cinnabar); box-shadow: var(--shadow); }
+.seg.on {
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: var(--bg-card);
+  box-shadow: var(--shadow);
+}
 
-.scale-line { margin: 24rpx 0 26rpx; }
-.scale-text { font-size: var(--fs-small); color: var(--ink-soft); }
-.scale-track {
-  height: 14rpx;
+/* ---------- 龙鳞七片 ---------- */
+.scale-line { margin: 26rpx 0 26rpx; }
+.scale-head { align-items: baseline; margin-bottom: 16rpx; }
+.scale-text { font-size: var(--fs-small); color: var(--ink-soft); letter-spacing: 2rpx; }
+.scale-num { font-size: var(--fs-h2); font-weight: 600; color: var(--dark-gold); }
+.scale-num-sep { font-size: var(--fs-small); color: var(--ink-muted); font-weight: 400; }
+
+/* 龙鳞托：一条鎏金暗槽 */
+.scale-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
   border-radius: 999rpx;
-  margin-top: 14rpx;
-  overflow: hidden;
+  padding: 18rpx 26rpx;
+  margin-top: 4rpx;
 }
-.scale-fill {
+.scale-chip { width: 38rpx; height: 46rpx; }
+.scale-face {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, var(--dark-gold-soft), var(--dark-gold));
-  border-radius: 999rpx;
-  transition: width 0.3s;
+  /* 龙鳞：上缘微弧收分、下缘聚尖，如覆瓦 */
+  clip-path: polygon(12% 0, 88% 0, 100% 26%, 100% 64%, 50% 100%, 0 64%, 0 26%);
+  background: var(--line);
+  opacity: 0.55;
+  transition: background 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
 }
-.continue-btn { margin-top: 4rpx; }
+.scale-chip.got .scale-face {
+  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 90%);
+  opacity: 1;
+  transform: translateY(-2rpx);
+}
+.scale-hint {
+  display: block;
+  margin-top: 16rpx;
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  letter-spacing: 1rpx;
+}
 
-/* 路线卷轴 */
-.route { position: relative; padding-left: 8rpx; }
-.route-item { position: relative; display: flex; padding-bottom: 22rpx; }
-.route-item:not(:last-child) .node::after {
+.continue-btn { margin-top: 6rpx; }
+
+/* ============================================================
+   卷轴路线
+   ============================================================ */
+.scroll-wrap { position: relative; padding: 6rpx 2rpx 0; }
+
+/* 卷轴轴头（上下两端的绫杆） */
+.scroll-rod {
+  position: relative;
+  height: 16rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, var(--ochre-deep) 0%, var(--ochre) 50%, var(--ochre-deep) 100%);
+  box-shadow: var(--shadow);
+}
+.scroll-rod.bottom { margin-top: 26rpx; }
+.rod-cap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--dark-gold-soft), var(--dark-gold));
+}
+.rod-cap.left { left: -6rpx; }
+.rod-cap.right { right: -6rpx; }
+
+/* 绢丝中轴：贯穿各节点的路线 */
+.route { position: relative; padding: 14rpx 4rpx 4rpx 10rpx; }
+.route-item {
+  position: relative;
+  display: flex;
+  padding-bottom: 26rpx;
+  /* 长卷徐徐展开：逐点淡入上移 */
+  animation: riseIn 0.5s ease both;
+}
+.route-item:nth-child(1) { animation-delay: 0.04s; }
+.route-item:nth-child(2) { animation-delay: 0.12s; }
+.route-item:nth-child(3) { animation-delay: 0.20s; }
+.route-item:nth-child(4) { animation-delay: 0.28s; }
+.route-item:nth-child(5) { animation-delay: 0.36s; }
+.route-item:nth-child(6) { animation-delay: 0.44s; }
+.route-item:nth-child(7) { animation-delay: 0.52s; }
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(26rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 连接线（绢丝） */
+.route-item:not(:last-child)::before {
   content: '';
   position: absolute;
-  left: 50%;
-  top: 64rpx;
-  transform: translateX(-50%);
+  left: 31rpx;
+  top: 66rpx;
   width: 2rpx;
   height: calc(100% - 40rpx);
-  background: var(--line);
+  background: linear-gradient(180deg, var(--line) 0%, var(--ochre) 60%, var(--line) 100%);
 }
+
+/* 节点圆 */
 .node {
+  position: relative;
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
@@ -53,12 +152,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20rpx;
+  margin-right: 22rpx;
   flex-shrink: 0;
   z-index: 1;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .node-index { font-size: var(--fs-small); color: var(--ink-muted); }
+/* 节点上的小徽记（完成点的鎏金芯） */
+.node-badge {
+  position: absolute;
+  right: -2rpx;
+  bottom: -2rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: var(--dark-gold);
+  border: 2rpx solid var(--bg-card);
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
 
+/* 路线卡片 */
 .route-card {
   flex: 1;
   background: var(--bg-card);
@@ -66,16 +180,83 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 22rpx 24rpx;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.3s ease;
 }
-.route-name { font-size: var(--fs-h2); font-weight: 600; color: var(--ink); }
-.route-state { font-size: var(--fs-mini); color: var(--ink-muted); }
-.route-role, .route-scale { display: block; font-size: var(--fs-mini); color: var(--ink-muted); margin-top: 8rpx; }
+.route-name { font-size: var(--fs-h2); font-weight: 600; color: var(--ink); letter-spacing: 1rpx; }
+.route-state { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 1rpx; }
+.route-role {
+  display: block;
+  font-size: var(--fs-mini);
+  color: var(--ink-soft);
+  margin-top: 10rpx;
+  line-height: 1.5;
+}
+.route-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14rpx;
+}
+.route-scale { font-size: var(--fs-mini); color: var(--ochre-deep); letter-spacing: 1rpx; }
 
-/* 状态 */
+/* 可点反馈 */
+.route-hover .route-card { transform: scale(0.985); box-shadow: var(--shadow-deep); }
+
+/* ---------- 三态 ---------- */
+/* 已完成：鎏金节点 + 金芯 */
 .route-item.completed .node { background: var(--dark-gold); border-color: var(--dark-gold); }
-.route-item.completed .node-index { color: #fbf3e4; }
+.route-item.completed .node-index { color: var(--bg-card); font-weight: 600; }
+.route-item.completed .node-badge { transform: scale(1); }
 .route-item.completed .route-state { color: var(--dark-gold); }
-.route-item.unlocked .node { border-color: var(--cinnabar-soft); }
-.route-item.unlocked .node-index { color: var(--cinnabar); }
+.route-item.completed .route-scale { color: var(--dark-gold); }
+
+/* 当前点位（可进入）：朱砂收边 + 轻柔呼吸光圈，明确"现在就去" */
+.route-item.unlocked .node {
+  background: var(--bg-card);
+  border-color: var(--cinnabar);
+  box-shadow: 0 0 0 4rpx rgba(158, 74, 42, 0.10);
+  animation: breath 2.6s ease-in-out infinite;
+}
+.route-item.unlocked .node-index { color: var(--cinnabar); font-weight: 600; }
 .route-item.unlocked .route-state { color: var(--cinnabar); }
-.route-item.locked { opacity: 0.55; }
+.route-item.unlocked .route-card {
+  border-color: var(--cinnabar-soft);
+  box-shadow: var(--shadow-deep);
+}
+.route-cta { font-size: var(--fs-mini); color: var(--cinnabar); letter-spacing: 1rpx; }
+
+@keyframes breath {
+  0%, 100% { box-shadow: 0 0 0 2rpx rgba(158, 74, 42, 0.10); }
+  50% { box-shadow: 0 0 0 12rpx rgba(158, 74, 42, 0); }
+}
+
+/* 锁定：低饱和淡出 */
+.route-item.locked { opacity: 0.6; }
+.route-item.locked .node { background: var(--bg-card-deep); }
+.route-item.locked .route-card { box-shadow: none; }
+.route-lock { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 1rpx; }
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0 48rpx;
+}
+.empty-seal {
+  width: 96rpx;
+  height: 110rpx;
+  clip-path: polygon(15% 0, 85% 0, 100% 24%, 100% 62%, 50% 100%, 0 62%, 0 24%);
+  background: linear-gradient(160deg, var(--line), var(--ochre));
+  opacity: 0.5;
+  margin-bottom: 24rpx;
+}
+.empty-title { font-size: var(--fs-h2); color: var(--ink-soft); letter-spacing: 3rpx; }
+.empty-desc {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 12rpx;
+  letter-spacing: 1rpx;
+}
