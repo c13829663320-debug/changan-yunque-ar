@@ -108,4 +108,12 @@ Page({
       url: `/package-tour/pages/scene/scene?id=${id}&mode=${this.data.mode}`,
     });
   },
+
+  onShareAppMessage() {
+    return {
+      title: '我在大明宫跟着云阙AR巡游，集齐七片龙鳞，你来吗？',
+      imageUrl: '/assets/brand/share-cover.jpg',
+      path: '/pages/tour/tour',
+    };
+  },
 });

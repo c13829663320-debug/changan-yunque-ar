@@ -244,3 +244,7 @@
 .menu-item.hot .m-arrow { color: var(--bg-card); }
 
 .reset-btn { margin-top: 12rpx; }
+
+/* 底部品牌落款 */
+.brand-foot { display: flex; justify-content: center; padding: 26rpx 0 8rpx; }
+.brand-foot-img { width: 188rpx; height: 258rpx; opacity: 0.94; }

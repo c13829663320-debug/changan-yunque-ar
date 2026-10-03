@@ -28,6 +28,8 @@
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 .hero.entered { opacity: 1; transform: translateY(0); }
+.brand-mark { width: 128rpx; height: 148rpx; margin-bottom: 6rpx; }
+
 /* 云阙拱龛肖像（竖幅壁画龛，替代圆形头像，脸部完整可见） */
 .yunque-shrine {
   position: relative;

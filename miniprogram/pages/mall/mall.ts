@@ -49,4 +49,12 @@ Page({
       url: `/package-mall/pages/goods-detail/goods-detail?id=${id}`,
     });
   },
+
+  onShareAppMessage() {
+    return {
+      title: '云阙商城｜把长安带回家，文创好物预售登记中',
+      imageUrl: '/assets/brand/share-cover.jpg',
+      path: '/pages/mall/mall',
+    };
+  },
 });

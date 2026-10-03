@@ -8,6 +8,7 @@
   <view class="page-wrap inner">
     <!-- 云阙互动开场 -->
     <view class="hero {{entered ? 'entered' : ''}}">
+      <image class="brand-mark" src="/assets/brand/brand-mark.png" mode="aspectFit"></image>
       <view class="yunque-shrine">
         <image class="shrine-portrait" src="/assets/characters/yunque-portrait.jpg" mode="aspectFill"></image>
         <view class="shrine-glow"></view>

@@ -94,5 +94,9 @@
     </view>
 
     <button class="btn-ghost reset-btn rise" style="animation-delay:.26s" bindtap="onReset">重置巡游进度</button>
+
+    <view class="brand-foot rise" style="animation-delay:.3s">
+      <image class="brand-foot-img" src="/assets/brand/brand-full.png" mode="aspectFit"></image>
+    </view>
   </view>
 </view>

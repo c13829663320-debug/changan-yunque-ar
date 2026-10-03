@@ -71,4 +71,19 @@ Page({
   goMall() {
     wx.switchTab({ url: '/pages/mall/mall' });
   },
+
+  onShareAppMessage() {
+    return {
+      title: '长安云阙·AR文旅助手｜跟着云阙集齐七片龙鳞，把长安带回家',
+      imageUrl: '/assets/brand/share-cover.jpg',
+      path: '/pages/home/home',
+    };
+  },
+
+  onShareTimeline() {
+    return {
+      title: '长安云阙·AR文旅助手｜大明宫AR巡游集七鳞',
+      imageUrl: '/assets/brand/share-cover.jpg',
+    };
+  },
 });
