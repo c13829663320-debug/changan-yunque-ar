@@ -86,6 +86,8 @@ export interface ScenePoint {
   bg?: string;
   /** AR 复原层「复原图」（包内绝对路径或 CDN）；为空时回退到 CSS 示意殿宇 */
   arRestoreImage?: string;
+  /** 动态复原视频（包内路径），无 3D 时以视频替代；舞台背景 / AR 层 / AR 相机共用 */
+  restoreVideo?: string;
   cover?: string;
   intro: string;
   sourceCard: SourceCard;

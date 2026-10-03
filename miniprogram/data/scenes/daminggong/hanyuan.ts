@@ -13,8 +13,6 @@ const hanyuan: ScenePoint = {
   markerImage: 'markers/hanyuan.png',
   arModel: 'models/hanyuan.glb',
   intro: '外朝正殿，龙尾道三折而上，元旦、冬至大朝会于此，王维写「万国衣冠拜冕旒」。',
-  bg: '/package-tour/assets/scenes/hanyuan/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/hanyuan/ar-restore.jpg',
   sourceCard: {
     title: '含元殿与大朝会',
     works: [

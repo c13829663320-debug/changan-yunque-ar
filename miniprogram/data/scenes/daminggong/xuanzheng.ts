@@ -18,8 +18,6 @@ const xuanzheng: ScenePoint = {
   geo: { latitude: 34.2882, longitude: 108.9633, radius: 110 },
   markerImage: 'markers/xuanzheng.png',
   arModel: 'models/xuanzheng.glb',
-  bg: '/package-tour/assets/scenes/xuanzheng/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/xuanzheng/ar-restore.jpg',
   intro: '中朝正殿，朔望大朝、殿试册封之所；退朝后百官于殿廊领「廊下食」。',
   sourceCard: {
     title: '廊下食：唐代官员的工作餐',

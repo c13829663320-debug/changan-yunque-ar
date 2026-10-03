@@ -12,8 +12,6 @@ const danfengmen: ScenePoint = {
   geo: { latitude: 34.2816, longitude: 108.9636, radius: 120 },
   markerImage: 'markers/danfengmen.png',
   arModel: 'models/danfengmen.glb',
-  bg: '/package-tour/assets/scenes/danfengmen/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/danfengmen/ar-restore.jpg',
   intro: '大明宫正南门，五门道、天子由此出入，被誉为盛唐第一门。',
   sourceCard: {
     title: '丹凤门与五门道',

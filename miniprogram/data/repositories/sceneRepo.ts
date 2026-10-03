@@ -10,7 +10,10 @@ export function getScenesBySpot(spotId: string): ScenePoint[] {
 }
 
 export function getScene(id: string): ScenePoint | undefined {
-  return allScenes.find((s) => s.id === id);
+  const s = allScenes.find((x) => x.id === id);
+  if (!s) return s;
+  // 数据驱动：为每点位挂载动态复原视频（无 3D 时以视频替代），舞台背景 / AR 层 / AR 相机共用
+  return { ...s, restoreVideo: `/package-tour/assets/scenes/${s.id}/restore.mp4` };
 }
 
 export function getNextScene(currentId: string): ScenePoint | undefined {

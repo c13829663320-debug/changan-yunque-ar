@@ -16,8 +16,6 @@ const taiyechi: ScenePoint = {
   geo: { latitude: 34.2955, longitude: 108.9605, radius: 150 },
   markerImage: 'markers/taiyechi.png',
   arModel: 'models/taiyechi.glb',
-  bg: '/package-tour/assets/scenes/taiyechi/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/taiyechi/ar-restore.jpg',
   intro: '后寝中心，一池三山、蓬莱在望，是皇家游宴赋诗之所。',
   sourceCard: {
     title: '太液池与蓬莱仙山',

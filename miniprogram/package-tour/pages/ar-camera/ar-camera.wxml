@@ -6,9 +6,22 @@
     <text class="cam-tip">对准点位解说牌 / 识别图，或进入触发半径</text>
   </view>
 
-  <!-- 识别 / 方位叠加：真实复原图 -->
+  <!-- 识别 / 方位叠加：动态复原视频（无 3D 以视频替代） -->
   <view class="cam-overlay" wx:if="{{detected}}">
-    <image wx:if="{{restoreSrc}}" class="ov-restore" src="{{restoreSrc}}" mode="aspectFit" />
+    <video
+      wx:if="{{restoreVideo}}"
+      class="ov-restore"
+      src="{{restoreVideo}}"
+      autoplay
+      loop
+      muted
+      controls="{{false}}"
+      show-center-play-btn="{{false}}"
+      show-play-btn="{{false}}"
+      show-fullscreen-btn="{{false}}"
+      enable-progress-gesture="{{false}}"
+      object-fit="cover"
+    ></video>
     <view wx:else class="overlay-palace">
       <view class="ov-roof"></view>
       <view class="ov-body"></view>

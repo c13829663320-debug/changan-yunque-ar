@@ -19,9 +19,7 @@ const xuanwumen: ScenePoint = {
   geo: { latitude: 34.3001, longitude: 108.9631, radius: 120 },
   markerImage: 'markers/xuanwumen.png',
   arModel: 'models/xuanwumen.glb',
-  bg: '/package-tour/assets/scenes/xuanwumen/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/xuanwumen/ar-restore.jpg',
-  cover: '/package-tour/assets/scenes/xuanwumen/ar-restore.jpg',
+  cover: '/package-tour/assets/scenes/xuanwumen/zou-long.jpg',
   intro: '大明宫北门。云阙在此辨明「玄武门之变」的误会，集齐七鳞，投龙祈愿。',
   sourceCard: {
     title: '玄武门之变辨 · 投龙祈愿',

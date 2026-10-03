@@ -29,7 +29,7 @@ Page({
       .map((id) => getGoods(id))
       .filter((g): g is Goods => !!g)
       .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
-    const cloudReady = !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction;
+    const cloudReady = !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction);
     this.setData({
       items,
       submitted: pending.length === 0 && doneIds.length > 0,

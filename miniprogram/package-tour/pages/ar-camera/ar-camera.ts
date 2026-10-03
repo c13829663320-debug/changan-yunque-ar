@@ -14,6 +14,7 @@ Page({
     distance: '',
     heading: '',
     restoreSrc: '',
+    restoreVideo: '',
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -29,6 +30,7 @@ Page({
       scene,
       sceneName: scene.name,
       restoreSrc: scene.arRestoreImage || '',
+      restoreVideo: scene.restoreVideo || '',
       mode: hasVK ? 'vksession' : 'lbs',
       vkStatus: hasVK
         ? 'VisionKit 可用，正在初始化 marker 识别…'

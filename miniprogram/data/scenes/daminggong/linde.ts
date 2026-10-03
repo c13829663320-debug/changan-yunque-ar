@@ -16,8 +16,6 @@ const linde: ScenePoint = {
   geo: { latitude: 34.2921, longitude: 108.9528, radius: 140 },
   markerImage: 'markers/linde.png',
   arModel: 'models/linde.glb',
-  bg: '/package-tour/assets/scenes/linde/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/linde/ar-restore.jpg',
   intro: '三殿相连的宴饮大殿，帝王在此大宴群臣、接见外宾，舞马百戏毕陈。',
   sourceCard: {
     title: '麟德殿国宴与舞马',

@@ -18,8 +18,6 @@ const zichen: ScenePoint = {
   geo: { latitude: 34.2912, longitude: 108.9632, radius: 100 },
   markerImage: 'markers/zichen.png',
   arModel: 'models/zichen.glb',
-  bg: '/package-tour/assets/scenes/zichen/bg.jpg',
-  arRestoreImage: '/package-tour/assets/scenes/zichen/ar-restore.jpg',
   intro: '内朝正殿，群臣「入閤」，君臣近距离议政；晚唐权力暗流在此涌动。',
   sourceCard: {
     title: '紫宸殿「入閤」与内朝',

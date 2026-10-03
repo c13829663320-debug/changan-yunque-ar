@@ -1,6 +1,21 @@
 <view class="scene scene-tone-{{scene.index}}">
-  <!-- 舞台 -->
-  <view class="stage {{scene.bg ? 'has-bg' : ''}}" style="{{scene.bg ? 'background-image:url(' + scene.bg + ')' : ''}}">
+  <!-- 舞台（动态复原视频作背景，无 3D 以视频替代） -->
+  <view class="stage has-video">
+    <video
+      wx:if="{{scene.restoreVideo}}"
+      class="stage-video"
+      src="{{scene.restoreVideo}}"
+      autoplay
+      loop
+      muted
+      controls="{{false}}"
+      show-center-play-btn="{{false}}"
+      show-play-btn="{{false}}"
+      show-fullscreen-btn="{{false}}"
+      show-mute-btn="{{false}}"
+      enable-progress-gesture="{{false}}"
+      object-fit="cover"
+    ></video>
     <view class="stage-scrim"></view>
     <view class="figure-wrap {{node.actor}}">
       <view class="figure {{node.actor === 'yunque' ? 'figure-yunque' : ''}}">
@@ -15,7 +30,20 @@
   <!-- AR 复原层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
-      <image wx:if="{{scene.arRestoreImage}}" class="ar-restore" src="{{scene.arRestoreImage}}" mode="widthFix" />
+      <video
+        wx:if="{{scene.restoreVideo}}"
+        class="ar-restore"
+        src="{{scene.restoreVideo}}"
+        autoplay
+        loop
+        muted
+        controls="{{false}}"
+        show-center-play-btn="{{false}}"
+        show-play-btn="{{false}}"
+        show-fullscreen-btn="{{false}}"
+        enable-progress-gesture="{{false}}"
+        object-fit="contain"
+      ></video>
       <view wx:else class="ar-palace">
         <view class="ar-roof"></view>
         <view class="ar-body"></view>

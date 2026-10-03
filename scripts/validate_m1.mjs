@@ -79,10 +79,10 @@ for (const [id, scale] of expected) {
   if (!src.includes("'ar_restore'")) fail(`${id}: 缺 AR 复原`);
   if (!src.includes("'collect_scale'")) fail(`${id}: 缺集鳞`);
   if (!src.includes(scale)) fail(`${id}: 缺龙鳞「${scale}」`);
-  if (!/bg:\s*['"`]/.test(src)) fail(`${id}: 未设置 bg`);
-  if (!/arRestoreImage:\s*['"`]/.test(src)) fail(`${id}: 未设置 arRestoreImage`);
+  const restoreVideo = join(mp, 'package-tour/assets/scenes', id, 'restore.mp4');
+  if (!existsSync(restoreVideo)) fail(`${id}: 缺动态复原视频 restore.mp4`);
 }
-if (failures === 0) ok('七剧场 id/史料卡/分支/AR/集鳞/龙鳞/图片字段齐全');
+if (failures === 0) ok('七剧场 id/史料卡/分支/AR/集鳞/龙鳞/动态视频齐全');
 
 // 4. index 聚合
 console.log('[4] index.ts 聚合七剧场');
