@@ -1,5 +1,9 @@
 <view class="home">
   <view class="bg-mountains"></view>
+  <view class="bg-mist"></view>
+  <view class="bg-scales">
+    <view class="bg-scale" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this" style="--i:{{index}}"></view>
+  </view>
 
   <view class="page-wrap inner">
     <!-- 云阙互动开场 -->
@@ -7,6 +11,7 @@
       <view class="yunque-badge">
         <image class="yunque-portrait" src="/assets/characters/yunque-dragon.jpg" mode="aspectFill"></image>
         <view class="yunque-halo"></view>
+        <view class="yunque-ring"></view>
       </view>
       <view class="bubble">
         <text class="bubble-text">{{greeting}}</text>
@@ -16,7 +21,7 @@
     </view>
 
     <!-- 双模式入口 -->
-    <view class="mode-grid">
+    <view class="mode-grid rise rise-1">
       <view class="mode-card" bindtap="onCloudTour">
         <text class="mode-word">云游</text>
         <text class="mode-name">云游长安</text>
@@ -30,7 +35,7 @@
     </view>
 
     <!-- 当前景点 -->
-    <view class="card spot-card" bindtap="goSpotDetail">
+    <view class="card spot-card rise rise-2" bindtap="goSpotDetail">
       <view class="row-between">
         <view>
           <text class="title-h2">{{spot.name}}</text>
@@ -44,7 +49,7 @@
     </view>
 
     <!-- 甄选商品 -->
-    <view class="section">
+    <view class="section rise rise-3">
       <view class="row-between">
         <text class="title-h2">云阙甄选</text>
         <text class="text-muted link" bindtap="goMall">进商城 ›</text>
