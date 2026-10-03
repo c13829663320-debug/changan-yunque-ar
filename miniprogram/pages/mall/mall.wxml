@@ -1,30 +1,35 @@
 <view class="page-wrap mall">
+  <!-- 标题：导航栏已显示“云阙商城”，此处仅保留一行紧凑副标题，避免重复 -->
   <view class="mall-head">
-    <text class="mall-title">云阙商城</text>
     <text class="mall-sub">文物灵感 · AIGC 再现，盛唐好物集</text>
   </view>
 
-  <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
-    <view
-      class="cat {{activeCat === item.id ? 'on' : ''}}"
-      wx:for="{{categories}}"
-      wx:key="id"
-      data-id="{{item.id}}"
-      bindtap="onFilter"
-    >{{item.label}}</view>
-  </scroll-view>
+  <!-- 分类筛选：横向滑动，右缘渐变遮罩提示可滑动 -->
+  <view class="cat-wrap">
+    <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
+      <view
+        class="cat {{activeCat === item.id ? 'on' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onFilter"
+      >{{item.label}}</view>
+    </scroll-view>
+    <view class="cat-fade"></view>
+  </view>
 
+  <!-- 两列等宽网格：图(预售角标) → 名称(≤2行) → 一行短描述 → 价格 -->
   <view class="goods-grid">
     <view
       class="grid-item"
       wx:for="{{goods}}"
       wx:key="id"
-      style="animation-delay: {{index * 60}}ms"
+      style="animation-delay: {{index * 50}}ms"
       data-id="{{item.id}}"
       bindtap="goDetail"
     >
       <view class="grid-cover">
-        <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill"></image>
+        <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill" lazy-load></image>
         <view wx:else class="grid-cover-fallback">
           <text class="cover-cat">{{item.categoryLabel}}</text>
         </view>
@@ -40,4 +45,7 @@
       </view>
     </view>
   </view>
+
+  <!-- 底部安全留白 -->
+  <view class="mall-bottom-space"></view>
 </view>

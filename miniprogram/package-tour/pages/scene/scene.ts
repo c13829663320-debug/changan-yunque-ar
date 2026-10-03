@@ -1,9 +1,12 @@
-import { getScene, getNextScene } from '../../../data/repositories/sceneRepo';
+import { getScene, getNextScene, getTotalCount } from '../../../data/repositories/sceneRepo';
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scene';
 
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 const MUTED_KEY = 'changan_yunque_muted';
+/** 复原视频“确有帧”看门狗：真机 timeupdate 未按时到达时始终保留 poster 兜底 */
+let stageWatchdog: ReturnType<typeof setTimeout> | null = null;
+let arWatchdog: ReturnType<typeof setTimeout> | null = null;
 
 Page({
   data: {
@@ -11,7 +14,8 @@ Page({
     scene: {} as ScenePoint,
     node: {} as DialogNode,
     dialogIndex: 0,
-    total: 0,
+    dialogTotal: 0,
+    scaleTotal: 0,
     showChoices: false,
     showFeedback: false,
     feedback: {} as ChoiceFeedback,
@@ -35,6 +39,8 @@ Page({
     // 复原视频是否真正开始播放（用于隐藏兜底画面，杜绝黑屏）
     stageReady: false,
     arReady: false,
+    /** 是否运行在开发者工具模拟器：模拟器 video 同层渲染会纯黑，故永不渲染 video、只放 poster */
+    isDevtools: false,
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -46,14 +52,33 @@ Page({
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
+    let isDevtools = false;
+    try {
+      isDevtools = wx.getSystemInfoSync().platform === 'devtools';
+    } catch (e) {
+      isDevtools = false;
+    }
     const voiceMuted = wx.getStorageSync(MUTED_KEY) === true;
-    this.setData({ mode, scene, total: scene.dialogs.length, voiceMuted }, () => {
-      this.playStageVideo();
-    });
+    // 龙鳞分母 = 当前景点的点位(场景)数（每个场景集一片鳞），不写死、支持多景点扩展
+    const scaleTotal = getTotalCount(scene.spotId);
+    this.setData(
+      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, voiceMuted, isDevtools },
+      () => {
+        this.startStagePlayback();
+      }
+    );
     this.renderNode(0);
   },
 
   onUnload() {
+    if (stageWatchdog) {
+      clearTimeout(stageWatchdog);
+      stageWatchdog = null;
+    }
+    if (arWatchdog) {
+      clearTimeout(arWatchdog);
+      arWatchdog = null;
+    }
     audioCtx?.destroy();
     audioCtx = null;
   },
@@ -136,15 +161,15 @@ Page({
         ? '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）'
         : '示意复原；M1接入XRFrame后呈现完整3D殿宇与光影';
     this.setData({ showAR: true, arTip, arReady: false }, () => {
-      try {
-        wx.createVideoContext('arVideo').play();
-      } catch (e) {
-        /* noop */
-      }
+      this.startArPlayback();
     });
   },
 
   closeAR() {
+    if (arWatchdog) {
+      clearTimeout(arWatchdog);
+      arWatchdog = null;
+    }
     this.setData({ showAR: false, arWatched: true });
   },
 
@@ -158,41 +183,111 @@ Page({
 
   noop() {},
 
-  // 主动播放舞台视频（模拟器 autoplay 可能不生效；兜底画面已保证不黑）
-  playStageVideo() {
+  // ===== 复原视频：模拟器只放 poster；真机须 timeupdate 确认有帧才淡入 video =====
+  /** 舞台视频：真机才播放并挂 1.5s 看门狗；模拟器直接返回（只放 poster） */
+  startStagePlayback() {
+    if (stageWatchdog) {
+      clearTimeout(stageWatchdog);
+      stageWatchdog = null;
+    }
+    if (this.data.isDevtools) return; // 模拟器：永不渲染 video，绝不黑
+    try {
+      wx.createVideoContext('stageVideo').play();
+    } catch (e) {
+      /* noop */
+    }
+    stageWatchdog = setTimeout(() => {
+      if (!this.data.stageReady) {
+        try {
+          wx.createVideoContext('stageVideo').play();
+        } catch (e) {
+          /* noop */
+        }
+      }
+    }, 1500);
+  },
+
+  /** AR 层视频：真机才播放并挂看门狗；模拟器只放 poster */
+  startArPlayback() {
+    if (arWatchdog) {
+      clearTimeout(arWatchdog);
+      arWatchdog = null;
+    }
+    if (this.data.isDevtools) return;
+    try {
+      wx.createVideoContext('arVideo').play();
+    } catch (e) {
+      /* noop */
+    }
+    arWatchdog = setTimeout(() => {
+      if (!this.data.arReady) {
+        try {
+          wx.createVideoContext('arVideo').play();
+        } catch (e) {
+          /* noop */
+        }
+      }
+    }, 1500);
+  },
+
+  onStageMeta() {
+    if (this.data.isDevtools) return;
     try {
       wx.createVideoContext('stageVideo').play();
     } catch (e) {
       /* noop */
     }
   },
-
-  // ===== 复原视频：加载即播，真正 bindplay 后才隐藏兜底画面 =====
-  onStageMeta() {
-    try {
-      wx.createVideoContext('stageVideo').play();
-    } catch (e) {
-      /* noop */
+  /** 不再轻信 bindplay（模拟器会触发 bindplay 却渲染纯黑）；currentTime>0.2 确有帧才淡入 */
+  onStageTimeUpdate(e: WechatMiniprogram.CustomEvent<{ currentTime: number }>) {
+    if (this.data.isDevtools) return;
+    const currentTime = e?.detail?.currentTime || 0;
+    if (currentTime > 0.2 && !this.data.stageReady) {
+      if (stageWatchdog) {
+        clearTimeout(stageWatchdog);
+        stageWatchdog = null;
+      }
+      this.setData({ stageReady: true });
     }
   },
   onStagePlay() {
-    if (!this.data.stageReady) this.setData({ stageReady: true });
+    /* 仅 bindplay 不足以证明已渲染出帧，ready 交给 bindtimeupdate 判定 */
   },
   onStageError() {
+    if (stageWatchdog) {
+      clearTimeout(stageWatchdog);
+      stageWatchdog = null;
+    }
     this.setData({ stageReady: false });
   },
 
   onArMeta() {
+    if (this.data.isDevtools) return;
     try {
       wx.createVideoContext('arVideo').play();
     } catch (e) {
       /* noop */
     }
   },
+  onArTimeUpdate(e: WechatMiniprogram.CustomEvent<{ currentTime: number }>) {
+    if (this.data.isDevtools) return;
+    const currentTime = e?.detail?.currentTime || 0;
+    if (currentTime > 0.2 && !this.data.arReady) {
+      if (arWatchdog) {
+        clearTimeout(arWatchdog);
+        arWatchdog = null;
+      }
+      this.setData({ arReady: true });
+    }
+  },
   onArPlay() {
-    if (!this.data.arReady) this.setData({ arReady: true });
+    /* ready 交给 bindtimeupdate 判定 */
   },
   onArError() {
+    if (arWatchdog) {
+      clearTimeout(arWatchdog);
+      arWatchdog = null;
+    }
     this.setData({ arReady: false });
   },
 

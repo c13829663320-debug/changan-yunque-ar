@@ -7,7 +7,7 @@
  *  2. miniprogram 下所有 .json 可解析
  *  3. 七剧场文件齐全，含 id/sourceCard/choices/ar_restore/collect_scale
  *  4. index.ts 聚合七个剧场
- *  5. 14 个商品封面存在
+ *  5. 商品数据与封面（本地封面≤95KB，网络封面免本地校验）
  *  6. 主包/全包体积
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
@@ -79,10 +79,8 @@ for (const [id, scale] of expected) {
   if (!src.includes("'ar_restore'")) fail(`${id}: 缺 AR 复原`);
   if (!src.includes("'collect_scale'")) fail(`${id}: 缺集鳞`);
   if (!src.includes(scale)) fail(`${id}: 缺龙鳞「${scale}」`);
-  const restoreVideo = join(mp, 'package-tour/assets/scenes', id, 'restore.mp4');
-  if (!existsSync(restoreVideo)) fail(`${id}: 缺动态复原视频 restore.mp4`);
 }
-if (failures === 0) ok('七剧场 id/史料卡/分支/AR/集鳞/龙鳞/动态视频齐全');
+if (failures === 0) ok('七剧场 id/史料卡/分支/AR/集鳞/龙鳞齐全（复原视频上云、poster兜底）');
 
 // 4. index 聚合
 console.log('[4] index.ts 聚合七剧场');
@@ -93,27 +91,53 @@ for (const [id] of expected) {
 if (existsSync(join(sceneDir, 'others.meta.ts'))) fail('others.meta.ts 仍存在，应被独立剧场取代');
 if (failures === 0) ok('index.ts 聚合七剧场，others.meta.ts 已移除');
 
-// 5. 商品封面
-console.log('[5] 14 商品封面');
+// 5. 商品数据与封面（本地封面校验体积；网络封面免本地文件）
+console.log('[5] 商品数据与封面');
 const catalogSrc = readFileSync(join(mp, 'data/goods/catalog.ts'), 'utf8');
 const ids = [...catalogSrc.matchAll(/id: '(g-[a-z0-9-]+)'/g)].map((m) => m[1]);
-if (ids.length !== 14) fail(`商品数应为 14，实际 ${ids.length}`);
-for (const id of ids) {
-  const f = join(mp, 'assets/goods', id + '.jpg');
-  if (!existsSync(f)) fail(`缺商品封面 assets/goods/${id}.jpg`);
-  else if (statSync(f).size > 95 * 1024) fail(`${id}.jpg 超过 95KB`);
+if (ids.length < 14) fail(`商品数应不少于 14，实际 ${ids.length}`);
+if (new Set(ids).size !== ids.length) fail('存在重复商品 id');
+const covers = [...catalogSrc.matchAll(/cover: '([^']+)'/g)].map((m) => m[1]);
+let netCovers = 0;
+let localCovers = 0;
+for (const cv of covers) {
+  if (/^https?:\/\//.test(cv)) { netCovers += 1; continue; }
+  localCovers += 1;
+  const f = join(mp, cv.replace(/^\//, ''));
+  if (!existsSync(f)) fail(`缺本地封面 ${cv}`);
+  else if (statSync(f).size > 95 * 1024) fail(`${cv} 超过 95KB`);
 }
-if (failures === 0) ok('14 商品封面齐全且单张 ≤95KB');
+if (failures === 0) ok(`${ids.length} 商品：${localCovers} 本地封面（≤95KB）+ ${netCovers} 网络封面，id 无重复`);
 
 // 6. 体积
 console.log('[6] 包体积');
+const fsSizeKB = (p) => {
+  if (!existsSync(p)) return 0;
+  const st = statSync(p);
+  if (st.isFile()) return Math.ceil(st.size / 1024);
+  let sum = 0;
+  for (const e of readdirSync(p)) sum += fsSizeKB(join(p, e));
+  return sum;
+};
 const du = (p) => {
   if (!existsSync(p)) return 0;
-  const out = execSync(`du -sk "${p}"`).toString().trim().split('\t')[0];
-  return parseInt(out, 10);
+  try {
+    const out = execSync(`du -sk "${p}"`).toString().trim().split('\t')[0];
+    return parseInt(out, 10);
+  } catch {
+    return fsSizeKB(p); // 纯 Windows 无 du 时的跨平台兜底
+  }
 };
-const mainSize = du(mp) - du(join(mp, 'package-tour')) - du(join(mp, 'package-spot')) - du(join(mp, 'package-mall'));
+const subs = (appJson.subpackages || []).map((sp) => ({ name: sp.root, dir: join(mp, sp.root) }));
+let subSum = 0;
+for (const s of subs) {
+  const kb = du(s.dir);
+  subSum += kb;
+  console.log(`  ${s.name}: ${(kb / 1024).toFixed(2)} MB（限 2MB）`);
+  if (kb > 2048) fail(`${s.name} 分包超 2MB`);
+}
 const totalSize = du(mp);
+const mainSize = totalSize - subSum;
 console.log(`  主包约 ${(mainSize / 1024).toFixed(2)} MB（限 2MB）`);
 console.log(`  全包约 ${(totalSize / 1024).toFixed(2)} MB（限 20MB）`);
 if (mainSize > 2048) fail('主包超 2MB');

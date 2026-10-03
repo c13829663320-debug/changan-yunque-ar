@@ -1,9 +1,13 @@
 /** 云阙商城商品 */
 export type GoodsCategory =
   | 'collection' // 典藏复刻
+  | 'figure' // 盛唐写实手办
   | 'blindbox' // IP潮玩盲盒
-  | 'city' // 城市限定
+  | 'plush' // 毛绒潮玩
   | 'jewelry' // 唐妆首饰
+  | 'accessory' // 随身祈福配饰
+  | 'lifestyle' // 日常软周边
+  | 'city' // 城市限定
   | 'digital' // 数字AR
   | 'experience'; // 体验预约
 
@@ -29,9 +33,13 @@ export interface Goods {
 
 export const CATEGORY_LABEL: Record<GoodsCategory, string> = {
   collection: '典藏复刻',
+  figure: '写实手办',
   blindbox: '潮玩盲盒',
-  city: '城市限定',
+  plush: '毛绒潮玩',
   jewelry: '唐妆首饰',
+  accessory: '随身配饰',
+  lifestyle: '日常软周边',
+  city: '城市限定',
   digital: '数字AR',
   experience: '体验预约',
 };

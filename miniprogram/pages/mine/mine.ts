@@ -1,20 +1,10 @@
 import { getProgressStore } from '../../store/progress';
 import { getSpots } from '../../data/repositories/spotRepo';
+import { getScenesBySpot } from '../../data/repositories/sceneRepo';
 import { Spot } from '../../data/types/spot';
 
-/**
- * 七片龙鳞的固定展示顺序（纯展示映射，与全片一致）。
- * 获得状态不由这里写死，而是运行时用真实进度 s.scales 比对。
- */
-const SCALE_WALL_META = [
-  { name: '启程鳞', hall: '丹凤门' },
-  { name: '朝会鳞', hall: '含元殿' },
-  { name: '廊下鳞', hall: '宣政殿' },
-  { name: '召对鳞', hall: '紫宸殿' },
-  { name: '池苑鳞', hall: '太液池' },
-  { name: '盛宴鳞', hall: '麟德殿' },
-  { name: '归愿鳞', hall: '玄武门' },
-] as const;
+/** 当前景点（龙鳞墙按景点场景数动态生成，不写死，支持多景点扩展） */
+const ACTIVE_SPOT = 'daminggong';
 
 interface ScaleCell {
   name: string;
@@ -37,7 +27,7 @@ Page({
     relicTotal: 5,
     spots: [] as Spot[],
     scaleWall: [] as ScaleCell[],
-    scaleTotal: SCALE_WALL_META.length,
+    scaleTotal: 0,
     spotCards: [] as SpotCard[],
   },
 
@@ -54,10 +44,12 @@ Page({
     const s = getProgressStore().snapshot;
 
     const gotScales = new Set(s.scales);
-    const scaleWall: ScaleCell[] = SCALE_WALL_META.map((m) => ({
-      name: m.name,
-      hall: m.hall,
-      got: gotScales.has(m.name),
+    // 龙鳞墙按当前景点的场景动态生成：每场景一片鳞，分母=场景数
+    const spotScenes = getScenesBySpot(ACTIVE_SPOT);
+    const scaleWall: ScaleCell[] = spotScenes.map((sc) => ({
+      name: sc.scaleName,
+      hall: sc.name,
+      got: gotScales.has(sc.scaleName),
     }));
 
     const doneScenes = new Set(s.completedSceneIds);
@@ -78,6 +70,7 @@ Page({
       stampCount: s.stamps.length,
       relicCount: s.collectedRelicIds.length,
       scaleWall,
+      scaleTotal: spotScenes.length,
       spotCards,
     });
   },

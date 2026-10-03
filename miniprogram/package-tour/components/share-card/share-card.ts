@@ -1,9 +1,11 @@
 /**
  * 祈愿分享卡（终章专属）
- * Canvas 2D 绘制：官方云阙 / 赤金走龙、七鳞意象、用户所许之愿、
+ * Canvas 2D 绘制：官方云阙 / 赤金走龙、龙鳞意象、用户所许之愿、
  * 「长安云阙」标识与「文物灵感 / AIGC 再现」小字。
  * 支持 canvasToTempFilePath 保存相册；分享给好友由页面 onShareAppMessage 接管。
  */
+import { getScenesBySpot } from '../../../data/repositories/sceneRepo';
+
 const W = 300;
 const H = 450;
 
@@ -144,16 +146,19 @@ Component({
           ctx.fillRect(178, 92, 96, 96);
         }
 
-        // 七鳞意象
+        // 龙鳞意象（按当前景点场景动态生成，不写死数量/名称）
+        const spotScenes = getScenesBySpot('daminggong');
+        const scaleTotal = spotScenes.length;
+        const scaleLabel = spotScenes.map((x) => x.scaleName.replace(/鳞$/, '')).join(' · ');
         ctx.fillStyle = COLOR.gold;
         ctx.font = '10px "Songti SC", serif';
-        ctx.fillText('启程 · 朝会 · 廊下 · 召对 · 池苑 · 盛宴 · 归愿', W / 2, 252);
-        // 七枚小金点
-        for (let i = 0; i < 7; i++) {
-          const cx = W / 2 - 54 + i * 18;
+        ctx.fillText(scaleLabel, W / 2, 252);
+        // 龙鳞小金点（居中、数量随景点）
+        for (let i = 0; i < scaleTotal; i++) {
+          const cx = W / 2 - (scaleTotal - 1) * 9 + i * 18;
           ctx.beginPath();
           ctx.arc(cx, 266, 3, 0, Math.PI * 2);
-          ctx.fillStyle = i === 6 ? COLOR.cinnabar : COLOR.gold;
+          ctx.fillStyle = i === scaleTotal - 1 ? COLOR.cinnabar : COLOR.gold;
           ctx.fill();
         }
 

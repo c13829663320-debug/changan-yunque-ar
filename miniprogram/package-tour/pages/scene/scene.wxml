@@ -8,7 +8,7 @@
       mode="aspectFill"
     ></image>
     <video
-      wx:if="{{scene.restoreVideo}}"
+      wx:if="{{!isDevtools && scene.restoreVideo}}"
       id="stageVideo"
       class="stage-video {{stageReady ? 'is-playing' : ''}}"
       src="{{scene.restoreVideo}}"
@@ -23,18 +23,13 @@
       enable-progress-gesture="{{false}}"
       object-fit="cover"
       bindloadedmetadata="onStageMeta"
+      bindtimeupdate="onStageTimeUpdate"
       bindplay="onStagePlay"
       binderror="onStageError"
     ></video>
     <view class="stage-scrim"></view>
-    <view class="figure-wrap {{node.actor}}">
-      <view class="figure {{node.actor === 'yunque' ? 'figure-yunque' : ''}}">
-        <image wx:if="{{node.actor === 'yunque'}}" class="figure-img" src="/assets/characters/yunque-girl.jpg" mode="aspectFill" />
-        <text wx:else class="figure-word">{{figureLabel}}</text>
-      </view>
-      <view class="figure-shadow"></view>
-    </view>
     <text class="place-tag">{{scene.name}} · {{scene.role}}</text>
+    <text class="restore-tag">复原画面</text>
   </view>
 
   <!-- 集鳞仪式动画 -->
@@ -55,6 +50,7 @@
       <view wx:if="{{scene.restoreVideo}}" class="ar-media">
         <image class="ar-fallback" src="{{scene.poster}}" mode="aspectFill"></image>
         <video
+          wx:if="{{!isDevtools}}"
           id="arVideo"
           class="ar-restore {{arReady ? 'is-playing' : ''}}"
           src="{{scene.restoreVideo}}"
@@ -68,6 +64,7 @@
           enable-progress-gesture="{{false}}"
           object-fit="cover"
           bindloadedmetadata="onArMeta"
+          bindtimeupdate="onArTimeUpdate"
           bindplay="onArPlay"
           binderror="onArError"
         ></video>
@@ -108,7 +105,7 @@
     <view class="end-panel">
       <view class="scale-circle"><text class="scale-word">{{scene.scaleName}}</text></view>
       <text class="end-title">你获得一片龙鳞</text>
-      <text class="end-sub">龙鳞 {{scaleCount}} / {{total}}</text>
+      <text class="end-sub">龙鳞 {{scaleCount}} / {{scaleTotal}}</text>
       <button class="btn-primary" bindtap="goNext" wx:if="{{hasNext}}">前往下一点位</button>
       <!-- 终章（玄武门）结算后：生成祈愿分享卡入口，仅对 xuanwumen 生效 -->
       <button

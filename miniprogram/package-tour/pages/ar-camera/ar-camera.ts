@@ -9,6 +9,8 @@ let vkSession: WechatMiniprogram.VKSession | null = null;
 let scanTimer: ReturnType<typeof setTimeout> | null = null;
 let recTimer: ReturnType<typeof setTimeout> | null = null;
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
+/** 复原视频“确有帧”看门狗：真机 timeupdate 未按时到达时始终保留 poster 兜底 */
+let briefWatchdog: ReturnType<typeof setTimeout> | null = null;
 
 type Phase = 'scanning' | 'recognizing' | 'briefing';
 type TargetKind = 'spot' | 'relic';
@@ -37,6 +39,8 @@ Page({
   data: {
     phase: 'scanning' as Phase,
     hasVK: false,
+    /** 是否运行在开发者工具模拟器：模拟器 video 同层渲染会纯黑，故永不渲染 video、只放 poster */
+    isDevtools: false,
     targetKind: 'spot' as TargetKind,
     // 通用
     targetName: '',
@@ -65,6 +69,14 @@ Page({
   },
 
   onLoad(query: Record<string, string | undefined>) {
+    let isDevtools = false;
+    try {
+      isDevtools = wx.getSystemInfoSync().platform === 'devtools';
+    } catch (e) {
+      isDevtools = false;
+    }
+    this.setData({ isDevtools });
+
     const seq = buildSequence();
     let startIdx = 0;
     if (query?.id) {
@@ -212,15 +224,7 @@ Page({
     this.clearTimers();
     const isSpot = this.data.targetKind === 'spot';
     this.setData({ phase: 'briefing' }, () => {
-      if (isSpot) {
-        setTimeout(() => {
-          try {
-            wx.createVideoContext('briefVideo', this).play();
-          } catch (e) {
-            /* noop */
-          }
-        }, 120);
-      }
+      if (isSpot) this.startBriefPlayback();
     });
     try {
       (wx as any).vibrateShort?.({ type: 'light' });
@@ -230,8 +234,35 @@ Page({
     this.playYunqueAudio();
   },
 
-  // ===== 复原视频：加载即播，真正 bindplay 后才隐藏兜底画面 =====
+  // ===== 复原视频：模拟器只放 poster；真机须 timeupdate 确认有帧才淡入 video =====
+  /** 启动复原视频：真机才渲染/播放，并挂 1.5s 看门狗；模拟器直接返回（只放 poster） */
+  startBriefPlayback() {
+    if (briefWatchdog) {
+      clearTimeout(briefWatchdog);
+      briefWatchdog = null;
+    }
+    if (this.data.isDevtools) return; // 模拟器：永不渲染 video，绝不黑
+    setTimeout(() => {
+      try {
+        wx.createVideoContext('briefVideo', this).play();
+      } catch (e) {
+        /* noop */
+      }
+    }, 120);
+    briefWatchdog = setTimeout(() => {
+      // 约 1.5s 仍未确认有帧：保持 poster，再尝试触发一次播放（若随后 timeupdate 到达仍可转正）
+      if (!this.data.briefReady) {
+        try {
+          wx.createVideoContext('briefVideo', this).play();
+        } catch (e) {
+          /* noop */
+        }
+      }
+    }, 1500);
+  },
+
   onBriefMeta() {
+    if (this.data.isDevtools) return;
     setTimeout(() => {
       try {
         wx.createVideoContext('briefVideo', this).play();
@@ -240,10 +271,26 @@ Page({
       }
     }, 30);
   },
+  /** 不再轻信 bindplay（模拟器会触发 bindplay 却渲染纯黑）；必须 currentTime>0.2 确有帧才淡入 */
+  onBriefTimeUpdate(e: WechatMiniprogram.CustomEvent<{ currentTime: number }>) {
+    if (this.data.isDevtools) return;
+    const currentTime = e?.detail?.currentTime || 0;
+    if (currentTime > 0.2 && !this.data.briefReady) {
+      if (briefWatchdog) {
+        clearTimeout(briefWatchdog);
+        briefWatchdog = null;
+      }
+      this.setData({ briefReady: true });
+    }
+  },
   onBriefPlay() {
-    if (!this.data.briefReady) this.setData({ briefReady: true });
+    /* 仅 bindplay 不足以证明已渲染出帧，ready 交给 bindtimeupdate 判定 */
   },
   onBriefError() {
+    if (briefWatchdog) {
+      clearTimeout(briefWatchdog);
+      briefWatchdog = null;
+    }
     this.setData({ briefReady: false });
   },
 
@@ -342,6 +389,10 @@ Page({
     if (recTimer) {
       clearTimeout(recTimer);
       recTimer = null;
+    }
+    if (briefWatchdog) {
+      clearTimeout(briefWatchdog);
+      briefWatchdog = null;
     }
   },
 

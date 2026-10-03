@@ -13,26 +13,15 @@
 /* 舞台 */
 .stage { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; min-height: 60vh; overflow: hidden; }
 .stage-video { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-.figure-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
-.figure {
-  width: 220rpx;
-  height: 220rpx;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fbf6ec, #e2d4bb);
-  border: 2rpx solid var(--dark-gold-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: float 3.6s ease-in-out infinite;
-}
-.figure-word { color: var(--dark-gold); font-size: 40rpx; letter-spacing: 4rpx; }
-.figure-wrap.liguan .figure { border-color: var(--azurite-deep); }
-.figure-wrap.liguan .figure-word { color: var(--azurite-deep); }
-.figure-wrap.narrator .figure { opacity: 0.5; width: 120rpx; height: 120rpx; }
-.figure-wrap.narrator .figure-word { font-size: 28rpx; color: var(--ink-muted); }
-.figure-shadow { width: 160rpx; height: 24rpx; border-radius: 50%; background: rgba(90,74,50,0.12); margin-top: 18rpx; filter: blur(6rpx); }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14rpx); } }
 .place-tag { position: absolute; top: 40rpx; font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 2rpx; }
+.restore-tag {
+  position: absolute; left: 24rpx; bottom: 22rpx; z-index: 2;
+  font-size: 22rpx; color: var(--ink-muted); letter-spacing: 2rpx;
+  background: rgba(244,236,221,0.66);
+  border: 1rpx solid rgba(150,120,70,0.28);
+  border-radius: 999rpx; padding: 5rpx 18rpx;
+  text-shadow: 0 1rpx 4rpx rgba(244,236,221,0.6);
+}
 
 /* 对话区 */
 .dialog-bar {
@@ -122,21 +111,7 @@
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, rgba(244,236,221,0.16) 0%, rgba(244,236,221,0.04) 42%, rgba(244,236,221,0.40) 100%);
 }
-.figure-wrap { z-index: 2; }
 .place-tag { z-index: 2; text-shadow: 0 1rpx 6rpx rgba(244,236,221,0.7); }
-
-/* 云阙「壁画龛」肖像（官方立绘，灰底以拱龛框收） */
-.figure-yunque {
-  width: 300rpx !important;
-  height: 420rpx !important;
-  border-radius: 150rpx 150rpx 26rpx 26rpx !important;
-  overflow: hidden;
-  padding: 0;
-  background: linear-gradient(180deg, #d9d4cc, #c9c3b8);
-  box-shadow: 0 14rpx 40rpx rgba(70, 62, 54, 0.22);
-}
-.figure-img { width: 100%; height: 100%; display: block; }
-.figure-wrap.yunque .figure-shadow { width: 200rpx; margin-top: 22rpx; }
 
 /* AR 复原图 */
 .ar-restore {
@@ -224,8 +199,12 @@
 
 /* ===== 复原视频兜底：彻底消除模拟器黑屏 ===== */
 @keyframes kenburns {
-  from { transform: scale(1.03); }
-  to { transform: scale(1.15); }
+  0% { transform: scale(1.06) translate3d(-1.6%, -1.2%, 0); }
+  100% { transform: scale(1.18) translate3d(1.6%, 1.1%, 0); }
+}
+@keyframes posterFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 /* 舞台兜底画面（video 未播放时显示，带缓慢电影运镜） */
 .stage-fallback {
@@ -234,10 +213,16 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  animation: kenburns 24s ease-in-out infinite alternate;
+  animation: kenburns 18s ease-in-out infinite alternate, posterFade 0.7s ease both;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
-.stage-video { visibility: hidden; background: transparent; }
-.stage-video.is-playing { visibility: visible; }
+.stage-video {
+  visibility: hidden; opacity: 0;
+  background: transparent;
+  transition: opacity 0.6s ease;
+}
+.stage-video.is-playing { visibility: visible; opacity: 1; }
 
 /* AR 复原容器与兜底画面 */
 .ar-media {
@@ -255,7 +240,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  animation: kenburns 20s ease-in-out infinite alternate;
+  animation: kenburns 16s ease-in-out infinite alternate, posterFade 0.7s ease both;
+  will-change: transform;
 }
 .ar-restore {
   position: absolute;
@@ -268,5 +254,7 @@
   background: transparent;
   box-shadow: none;
   visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.6s ease;
 }
-.ar-restore.is-playing { visibility: visible; }
+.ar-restore.is-playing { visibility: visible; opacity: 1; }

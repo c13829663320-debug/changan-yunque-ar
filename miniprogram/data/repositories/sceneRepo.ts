@@ -1,6 +1,9 @@
 import daminggongScenes from '../scenes/daminggong/index';
 import { ScenePoint } from '../types/scene';
 
+/** 重媒体（复原视频/配音）CDN 基址：不进小程序包、在线播放；加载失败由 poster 运镜/字幕兜底 */
+const MEDIA_BASE = 'https://aka.doubaocdn.com/changan';
+
 const allScenes: ScenePoint[] = [...daminggongScenes];
 
 export function getScenesBySpot(spotId: string): ScenePoint[] {
@@ -15,7 +18,7 @@ export function getScene(id: string): ScenePoint | undefined {
   // 数据驱动：为每点位挂载动态复原视频（无 3D 时以视频替代），舞台背景 / AR 层 / AR 相机共用
   return {
     ...s,
-    restoreVideo: `/package-tour/assets/scenes/${s.id}/restore.mp4`,
+    restoreVideo: `${MEDIA_BASE}/scenes/${s.id}.mp4`,
     poster: `/package-tour/assets/scenes/${s.id}/poster.jpg`,
   };
 }

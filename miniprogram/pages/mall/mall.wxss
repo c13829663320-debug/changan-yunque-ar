@@ -1,29 +1,22 @@
-/* —— 商城列表页打磨：盛唐敦煌低饱和质感，克制留白与层级 —— */
-.mall { padding-top: 8rpx; }
+/* —— 商城列表页：两列等宽网格 + 紧凑标题 + 分类横滑，盛唐低饱和质感 —— */
+.mall { padding-top: 6rpx; }
 
-.mall-head { margin: 6rpx 4rpx 24rpx; }
-.mall-title {
-  font-size: var(--fs-title);
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 3rpx;
-  display: block;
-}
+/* 标题区：仅保留一行副标题（导航栏已显示“云阙商城”），紧凑 */
+.mall-head { margin: 2rpx 4rpx 18rpx; }
 .mall-sub {
   font-size: var(--fs-small);
   color: var(--ink-muted);
-  margin-top: 8rpx;
-  display: block;
   letter-spacing: 1rpx;
 }
 
-/* 分类筛选：选中=深墨 pill，未选=卡纸描边 pill */
-.cat-bar { white-space: nowrap; margin-bottom: 28rpx; }
+/* 分类筛选：横向滑动容器 + 右缘渐变遮罩 */
+.cat-wrap { position: relative; margin-bottom: 26rpx; }
+.cat-bar { white-space: nowrap; }
 .cat {
   display: inline-flex;
   align-items: center;
-  padding: 13rpx 32rpx;
-  margin-right: 16rpx;
+  padding: 12rpx 30rpx;
+  margin-right: 14rpx;
   font-size: var(--fs-small);
   color: var(--ink-soft);
   background: var(--bg-card);
@@ -31,32 +24,60 @@
   border-radius: 999rpx;
   transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
+.cat:last-child { margin-right: 28rpx; }
 .cat.on {
   background: var(--ink);
   color: var(--ivory);
   border-color: var(--ink);
   font-weight: 600;
 }
+/* 右缘渐变，提示分类条可继续横滑（与页面底色 #f4ecdd 衔接） */
+.cat-fade {
+  position: absolute;
+  top: 0;
+  right: -2rpx;
+  width: 60rpx;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(244, 236, 221, 0), #f4ecdd 78%);
+}
 
-/* 商品双列卡 */
-.goods-grid { display: flex; flex-wrap: wrap; gap: 22rpx; }
+/* 两列等宽网格：不依赖 flex gap，用固定宽度 + 右外边距，偶数项归零 */
+.goods-grid { display: flex; flex-wrap: wrap; }
 .grid-item {
-  width: calc(50% - 11rpx);
+  position: relative;
+  width: 48.6%;
+  margin-right: 2.8%;
+  margin-bottom: 22rpx;
   background: var(--bg-card);
   border: 1rpx solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  animation: mallFadeUp 0.5s ease backwards;
+  box-sizing: border-box;
+  animation: mallFadeUp 0.45s ease backwards;
 }
+.grid-item:nth-child(2n) { margin-right: 0; }
+
+/* 正方形封面：padding-bottom 100% 撑出方图，图片绝对定位铺满（跨机型稳定） */
 .grid-cover {
   position: relative;
-  height: 300rpx;
-  background: linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
+  width: 100%;
+  padding-bottom: 100%;
   overflow: hidden;
+  background: linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
 }
-.grid-cover-img { width: 100%; height: 100%; }
+.grid-cover-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .grid-cover-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -69,14 +90,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 90rpx;
+  height: 80rpx;
   background: linear-gradient(180deg, transparent, rgba(70, 62, 54, 0.18));
   pointer-events: none;
 }
 .cover-badge {
   position: absolute;
-  top: 16rpx;
-  left: 16rpx;
+  top: 14rpx;
+  left: 14rpx;
   padding: 5rpx 16rpx;
   font-size: var(--fs-mini);
   color: var(--ivory);
@@ -85,13 +106,14 @@
   letter-spacing: 1rpx;
 }
 
-.grid-info { padding: 18rpx 20rpx 22rpx; }
+/* 卡片信息：名称≤2行 → 一行短描述 → 价格，排布紧凑 */
+.grid-info { padding: 16rpx 18rpx 20rpx; }
 .grid-name {
   font-size: var(--fs-small);
   color: var(--ink);
   font-weight: 600;
-  line-height: 1.45;
-  height: 66rpx;
+  line-height: 1.4;
+  height: 62rpx;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 2;
@@ -102,21 +124,19 @@
   color: var(--ink-muted);
   line-height: 1.5;
   margin-top: 6rpx;
-  height: 30rpx;
+  height: 28rpx;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
 }
-.grid-foot {
-  margin-top: 14rpx;
-  display: flex;
-  align-items: baseline;
-}
-.grid-price { font-size: 34rpx; color: var(--cinnabar); font-weight: 700; }
+.grid-foot { margin-top: 12rpx; display: flex; align-items: baseline; }
+.grid-price { font-size: 32rpx; color: var(--cinnabar); font-weight: 700; }
 .grid-price-symbol { font-size: var(--fs-small); font-weight: 600; margin-right: 2rpx; }
 
+.mall-bottom-space { height: 24rpx; }
+
 @keyframes mallFadeUp {
-  from { opacity: 0; transform: translateY(24rpx); }
+  from { opacity: 0; transform: translateY(20rpx); }
   to { opacity: 1; transform: translateY(0); }
 }

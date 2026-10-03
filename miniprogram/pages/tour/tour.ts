@@ -22,7 +22,7 @@ Page({
     scenes: [] as SceneVM[],
     scaleCells: [] as ScaleCell[],
     scaleCount: 0,
-    total: 7,
+    total: 0,
     percent: 0,
     continueText: '开始巡游',
     modeHint: '云游模式 · 在线复原盛唐宫殿',
