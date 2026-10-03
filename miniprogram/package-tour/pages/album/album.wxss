@@ -1,115 +1,200 @@
+/* ============================================================
+   文物图鉴 album · 盛唐鎏金/玉石质感
+   复用 tokens / line-icon / tour 鎏金分段样式，纯 CSS，不新增图片
+   ============================================================ */
 .album-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f6efe1 0%, #f1e8d6 100%);
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-deep) 100%);
   padding-bottom: 60rpx;
 }
 
-/* 头部 */
+/* ---------- 头部 ---------- */
 .album-head { padding: 40rpx 40rpx 28rpx; }
 .album-kicker {
   display: block;
-  font-size: 22rpx;
+  font-size: var(--fs-mini);
   letter-spacing: 4rpx;
-  color: #a9803a;
+  color: var(--dark-gold);
   margin-bottom: 12rpx;
 }
 .album-title {
   display: block;
-  font-size: 48rpx;
+  font-size: var(--fs-title);
   font-weight: 700;
-  color: #2b2620;
-  letter-spacing: 4rpx;
-  margin-bottom: 24rpx;
+  color: var(--ink);
+  letter-spacing: 6rpx;
+  margin-bottom: 26rpx;
 }
+
+/* 景点切换（复用 tour 鎏金分段） */
+.spot-switch { position: relative; margin: 0 0 14rpx; }
+.spot-switch-inner {
+  display: flex;
+  background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 5rpx;
+  box-shadow: inset 0 2rpx 6rpx rgba(90, 74, 50, 0.08);
+}
+.spot-tab {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  font-size: var(--fs-body);
+  letter-spacing: 3rpx;
+  color: var(--ink-muted);
+  border-radius: var(--radius-pill);
+  transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
+}
+.spot-tab.on {
+  background: var(--grad-cinnabar);
+  color: #fbf3e4;
+  font-weight: 600;
+  box-shadow: 0 6rpx 16rpx rgba(158, 74, 42, 0.26), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.28);
+}
+.spot-tab-hover { opacity: 0.85; }
+.spot-switch-line {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -12rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, var(--dark-gold-soft) 28%, var(--dark-gold) 50%, var(--dark-gold-soft) 72%, transparent);
+  opacity: 0.7;
+}
+
+/* 进度条：鎏金质感 */
 .album-progress {
   height: 12rpx;
-  border-radius: 6rpx;
-  background: rgba(154, 120, 60, 0.16);
+  border-radius: var(--radius-pill);
+  background: rgba(168, 137, 58, 0.14);
+  box-shadow: inset 0 1rpx 3rpx rgba(90, 74, 50, 0.12);
   overflow: hidden;
 }
 .album-progress-bar {
   height: 100%;
-  border-radius: 6rpx;
-  background: linear-gradient(90deg, #c79a4b, #9e3b2e);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--dark-gold-soft), var(--dark-gold));
+  box-shadow: 0 0 8rpx rgba(194, 166, 104, 0.5);
   transition: width 0.6s ease;
 }
 .album-progress-text {
   display: block;
   margin-top: 14rpx;
-  font-size: 24rpx;
-  color: #6b5e48;
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  letter-spacing: 1rpx;
 }
 
-/* 网格 */
-.album-grid { display: flex; flex-wrap: wrap; padding: 8rpx 28rpx; }
-.relic-cell { width: 50%; box-sizing: border-box; padding: 12rpx; }
+/* ---------- 文物网格（2 列） ---------- */
+.album-grid { display: flex; flex-wrap: wrap; padding: 16rpx 24rpx 0; }
+.relic-cell { width: 50%; box-sizing: border-box; padding: 14rpx; }
 .relic-thumb {
   position: relative;
   width: 100%;
-  height: 240rpx;
-  border-radius: 18rpx;
+  height: 250rpx;
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #e8dfcc;
-  box-shadow: 0 6rpx 20rpx rgba(60, 40, 15, 0.08);
+  background: var(--bg-card-deep);
+  box-shadow: var(--shadow);
 }
 .relic-thumb-img { width: 100%; height: 100%; }
+
+/* 已收录：鎏金边框 + 绢光 */
+.relic-cell.got .relic-thumb {
+  border: 2rpx solid var(--dark-gold);
+  box-shadow: 0 8rpx 22rpx rgba(150, 110, 50, 0.24), inset 0 0 0 1rpx rgba(194, 166, 104, 0.4);
+}
+.relic-cell-hover { opacity: 0.92; }
+
+/* 锁态：灰玉卡 + line-icon 锁 SVG（无「锁」文字） */
+.relic-cell.locked .relic-thumb-img { filter: grayscale(1) brightness(0.86); }
 .relic-lock {
   position: absolute;
   inset: 0;
-  background: rgba(40, 32, 22, 0.62);
+  background: rgba(241, 232, 214, 0.32);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.relic-lock-glyph {
-  width: 64rpx;
-  height: 64rpx;
-  line-height: 64rpx;
-  text-align: center;
-  border: 2rpx solid rgba(244, 236, 221, 0.7);
+.relic-lock-badge {
+  width: 76rpx;
+  height: 76rpx;
   border-radius: 50%;
-  color: #f4ecdd;
-  font-size: 26rpx;
+  background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card-deep) 100%);
+  border: 1rpx solid rgba(168, 137, 58, 0.45);
+  box-shadow: 0 4rpx 14rpx rgba(60, 40, 15, 0.22), inset 0 1rpx 2rpx rgba(255, 250, 236, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.relic-cell.locked .relic-thumb-img { filter: grayscale(1) brightness(0.8); }
 .relic-name {
   display: block;
   margin-top: 14rpx;
-  font-size: 27rpx;
+  font-size: var(--fs-body);
   font-weight: 600;
-  color: #2b2620;
+  color: var(--ink);
+  letter-spacing: 1rpx;
 }
-.relic-name.dim { color: #9a8e78; }
+.relic-name.dim { color: var(--ink-muted); }
 .relic-era {
   display: block;
-  margin-top: 4rpx;
-  font-size: 21rpx;
-  color: #8a7b60;
+  margin-top: 6rpx;
+  font-size: var(--fs-mini);
+  color: var(--ochre-deep);
+  letter-spacing: 1rpx;
 }
 
-/* 提示 */
+/* ---------- 空态引导卡：鎏金细框 + 极淡暗纹 ---------- */
 .album-tip {
-  margin: 28rpx 40rpx 0;
-  padding: 26rpx 28rpx;
-  background: rgba(255, 253, 248, 0.7);
-  border: 1rpx solid rgba(154, 120, 60, 0.18);
-  border-radius: 18rpx;
+  margin: 30rpx 40rpx 0;
+  padding: 30rpx 30rpx 32rpx;
+  background:
+    repeating-linear-gradient(135deg, rgba(168, 137, 58, 0.035) 0 2rpx, transparent 2rpx 22rpx),
+    var(--bg-card);
+  border: 1rpx solid rgba(168, 137, 58, 0.32);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow), inset 0 0 0 1rpx rgba(255, 250, 236, 0.6);
 }
-.album-tip-text { display: block; font-size: 24rpx; line-height: 1.7; color: #6b5e48; }
+.tip-icon {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--bg-card-deep), #ece0c8);
+  border: 1rpx solid rgba(168, 137, 58, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18rpx;
+}
+.album-tip-title {
+  display: block;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 2rpx;
+  margin-bottom: 10rpx;
+}
+.album-tip-text {
+  display: block;
+  font-size: var(--fs-small);
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
 .album-scan-btn {
-  margin-top: 20rpx;
+  margin-top: 24rpx;
   height: 80rpx;
   line-height: 80rpx;
-  border-radius: 40rpx;
-  background: linear-gradient(135deg, #9e3b2e, #7e2c22);
-  color: #f6eedd;
-  font-size: 27rpx;
-  letter-spacing: 2rpx;
-  box-shadow: 0 8rpx 20rpx rgba(126, 44, 34, 0.28);
+  border-radius: var(--radius-pill);
+  background: var(--grad-cinnabar);
+  color: #fbf3e4;
+  font-size: var(--fs-body);
+  letter-spacing: 3rpx;
+  box-shadow: 0 10rpx 24rpx rgba(158, 74, 42, 0.30), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.3);
 }
 .album-scan-btn::after { border: none; }
 
-/* 详情弹层 */
+/* ---------- 详情弹层 ---------- */
 .detail-mask {
   position: fixed;
   inset: 0;
@@ -121,7 +206,7 @@
 .detail-sheet {
   width: 100%;
   height: 88vh;
-  background: #fbf6ec;
+  background: var(--bg-card);
   border-radius: 28rpx 28rpx 0 0;
   overflow: hidden;
   display: flex;
@@ -132,21 +217,34 @@
   from { transform: translateY(60rpx); opacity: 0.4; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+/* banner：鎏金画框 */
 .detail-banner { position: relative; height: 380rpx; flex-shrink: 0; }
 .detail-banner-img { width: 100%; height: 100%; }
+.detail-banner-frame {
+  position: absolute;
+  inset: 14rpx;
+  border: 2rpx solid rgba(194, 166, 104, 0.72);
+  border-radius: 12rpx;
+  box-shadow: inset 0 0 0 1rpx rgba(255, 248, 226, 0.35);
+  pointer-events: none;
+}
 .detail-close {
   position: absolute;
-  top: 24rpx;
-  right: 24rpx;
+  top: 30rpx;
+  right: 30rpx;
+  z-index: 2;
   width: 60rpx;
   height: 60rpx;
   border-radius: 50%;
-  background: rgba(30, 22, 14, 0.45);
+  background: rgba(30, 22, 14, 0.5);
+  border: 1rpx solid rgba(246, 238, 221, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.detail-close-glyph { color: #f6eedd; font-size: 28rpx; }
+.detail-close-hover { opacity: 0.75; }
+.detail-close-glyph { color: #f6eedd; font-size: 26rpx; }
 .detail-banner-meta {
   position: absolute;
   left: 0;
@@ -165,79 +263,116 @@
 .detail-era {
   display: block;
   margin-top: 6rpx;
-  font-size: 23rpx;
+  font-size: var(--fs-small);
   color: rgba(246, 238, 221, 0.85);
 }
 
-.detail-scroll { flex: 1; padding: 28rpx 32rpx 48rpx; box-sizing: border-box; }
+.detail-scroll { flex: 1; padding: 30rpx 32rpx 48rpx; box-sizing: border-box; }
+
+/* 卷轴碑帖：鎏金题签 */
+.detail-block { margin-top: 8rpx; }
+.detail-sign {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 20rpx;
+  margin-bottom: 16rpx;
+  background: var(--grad-cinnabar);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4rpx 12rpx rgba(158, 74, 42, 0.22);
+}
+.detail-sign-gold {
+  background: var(--grad-gold);
+  box-shadow: 0 4rpx 12rpx rgba(150, 110, 50, 0.25);
+}
+.detail-sign-text {
+  font-size: var(--fs-small);
+  color: #fbf3e4;
+  letter-spacing: 3rpx;
+}
+
+/* 云阙讲解：朱砂边引文 */
+.detail-lines { padding: 4rpx 0 4rpx 8rpx; }
 .detail-line {
   position: relative;
-  padding: 16rpx 0 16rpx 28rpx;
-  border-left: 3rpx solid rgba(158, 59, 46, 0.4);
-  margin-left: 8rpx;
+  padding: 14rpx 0 14rpx 26rpx;
+  border-left: 3rpx solid rgba(158, 74, 42, 0.45);
 }
-.detail-line-text { font-size: 27rpx; line-height: 1.75; color: #3a322a; }
+.detail-line-text {
+  font-size: var(--fs-body);
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+/* 文物档案：绢纸卡 */
 .detail-arch {
   margin-top: 24rpx;
   padding: 24rpx 26rpx;
-  background: #fffdf8;
-  border: 1rpx solid rgba(154, 120, 60, 0.18);
-  border-radius: 16rpx;
+  background:
+    repeating-linear-gradient(0deg, rgba(168, 137, 58, 0.03) 0 2rpx, transparent 2rpx 18rpx),
+    #fffdf8;
+  border: 1rpx solid rgba(168, 137, 58, 0.28);
+  border-radius: var(--radius);
 }
-.detail-arch-title {
+.detail-arch-text {
   display: block;
-  font-size: 26rpx;
-  font-weight: 700;
-  color: #9e3b2e;
-  margin-bottom: 12rpx;
-  letter-spacing: 2rpx;
+  font-size: var(--fs-small);
+  line-height: 1.9;
+  color: #4a4034;
 }
-.detail-arch-text { font-size: 25rpx; line-height: 1.8; color: #4a4034; }
+
+/* 灵感标注 */
 .detail-note {
   margin-top: 18rpx;
   padding: 16rpx 22rpx;
-  background: rgba(158, 59, 46, 0.07);
-  border-radius: 12rpx;
+  background: rgba(158, 74, 42, 0.07);
+  border-left: 3rpx solid rgba(158, 74, 42, 0.4);
+  border-radius: 0 12rpx 12rpx 0;
 }
-.detail-note-text { font-size: 22rpx; line-height: 1.6; color: #8a5a48; }
+.detail-note-text { font-size: var(--fs-mini); line-height: 1.7; color: #8a5a48; }
+
+/* 史料卡：碑帖 */
 .detail-source {
-  margin-top: 22rpx;
+  margin-top: 26rpx;
   padding: 24rpx 26rpx;
-  background: rgba(184, 137, 62, 0.08);
-  border-radius: 16rpx;
+  background: rgba(168, 137, 58, 0.08);
+  border: 1rpx solid rgba(168, 137, 58, 0.3);
+  border-radius: var(--radius);
 }
-.detail-source-title {
+.detail-source-work { margin-bottom: 14rpx; }
+.detail-source-name {
   display: block;
-  font-size: 26rpx;
-  font-weight: 700;
-  color: #a9803a;
-  margin-bottom: 14rpx;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: #5a4a30;
+  letter-spacing: 1rpx;
 }
-.detail-source-work { margin-bottom: 12rpx; }
-.detail-source-name { display: block; font-size: 24rpx; font-weight: 600; color: #5a4a30; }
 .detail-source-quote {
   display: block;
-  margin-top: 6rpx;
-  font-size: 23rpx;
-  line-height: 1.7;
-  color: #6b5e48;
+  margin-top: 8rpx;
+  padding-left: 20rpx;
+  border-left: 2rpx solid rgba(168, 137, 58, 0.45);
+  font-size: var(--fs-small);
+  line-height: 1.8;
+  color: var(--ink-soft);
 }
 .detail-source-note {
   display: block;
   margin-top: 10rpx;
-  font-size: 21rpx;
+  font-size: var(--fs-mini);
   line-height: 1.6;
-  color: #8a7b60;
+  color: var(--ink-muted);
 }
+
+/* 商城复刻：统一朱砂鎏金胶囊 */
 .detail-mall-btn {
-  margin-top: 26rpx;
+  margin-top: 30rpx;
   height: 84rpx;
   line-height: 84rpx;
-  border-radius: 42rpx;
-  background: linear-gradient(135deg, #c79a4b, #a9762e);
-  color: #fbf4e4;
-  font-size: 28rpx;
-  letter-spacing: 2rpx;
-  box-shadow: 0 8rpx 20rpx rgba(169, 118, 46, 0.28);
+  border-radius: var(--radius-pill);
+  background: var(--grad-cinnabar);
+  color: #fbf3e4;
+  font-size: var(--fs-body);
+  letter-spacing: 3rpx;
+  box-shadow: 0 10rpx 24rpx rgba(158, 74, 42, 0.30), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.3);
 }
 .detail-mall-btn::after { border: none; }
