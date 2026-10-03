@@ -83,3 +83,24 @@
 .btn-primary:active, .bar-buy:active { transform: scale(0.98); opacity: 0.92; }
 image { transition: opacity 0.3s ease; }
 
+/* —— 骨架微光（纯 CSS，复用 tokens：浅玉底上极淡金/象牙高光缓慢扫过；非灰块）——
+   用法：容器挂 .shimmer（仅叠加一层高光扫过，不改容器原有底色）；
+   内部异步图片挂 .shimmer-media，bindload 后加 .is-loaded 淡入；
+   binderror 时移除容器 .shimmer 走既有兜底。 */
+.shimmer {
+  background-image: linear-gradient(100deg,
+    rgba(255, 250, 236, 0) 0%,
+    rgba(255, 244, 214, 0.85) 50%,
+    rgba(255, 250, 236, 0) 100%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: shimmerSweep 1.9s ease-in-out infinite;
+}
+@keyframes shimmerSweep {
+  0% { background-position: 130% 0; }
+  100% { background-position: -130% 0; }
+}
+/* 异步图片：未加载时透明（露出容器微光底），bindload 加 .is-loaded 淡入 */
+.shimmer-media { opacity: 0; }
+.shimmer-media.is-loaded { opacity: 1; }
+

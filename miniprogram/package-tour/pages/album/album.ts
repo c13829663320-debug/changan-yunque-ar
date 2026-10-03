@@ -10,6 +10,10 @@ interface AlbumCell {
   era: string;
   image: string;
   got: boolean;
+  /** 缩略图是否已加载完成（微光底淡入淡出用，纯展示态，不改业务数据流） */
+  loaded: boolean;
+  /** 缩略图加载失败：移除微光底，回退容器底色 */
+  err: boolean;
 }
 
 interface SpotTab {
@@ -66,6 +70,8 @@ Page({
       era: r.era,
       image: r.image,
       got: got.has(r.id),
+      loaded: false,
+      err: false,
     }));
     this.setData({
       spotName: spot ? shortSpotName(spot.name) : '文物图鉴',
@@ -101,6 +107,22 @@ Page({
   },
 
   noop() {},
+
+  /** 缩略图加载完成：淡入图片、露出后微光底自然被不透明图片覆盖 */
+  onRelicImgLoad(e: WechatMiniprogram.TouchEvent) {
+    const id = (e.currentTarget.dataset as { id: string }).id;
+    const idx = this.data.cells.findIndex((c) => c.id === id);
+    if (idx < 0) return;
+    this.setData({ [`cells.${idx}.loaded`]: true });
+  },
+
+  /** 缩略图失败：无既有图片兜底可复用，移除微光、回退容器浅玉底色（与现状一致，不新增兜底样式） */
+  onRelicImgError(e: WechatMiniprogram.TouchEvent) {
+    const id = (e.currentTarget.dataset as { id: string }).id;
+    const idx = this.data.cells.findIndex((c) => c.id === id);
+    if (idx < 0) return;
+    this.setData({ [`cells.${idx}.err`]: true });
+  },
 
   onViewGoods() {
     const id = this.data.detail?.goodsId;

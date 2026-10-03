@@ -28,8 +28,17 @@
       data-id="{{item.id}}"
       bindtap="goDetail"
     >
-      <view class="grid-cover">
-        <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill" lazy-load></image>
+      <view class="grid-cover {{item.coverErr ? '' : 'shimmer'}}">
+        <image
+          wx:if="{{item.cover && !item.coverErr}}"
+          class="grid-cover-img shimmer-media {{item.imgLoaded ? 'is-loaded' : ''}}"
+          src="{{item.cover}}"
+          mode="aspectFill"
+          lazy-load
+          bindload="onCoverLoad"
+          binderror="onCoverError"
+          data-id="{{item.id}}"
+        ></image>
         <view wx:else class="grid-cover-fallback">
           <text class="cover-cat">{{item.categoryLabel}}</text>
         </view>

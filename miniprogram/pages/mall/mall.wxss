@@ -67,6 +67,16 @@
   overflow: hidden;
   background: linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
 }
+/* 骨架微光：在原有象牙渐变底上叠加极淡金高光扫过（复用全局 shimmerSweep）；
+   封面 bindload 淡入后覆盖，binderror 移除 .shimmer 并切回分类标签兜底 */
+.grid-cover.shimmer {
+  background-image:
+    linear-gradient(100deg, rgba(255, 250, 236, 0) 0%, rgba(255, 244, 214, 0.85) 50%, rgba(255, 250, 236, 0) 100%),
+    linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
+  background-size: 220% 100%, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
+  animation: shimmerSweep 1.9s ease-in-out infinite;
+}
 .grid-cover-img {
   position: absolute;
   top: 0;

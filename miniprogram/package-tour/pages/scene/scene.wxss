@@ -287,9 +287,9 @@
 .vc-btn, .source-mini {
   font-size: var(--fs-mini); color: var(--dark-gold);
   border: 1rpx solid var(--dark-gold-soft); border-radius: 999rpx;
-  padding: 5rpx 18rpx; line-height: 1.7; background: rgba(255,255,255,0.55);
+  padding: 10rpx 18rpx; line-height: 1.7; background: rgba(255,255,255,0.55);
 }
-.source-mini { display: flex; align-items: center; gap: 6rpx; padding: 5rpx 14rpx; }
+.source-mini { display: flex; align-items: center; gap: 6rpx; padding: 10rpx 14rpx; }
 .source-mini-text { font-size: var(--fs-mini); }
 
 /* ===== 集鳞仪式动画：dragon-scale got 态 ===== */

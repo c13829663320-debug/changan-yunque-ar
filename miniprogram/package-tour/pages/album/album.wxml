@@ -35,8 +35,15 @@
       hover-class="relic-cell-hover"
       hover-stay-time="60"
     >
-      <view class="relic-thumb">
-        <image class="relic-thumb-img" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="relic-thumb {{item.err ? '' : 'shimmer'}}">
+        <image
+          class="relic-thumb-img shimmer-media {{item.loaded ? 'is-loaded' : ''}}"
+          src="{{item.image}}"
+          mode="aspectFill"
+          bindload="onRelicImgLoad"
+          binderror="onRelicImgError"
+          data-id="{{item.id}}"
+        ></image>
         <view wx:if="{{!item.got}}" class="relic-lock">
           <view class="relic-lock-badge">
             <line-icon name="lock" size="{{40}}"></line-icon>
@@ -70,7 +77,7 @@
       <view class="detail-banner">
         <image class="detail-banner-img" src="{{detail.image}}" mode="aspectFill"></image>
         <view class="detail-banner-frame"></view>
-        <view class="detail-close" bindtap="closeDetail" hover-class="detail-close-hover">
+        <view class="detail-close" bindtap="closeDetail" aria-label="关闭文物详情" hover-class="detail-close-hover">
           <text class="detail-close-glyph">✕</text>
         </view>
         <view class="detail-banner-meta">

@@ -100,6 +100,18 @@
 }
 .relic-thumb-img { width: 100%; height: 100%; }
 
+/* 骨架微光：在容器浅玉底色上叠加极淡象牙金高光扫过（复用全局 shimmerSweep，非灰块）；
+   图片 bindload 淡入后自然覆盖，binderror 移除 .shimmer 回退底色 */
+.relic-thumb.shimmer {
+  background-image: linear-gradient(100deg,
+    rgba(255, 250, 236, 0) 0%,
+    rgba(255, 244, 214, 0.85) 50%,
+    rgba(255, 250, 236, 0) 100%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: shimmerSweep 1.9s ease-in-out infinite;
+}
+
 /* 已收录：鎏金边框 + 绢光 */
 .relic-cell.got .relic-thumb {
   border: 2rpx solid var(--dark-gold);
@@ -231,11 +243,11 @@
 }
 .detail-close {
   position: absolute;
-  top: 30rpx;
-  right: 30rpx;
+  top: 24rpx;
+  right: 24rpx;
   z-index: 2;
-  width: 60rpx;
-  height: 60rpx;
+  width: 72rpx;
+  height: 72rpx;
   border-radius: 50%;
   background: rgba(30, 22, 14, 0.5);
   border: 1rpx solid rgba(246, 238, 221, 0.35);
