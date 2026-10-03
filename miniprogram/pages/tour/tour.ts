@@ -5,6 +5,10 @@ import { ScenePoint } from '../../data/types/scene';
 
 type SceneState = 'completed' | 'unlocked' | 'locked';
 
+/** 五色珐琅：龙鳞集录按点位 index 循环取色 */
+type Enamel = 'celadon' | 'azurite' | 'cinnabar' | 'jade' | 'ivory';
+const ENAMELS: Enamel[] = ['celadon', 'azurite', 'cinnabar', 'jade', 'ivory'];
+
 interface SceneVM extends ScenePoint {
   state: SceneState;
   stateLabel: string;
@@ -15,6 +19,8 @@ interface SceneVM extends ScenePoint {
 interface ScaleCell {
   n: number;
   got: boolean;
+  /** 五色珐琅，按 index 循环 */
+  enamel: Enamel;
 }
 
 interface SpotTab {
@@ -88,10 +94,11 @@ Page({
     const total = getTotalCount(spotId);
     const scaleCount = completedInSpot;
 
-    // 龙鳞托：本景点每集一点位亮一片
-    const scaleCells: ScaleCell[] = raw.map((s) => ({
+    // 龙鳞托：本景点每集一点位亮一片；珐琅五色按序循环
+    const scaleCells: ScaleCell[] = raw.map((s, i) => ({
       n: s.index,
       got: store.isCompleted(s.id),
+      enamel: ENAMELS[i % ENAMELS.length],
     }));
 
     this.setData({

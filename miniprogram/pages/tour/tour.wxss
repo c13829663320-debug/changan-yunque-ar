@@ -6,7 +6,10 @@
 
 .tour { padding-top: 20rpx; }
 
-/* ---------- 顶部卡片：标题 + 模式切换 ---------- */
+/* ============================================================
+   卷首卡：标题 + 分段控件 + 景点切换 + 龙鳞 + 主按钮
+   三者质感统一：朱砂鎏金渐变 / 暗槽托 / 绢丝高光
+   ============================================================ */
 .progress-head { padding-bottom: 30rpx; }
 .head-row { align-items: flex-start; }
 .head-title { display: flex; flex-direction: column; }
@@ -22,22 +25,25 @@
   display: flex;
   background: var(--bg-card-deep);
   border: 1rpx solid var(--line);
-  border-radius: 999rpx;
+  border-radius: var(--radius-pill);
   padding: 5rpx;
+  box-shadow: inset 0 2rpx 6rpx rgba(90, 74, 50, 0.08);
 }
 .seg {
   padding: 10rpx 28rpx;
   font-size: var(--fs-small);
   letter-spacing: 2rpx;
   color: var(--ink-muted);
-  border-radius: 999rpx;
+  border-radius: var(--radius-pill);
   transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
 }
 .seg.on {
-  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
-  color: var(--bg-card);
-  box-shadow: var(--shadow);
+  background: var(--grad-cinnabar);
+  color: #fbf3e4;
+  font-weight: 600;
+  box-shadow: 0 6rpx 16rpx rgba(158, 74, 42, 0.26), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.28);
 }
+.seg-hover { opacity: 0.85; }
 
 /* ---------- 卷首景点切换（多景点时出现） ---------- */
 .spot-switch { position: relative; margin: 22rpx 0 4rpx; }
@@ -45,8 +51,9 @@
   display: flex;
   background: var(--bg-card-deep);
   border: 1rpx solid var(--line);
-  border-radius: 999rpx;
+  border-radius: var(--radius-pill);
   padding: 5rpx;
+  box-shadow: inset 0 2rpx 6rpx rgba(90, 74, 50, 0.08);
 }
 .spot-tab {
   flex: 1;
@@ -55,16 +62,16 @@
   font-size: var(--fs-body);
   letter-spacing: 3rpx;
   color: var(--ink-muted);
-  border-radius: 999rpx;
+  border-radius: var(--radius-pill);
   transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
 }
 .spot-tab.on {
-  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
-  color: var(--bg-card);
+  background: var(--grad-cinnabar);
+  color: #fbf3e4;
   font-weight: 600;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6rpx 16rpx rgba(158, 74, 42, 0.26), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.28);
 }
-.spot-tab-hover { opacity: 0.88; }
+.spot-tab-hover { opacity: 0.85; }
 /* 卷首下沿一缕鎏金绢丝，呼应长卷轴头 */
 .spot-switch-line {
   position: absolute;
@@ -72,42 +79,28 @@
   right: 8%;
   bottom: -12rpx;
   height: 2rpx;
-  background: linear-gradient(90deg, transparent, var(--ochre) 50%, transparent);
-  opacity: 0.6;
+  background: linear-gradient(90deg, transparent, var(--dark-gold-soft) 28%, var(--dark-gold) 50%, var(--dark-gold-soft) 72%, transparent);
+  opacity: 0.7;
 }
 
-/* ---------- 龙鳞七片 ---------- */
+/* ---------- 龙鳞集录 ---------- */
 .scale-line { margin: 26rpx 0 26rpx; }
 .scale-head { align-items: baseline; margin-bottom: 16rpx; }
 .scale-text { font-size: var(--fs-small); color: var(--ink-soft); letter-spacing: 2rpx; }
 .scale-num { font-size: var(--fs-h2); font-weight: 600; color: var(--dark-gold); }
 .scale-num-sep { font-size: var(--fs-small); color: var(--ink-muted); font-weight: 400; }
 
-/* 龙鳞托：一条鎏金暗槽 */
+/* 鎏金暗槽托：内凹收分，衬托龙鳞 */
 .scale-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--bg-card-deep);
+  background: linear-gradient(180deg, var(--bg-card-deep) 0%, #ecdfc6 100%);
   border: 1rpx solid var(--line);
-  border-radius: 999rpx;
-  padding: 18rpx 26rpx;
+  border-radius: var(--radius-pill);
+  padding: 20rpx 30rpx;
   margin-top: 4rpx;
-}
-.scale-chip { width: 38rpx; height: 46rpx; }
-.scale-face {
-  width: 100%;
-  height: 100%;
-  /* 龙鳞：上缘微弧收分、下缘聚尖，如覆瓦 */
-  clip-path: polygon(12% 0, 88% 0, 100% 26%, 100% 64%, 50% 100%, 0 64%, 0 26%);
-  background: var(--line);
-  opacity: 0.55;
-  transition: background 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
-}
-.scale-chip.got .scale-face {
-  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 90%);
-  opacity: 1;
-  transform: translateY(-2rpx);
+  box-shadow: inset 0 3rpx 8rpx rgba(90, 74, 50, 0.12), inset 0 -2rpx 4rpx rgba(255, 252, 244, 0.6);
 }
 .scale-hint {
   display: block;
@@ -117,33 +110,50 @@
   letter-spacing: 1rpx;
 }
 
-.continue-btn { margin-top: 6rpx; }
+/* 主按钮：与分段/景点切换同源朱砂鎏金，绢丝高光 */
+.continue-btn {
+  margin-top: 6rpx;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10rpx 24rpx rgba(158, 74, 42, 0.30), inset 0 2rpx 3rpx rgba(255, 244, 224, 0.30);
+}
+.continue-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 36%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 246, 224, 0.32), transparent);
+  transform: skewX(-18deg);
+}
 
 /* ============================================================
    卷轴路线
    ============================================================ */
 .scroll-wrap { position: relative; padding: 6rpx 2rpx 0; }
 
-/* 卷轴轴头（上下两端的绫杆） */
+/* 卷轴轴头（上下两端绫杆） */
 .scroll-rod {
   position: relative;
-  height: 16rpx;
-  border-radius: 999rpx;
-  background: linear-gradient(90deg, var(--ochre-deep) 0%, var(--ochre) 50%, var(--ochre-deep) 100%);
-  box-shadow: var(--shadow);
+  height: 18rpx;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--ochre-deep) 0%, var(--dark-gold-soft) 50%, var(--ochre-deep) 100%);
+  box-shadow: 0 4rpx 12rpx rgba(120, 90, 40, 0.22), inset 0 2rpx 3rpx rgba(255, 248, 224, 0.5);
 }
 .scroll-rod.bottom { margin-top: 26rpx; }
 .rod-cap {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 22rpx;
-  height: 22rpx;
+  width: 26rpx;
+  height: 26rpx;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, var(--dark-gold-soft), var(--dark-gold));
+  box-shadow: 0 2rpx 6rpx rgba(120, 90, 40, 0.35), inset 0 1rpx 2rpx rgba(255, 248, 224, 0.5);
 }
-.rod-cap.left { left: -6rpx; }
-.rod-cap.right { right: -6rpx; }
+.rod-cap.left { left: -8rpx; }
+.rod-cap.right { right: -8rpx; }
 
 /* 绢丝中轴：贯穿各节点的路线 */
 .route { position: relative; padding: 14rpx 4rpx 4rpx 10rpx; }
@@ -175,16 +185,16 @@
   top: 66rpx;
   width: 2rpx;
   height: calc(100% - 40rpx);
-  background: linear-gradient(180deg, var(--line) 0%, var(--ochre) 60%, var(--line) 100%);
+  background: linear-gradient(180deg, var(--line) 0%, var(--ochre) 55%, var(--line) 100%);
 }
 
-/* 节点圆 */
+/* 节点圆（默认 = 锁定灰玉） */
 .node {
   position: relative;
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
-  background: var(--bg-card-deep);
+  background: linear-gradient(160deg, var(--bg-card-deep), #e7ddc9);
   border: 2rpx solid var(--line);
   display: flex;
   align-items: center;
@@ -194,20 +204,7 @@
   z-index: 1;
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.node-index { font-size: var(--fs-small); color: var(--ink-muted); }
-/* 节点上的小徽记（完成点的鎏金芯） */
-.node-badge {
-  position: absolute;
-  right: -2rpx;
-  bottom: -2rpx;
-  width: 18rpx;
-  height: 18rpx;
-  border-radius: 50%;
-  background: var(--dark-gold);
-  border: 2rpx solid var(--bg-card);
-  transform: scale(0);
-  transition: transform 0.3s ease;
-}
+.node-index { font-size: var(--fs-small); font-weight: 600; color: var(--ink-muted); }
 
 /* 路线卡片 */
 .route-card {
@@ -217,7 +214,7 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 22rpx 24rpx;
-  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.3s ease;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.3s ease, opacity 0.3s ease;
 }
 .route-name { font-size: var(--fs-h2); font-weight: 600; color: var(--ink); letter-spacing: 1rpx; }
 .route-state { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 1rpx; }
@@ -232,46 +229,69 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 14rpx;
+  margin-top: 16rpx;
 }
-.route-scale { font-size: var(--fs-mini); color: var(--ochre-deep); letter-spacing: 1rpx; }
+.route-scale { display: flex; align-items: center; }
+.route-scale-name { font-size: var(--fs-mini); color: var(--ochre-deep); letter-spacing: 1rpx; margin-left: 8rpx; }
+.route-action { display: flex; align-items: center; }
+.route-cta { display: flex; align-items: center; }
+.route-cta-text { font-size: var(--fs-mini); color: var(--cinnabar); letter-spacing: 2rpx; margin-right: 4rpx; }
 
 /* 可点反馈 */
 .route-hover .route-card { transform: scale(0.985); box-shadow: var(--shadow-deep); }
 
 /* ---------- 三态 ---------- */
-/* 已完成：鎏金节点 + 金芯 */
-.route-item.completed .node { background: var(--dark-gold); border-color: var(--dark-gold); }
-.route-item.completed .node-index { color: var(--bg-card); font-weight: 600; }
-.route-item.completed .node-badge { transform: scale(1); }
+/* 已完成：鎏金环 + 金芯（节点右下角鎏金小芯） */
+.route-item.completed .node {
+  background: var(--bg-card);
+  border: 3rpx solid var(--dark-gold);
+  box-shadow: inset 0 0 0 2rpx rgba(168, 137, 58, 0.12);
+}
+.route-item.completed .node-index { color: var(--dark-gold); }
+.route-item.completed .node::after {
+  content: '';
+  position: absolute;
+  right: -3rpx;
+  bottom: -3rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: var(--grad-gold);
+  border: 2rpx solid var(--bg-card);
+}
 .route-item.completed .route-state { color: var(--dark-gold); }
-.route-item.completed .route-scale { color: var(--dark-gold); }
+.route-item.completed .route-scale-name { color: var(--dark-gold); }
+.route-item.completed .route-card {
+  border-color: rgba(168, 137, 58, 0.45);
+  background: linear-gradient(180deg, var(--bg-card) 0%, #f7efdd 100%);
+}
 
-/* 当前点位（可进入）：朱砂收边 + 轻柔呼吸光圈，明确"现在就去" */
+/* 当前可进入（unlocked）：朱砂收边 + 高光 + 呼吸光圈，明确"现在就去" */
 .route-item.unlocked .node {
   background: var(--bg-card);
   border-color: var(--cinnabar);
-  box-shadow: 0 0 0 4rpx rgba(158, 74, 42, 0.10);
   animation: breath 2.6s ease-in-out infinite;
 }
-.route-item.unlocked .node-index { color: var(--cinnabar); font-weight: 600; }
+.route-item.unlocked .node-index { color: var(--cinnabar); font-weight: 700; }
 .route-item.unlocked .route-state { color: var(--cinnabar); }
 .route-item.unlocked .route-card {
   border-color: var(--cinnabar-soft);
-  box-shadow: var(--shadow-deep);
+  box-shadow: var(--shadow-deep), inset 0 2rpx 4rpx rgba(255, 252, 244, 0.7);
+  background: linear-gradient(180deg, var(--bg-card) 0%, #fbf1e6 100%);
 }
-.route-cta { font-size: var(--fs-mini); color: var(--cinnabar); letter-spacing: 1rpx; }
 
 @keyframes breath {
-  0%, 100% { box-shadow: 0 0 0 2rpx rgba(158, 74, 42, 0.10); }
+  0%, 100% { box-shadow: 0 0 0 2rpx rgba(158, 74, 42, 0.16); }
   50% { box-shadow: 0 0 0 12rpx rgba(158, 74, 42, 0); }
 }
 
-/* 锁定：低饱和淡出 */
-.route-item.locked { opacity: 0.6; }
-.route-item.locked .node { background: var(--bg-card-deep); }
-.route-item.locked .route-card { box-shadow: none; }
-.route-lock { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 1rpx; }
+/* 锁定（locked）：灰玉节点 + 卡片降饱和，底部小锁 SVG */
+.route-item.locked .route-card {
+  box-shadow: none;
+  border-color: var(--line);
+  opacity: 0.72;
+}
+.route-item.locked .route-scale-name { color: var(--ink-muted); }
 
 /* ============================================================
    空状态
