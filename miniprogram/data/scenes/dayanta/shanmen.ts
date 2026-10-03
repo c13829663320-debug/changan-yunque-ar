@@ -34,6 +34,7 @@ const shanmen: ScenePoint = {
     },
     {
       id: 'sm-2',
+      audio: 'https://aka.doubaocdn.com/s/1RABKM7G86',
       actor: 'seng',
       actorName: '知客僧',
       text: '施主远来瞻礼。此寺乃东宫为追福文德皇后所立，寺名取“慈恩”之意，玄奘法师今为上座，领众栖止。',

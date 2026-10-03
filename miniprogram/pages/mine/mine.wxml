@@ -137,6 +137,12 @@
         <line-icon class="m-arrow" name="arrow" size="{{28}}" theme="light"></line-icon>
       </view>
 
+      <!-- 全局背景乐/音效开关（与对话配音静音相互独立；复用 menu-item 样式） -->
+      <view class="menu-item" bindtap="onSoundToggle">
+        <view class="m-left"><text class="m-label">背景乐与音效</text></view>
+        <text class="m-sound-state {{soundOn ? 'on' : ''}}">{{soundOn ? '开' : '关'}}</text>
+      </view>
+
       <view class="menu-item" data-k="booking" bindtap="onMenu">
         <view class="m-left"><line-icon class="m-icon" name="booking" size="{{38}}"></line-icon><text class="m-label">体验预约</text></view>
         <line-icon class="m-arrow" name="arrow" size="{{28}}"></line-icon>

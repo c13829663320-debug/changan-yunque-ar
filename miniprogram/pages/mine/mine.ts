@@ -3,6 +3,7 @@ import { getSpots } from '../../data/repositories/spotRepo';
 import { getScenesBySpot } from '../../data/repositories/sceneRepo';
 import { getRelicsBySpot } from '../../data/repositories/relicRepo';
 import { Spot } from '../../data/types/spot';
+import { audio } from '../../utils/audio-manager';
 
 /** 五色珐琅：鳞片按单元在 celadon/azurite/cinnabar/jade/ivory 间依次循环 */
 const ENAMELS = ['celadon', 'azurite', 'cinnabar', 'jade', 'ivory'];
@@ -50,6 +51,8 @@ Page({
     relicCells: [] as RelicCell[],
     /** 缩略图加载失败兜底：key=relicId，true 时渲染鎏金框 */
     relicImgError: {} as Record<string, boolean>,
+    /** 全局背景乐/音效开关（与对话配音静音相互独立） */
+    soundOn: true,
   },
 
   onLoad() {
@@ -58,6 +61,7 @@ Page({
 
   onShow() {
     this.syncProgress();
+    this.setData({ soundOn: audio.isOn() });
   },
 
   /** 读取真实进度，驱动分组龙鳞墙、文物图鉴与景点到访态（纯展示计算） */
@@ -160,6 +164,13 @@ Page({
       about: '长安云阙 · 盛唐文物活化 AR文旅助手 v0.1.0',
     };
     wx.showToast({ title: map[k] || '即将上线', icon: 'none' });
+  },
+
+  /** 全局背景乐/音效开关：切换并持久化；打开时顺带解锁并播一次反馈音 */
+  onSoundToggle() {
+    const on = audio.toggle();
+    this.setData({ soundOn: on });
+    if (on) audio.sfx('tap');
   },
 
   onReset() {

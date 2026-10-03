@@ -31,6 +31,7 @@ const qinglongGuanding: ScenePoint = {
     },
     {
       id: 'qs2-2',
+      audio: 'https://aka.doubaocdn.com/s/ieJLhR8SMh',
       actor: 'huiguo',
       actorName: '惠果阿阇梨',
       text: '汝远涉沧溟而来，因缘不浅。今为汝授两部灌顶——自今而后，当护持密法，莫令断绝。',
@@ -64,6 +65,7 @@ const qinglongGuanding: ScenePoint = {
     },
     {
       id: 'qs2-4',
+      audio: 'https://aka.doubaocdn.com/s/eCyq7AXz1d',
       actor: 'narrator',
       text: 'AR 复原唐代密宗灌顶坛场布置。',
       action: { type: 'ar_restore', name: '灌顶坛场' },

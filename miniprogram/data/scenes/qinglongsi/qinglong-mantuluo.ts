@@ -31,6 +31,7 @@ const qinglongMantuluo: ScenePoint = {
     },
     {
       id: 'qs3-2',
+      audio: 'https://aka.doubaocdn.com/s/sgf3f9P84D',
       actor: 'kukai',
       actorName: '空海',
       text: '此曼荼罗，胎藏界表理、金刚界表智，理智两部，合而为一——弟子当绘图以归，使此法东传。',
@@ -64,6 +65,7 @@ const qinglongMantuluo: ScenePoint = {
     },
     {
       id: 'qs3-4',
+      audio: 'https://aka.doubaocdn.com/s/Q8toFlsK2l',
       actor: 'narrator',
       text: 'AR 复原大日殿与两部曼荼罗。',
       action: { type: 'ar_restore', name: '曼荼罗道场' },

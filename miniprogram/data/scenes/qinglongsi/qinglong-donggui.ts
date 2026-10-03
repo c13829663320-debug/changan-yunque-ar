@@ -31,6 +31,7 @@ const qinglongDonggui: ScenePoint = {
     },
     {
       id: 'qs5-2',
+      audio: 'https://aka.doubaocdn.com/s/4oUi7eNaiF',
       actor: 'kukai',
       actorName: '空海',
       text: '一灯能燃千灯。此去归国，当于高野山建坛，使惠果阿阇梨之法，灯灯相续于东海。',
@@ -64,6 +65,7 @@ const qinglongDonggui: ScenePoint = {
     },
     {
       id: 'qs5-4',
+      audio: 'https://aka.doubaocdn.com/s/zAlpOm27Vz',
       actor: 'narrator',
       text: 'AR 复原樱海远眺、东归意境。',
       action: { type: 'ar_restore', name: '东归樱海' },

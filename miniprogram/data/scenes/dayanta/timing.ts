@@ -80,6 +80,7 @@ const timing: ScenePoint = {
     },
     {
       id: 'tmg-5',
+      audio: 'https://aka.doubaocdn.com/s/MY1PTgFMhn',
       actor: 'narrator',
       text: '这“雁塔题名”之制，见载于《唐摭言》《登科记考》；白居易那句“十七人中最少年”，更是千古传诵。可点开史料卡一观。',
       action: { type: 'open_source_card' },

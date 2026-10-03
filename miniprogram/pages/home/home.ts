@@ -2,6 +2,7 @@ import { getSpot } from '../../data/repositories/spotRepo';
 import { getFeaturedGoods } from '../../data/repositories/goodsRepo';
 import { CATEGORY_LABEL, Goods } from '../../data/types/goods';
 import { getProgressStore } from '../../store/progress';
+import { audio } from '../../utils/audio-manager';
 
 interface FeaturedGoodsVM extends Goods {
   categoryLabel: string;
@@ -35,6 +36,8 @@ Page({
 
   /** 一键入宫：直达丹凤门剧场（云游模式） */
   onEnterPalace() {
+    audio.unlock();
+    audio.sfx('tap');
     wx.navigateTo({
       url: '/package-tour/pages/scene/scene?id=danfengmen&mode=cloud',
     });
@@ -42,11 +45,13 @@ Page({
 
   /** 云游长安：从巡游地图进入 */
   onCloudTour() {
+    audio.unlock();
     wx.switchTab({ url: '/pages/tour/tour' });
   },
 
   /** 现场巡游：打开 AR 扫描识别页（扫描景点/物品 → 云阙讲解） */
   onSiteTour() {
+    audio.unlock();
     wx.navigateTo({
       url: '/package-tour/pages/ar-camera/ar-camera',
     });

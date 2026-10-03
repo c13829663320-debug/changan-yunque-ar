@@ -31,12 +31,14 @@ const qinglongFufa: ScenePoint = {
     },
     {
       id: 'qs4-2',
+      audio: 'https://aka.doubaocdn.com/s/jaraG8J4VI',
       actor: 'huiguo',
       actorName: '惠果阿阇梨',
       text: '我此土缘尽，不久当谢。汝宜早归，以奉国家、流布天下，使四海之内，知有此道。',
     },
     {
       id: 'qs4-3',
+      audio: 'https://aka.doubaocdn.com/s/gOynVmBt85',
       actor: 'kukai',
       actorName: '空海',
       text: '弟子……谨奉师命，誓返本邦，广宣密法，不敢有怠。',
@@ -70,6 +72,7 @@ const qinglongFufa: ScenePoint = {
     },
     {
       id: 'qs4-5',
+      audio: 'https://aka.doubaocdn.com/s/fcJSebAC82',
       actor: 'narrator',
       text: 'AR 复原祖师堂付法场景。',
       action: { type: 'ar_restore', name: '祖师堂' },

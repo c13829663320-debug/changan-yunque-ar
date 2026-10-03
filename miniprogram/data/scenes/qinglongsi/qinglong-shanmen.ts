@@ -31,6 +31,7 @@ const qinglongShanmen: ScenePoint = {
     },
     {
       id: 'qs1-2',
+      audio: 'https://aka.doubaocdn.com/s/QEp5h4rAHO',
       actor: 'kukai',
       actorName: '空海',
       text: '贫僧空海，自日本国来，为求无上密法。闻青龙寺惠果阿阇梨，得不空大师真传，特来拜谒。',
@@ -64,6 +65,7 @@ const qinglongShanmen: ScenePoint = {
     },
     {
       id: 'qs1-4',
+      audio: 'https://aka.doubaocdn.com/s/fYHgVI8UbC',
       actor: 'narrator',
       text: '开启 AR，可看唐时青龙寺山门与樱庭复原全貌。',
       action: { type: 'ar_restore', name: '青龙寺山门' },

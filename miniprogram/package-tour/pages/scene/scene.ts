@@ -2,6 +2,7 @@ import { getScene, getNextScene, getTotalCount, getScenesBySpot } from '../../..
 import { getSpot } from '../../../data/repositories/spotRepo';
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scene';
+import { audio } from '../../../utils/audio-manager';
 
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 const MUTED_KEY = 'changan_yunque_muted';
@@ -126,6 +127,7 @@ Page({
   },
 
   onNext() {
+    audio.unlock(); // 主按钮即首次手势之一，解锁背景乐自动播放
     const { node, dialogIndex, scene } = this.data;
     if (node.action?.type === 'ar_restore' && !this.data.arWatched) {
       this.openAR();
@@ -133,6 +135,7 @@ Page({
     }
     if (node.action?.type === 'collect_scale') {
       if (this.data.collectingScale) return;
+      audio.sfx('collect'); // 接过龙鳞：鎏金叮
       this.setData({ collectingScale: true });
       setTimeout(() => {
         this.setData({ collectingScale: false });
@@ -148,9 +151,11 @@ Page({
   },
 
   onChoose(e: WechatMiniprogram.TouchEvent) {
+    audio.unlock();
     const choiceId = (e.currentTarget.dataset as { id: string }).id;
     const choice = this.data.node.choices?.find((c) => c.id === choiceId);
     if (!choice) return;
+    audio.sfx('tap');
     // 记录用户所选祈愿取向，供终章分享卡使用（泛化：取所选文案）
     this.setData({ showChoices: false, showFeedback: true, feedback: choice.feedback, wishText: choice.text });
   },
@@ -166,6 +171,7 @@ Page({
   },
 
   openAR() {
+    audio.sfx('recognize'); // 开启 AR 复原：上行叮咚
     const arTip =
       this.data.mode === 'onsite'
         ? '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）'
@@ -184,6 +190,7 @@ Page({
   },
 
   openSource() {
+    audio.sfx('open'); // 史料卡弹窗开启
     this.setData({ showSource: true });
   },
 

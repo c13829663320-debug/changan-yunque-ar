@@ -254,6 +254,20 @@
 .m-icon { flex-shrink: 0; opacity: 0.9; }
 .m-label { font-size: var(--fs-body); color: var(--ink-soft); letter-spacing: 1rpx; }
 .m-arrow { flex-shrink: 0; opacity: 0.65; }
+/* 背景乐/音效开关胶囊：仅用既有 tokens，不另造配色 */
+.m-sound-state {
+  flex-shrink: 0;
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  padding: 6rpx 22rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line);
+}
+.m-sound-state.on {
+  color: var(--dark-gold);
+  border-color: var(--dark-gold-soft);
+  background: var(--ivory);
+}
 
 /* 意向单重点入口：朱砂渐变底 + 象牙白瓦片内嵌图标 */
 .menu-item.hot {

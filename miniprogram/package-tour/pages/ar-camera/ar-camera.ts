@@ -3,6 +3,7 @@ import { getRelic, getRelicsByScene } from '../../../data/repositories/relicRepo
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, SourceCard } from '../../../data/types/scene';
 import { Relic } from '../../../data/types/relic';
+import { audio } from '../../../utils/audio-manager';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let vkSession: WechatMiniprogram.VKSession | null = null;
@@ -385,15 +386,18 @@ Page({
 
   /* ---------- 讲解面板操作 ---------- */
   onCollect() {
+    audio.unlock();
     if (this.data.targetKind === 'spot' && this.data.scene) {
       // 现场（真机 LBS/VK 识别、模拟器 demo 自动打卡均走此入口）：收龙鳞 + 盖通关文牒章
       // 云游 scene 页只调 completeScene，绝不盖章
       getProgressStore().completeScene(this.data.scene);
       getProgressStore().stampScene(this.data.scene);
+      audio.sfx('stamp'); // 朱印落纸
       this.setData({ collected: true });
       wx.showToast({ title: `已集「${this.data.scaleName}」· 盖章`, icon: 'none' });
     } else if (this.data.targetKind === 'relic' && this.data.relic) {
       getProgressStore().collectRelic(this.data.relic.id);
+      audio.sfx('collect'); // 收入图鉴：鎏金叮
       this.setData({ relicInAlbum: true });
       wx.showToast({ title: '已收入文物图鉴', icon: 'none' });
     }

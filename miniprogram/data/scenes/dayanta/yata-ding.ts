@@ -81,6 +81,7 @@ const yataDing: ScenePoint = {
     },
     {
       id: 'yd-5',
+      audio: 'https://aka.doubaocdn.com/s/mfRdtFf1jr',
       actor: 'narrator',
       text: '这一雁塔本生，详载于《大唐西域记》，亦见《大慈恩寺三藏法师传》《法苑珠林》。可点开史料卡，看玄奘笔下那只远自印度飞来的雁。',
       action: { type: 'open_source_card' },
