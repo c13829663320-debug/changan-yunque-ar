@@ -175,7 +175,7 @@
 }
 .ar-frame {
   width: 100%;
-  background: linear-gradient(180deg, #2c3230, #3a3f3a);
+  background: linear-gradient(180deg, var(--ink), var(--ink-soft));
   border-radius: var(--radius-lg);
   padding: 44rpx 36rpx 36rpx;
   display: flex;
@@ -224,10 +224,10 @@
   0%, 100% { top: 60rpx; opacity: 0.2; }
   50% { top: 380rpx; opacity: 1; }
 }
-.ar-title { font-size: var(--fs-h2); color: #f3ead6; font-weight: 600; }
+.ar-title { font-size: var(--fs-h2); color: var(--ivory); font-weight: 600; }
 .ar-tip {
   font-size: var(--fs-small);
-  color: #c9bda6;
+  color: var(--line);
   text-align: center;
   line-height: 1.6;
   margin: 14rpx 0 26rpx;
