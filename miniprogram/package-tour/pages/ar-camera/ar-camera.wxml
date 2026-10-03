@@ -1,8 +1,14 @@
 <view class="ar-cam">
-  <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
+  <camera wx:if="{{phase !== 'briefing'}}" class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
 
-  <!-- 顶部：现场 AR 标题 -->
-  <view class="cam-top">
+  <!-- 左上角：退出到首页 -->
+  <view class="exit-btn {{phase === 'briefing' ? 'on-light' : ''}}" bindtap="onExit">
+    <text class="exit-glyph">✕</text>
+    <text class="exit-label">退出</text>
+  </view>
+
+  <!-- 顶部标题（扫描 / 识别时） -->
+  <view class="cam-top" wx:if="{{phase !== 'briefing'}}">
     <text class="cam-kicker">现场 AR · 云阙识别</text>
     <text class="cam-title">{{sceneName}}</text>
   </view>
@@ -21,9 +27,8 @@
     </view>
   </view>
 
-  <!-- 云阙 AR 讲解弹层 -->
+  <!-- 云阙 AR 讲解（全屏，camera 已隐藏以保证视频正常播放） -->
   <view class="brief {{phase === 'briefing' ? 'show' : ''}}" wx:if="{{phase === 'briefing'}}">
-    <!-- 顶部固定：云阙 + AR复原视频（原生 video 不放进 scroll-view，避免黑屏） -->
     <view class="brief-top">
       <view class="yq-head">
         <image class="yq-avatar" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image>
@@ -54,7 +59,6 @@
       </view>
     </view>
 
-    <!-- 可滚动：讲解词 / 历史背景 / 史料卡 -->
     <scroll-view scroll-y class="brief-scroll" enhanced show-scrollbar="{{false}}">
       <view class="lines">
         <view class="line" wx:for="{{yunqueLines}}" wx:key="text">
@@ -81,7 +85,6 @@
       </view>
     </scroll-view>
 
-    <!-- 底部操作 -->
     <view class="brief-actions">
       <button class="act-ghost" bindtap="onRescan">重扫</button>
       <button class="act-collect {{collected ? 'done' : ''}}" bindtap="onCollect">

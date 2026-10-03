@@ -183,7 +183,7 @@ Page({
   onRescan() {
     this.stopAudio();
     this.setData({ phase: 'scanning', showSource: false });
-    if (!this.data.hasVK) this.scheduleDemoScan();
+    this.scheduleDemoScan();
   },
 
   onNext() {
@@ -192,7 +192,7 @@ Page({
     this.setData({ phase: 'scanning', showSource: false });
     if (next) {
       this.loadTarget(next.id);
-      if (!this.data.hasVK) this.scheduleDemoScan();
+      this.scheduleDemoScan();
     } else {
       wx.showToast({ title: '七点位已扫描完成', icon: 'none' });
     }
@@ -200,6 +200,12 @@ Page({
 
   onManualDetect() {
     if (this.data.phase === 'scanning') this.startRecognize();
+  },
+
+  /** 退出到首页 */
+  onExit() {
+    this.stopAudio();
+    wx.switchTab({ url: '/pages/home/home' });
   },
 
   haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
