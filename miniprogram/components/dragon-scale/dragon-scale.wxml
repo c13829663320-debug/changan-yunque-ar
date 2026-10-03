@@ -1,0 +1,12 @@
+<view class="ds ds-{{size}} {{got?'got':''}} en-{{enamel}}">
+  <view class="ds-body">
+    <view class="sheen"></view>
+    <view class="enamel"></view>
+    <view class="enamel-mark"></view>
+    <view class="gloss"></view>
+  </view>
+  <view class="ds-label" wx:if="{{showLabel}}">
+    <text class="ds-name">{{name}}</text>
+    <text class="ds-hall">{{hall}}</text>
+  </view>
+</view>

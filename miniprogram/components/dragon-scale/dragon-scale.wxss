@@ -1,0 +1,40 @@
+.ds{display:inline-flex;flex-direction:column;align-items:center;}
+.ds-body{position:relative;background-size:100% 100%;background-repeat:no-repeat;overflow:hidden;
+  clip-path:polygon(12% 0,88% 0,100% 24%,100% 62%,50% 100%,0 62%,0 24%);}
+.ds-lg .ds-body{width:104rpx;height:116rpx;}
+.ds-md .ds-body{width:64rpx;height:72rpx;}
+.ds-sm .ds-body{width:40rpx;height:45rpx;}
+.ds-body{background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20112%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23b3a58c%22%20stroke-width%3D%222.4%22%20opacity%3D%22.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M50%2042c-8%200-12.5%205.6-10%2011.8c-6.2-1.4-11.4%202.4-9.6%208c1.6%204.8%207.2%206.2%2011.4%203.8c.4%205.6%206.6%208%2011%204.8c5.2%202.8%2010.4.4%2010-5.2c4.8%201.4%209.6-1%209-6.2c-.6-5.2-6.2-7.6-11-4.8C62.4%2047.6%2057.6%2042%2050%2042Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E'),linear-gradient(160deg,#f4ecdc,#e3d7bf);
+  box-shadow:inset 0 9rpx 14rpx rgba(110,92,62,.22),inset 0 -7rpx 11rpx rgba(255,255,255,.6);}
+.ds.got .ds-body{background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20112%22%3E%3Cpath%20d%3D%22M17%205H83L95%2029V66L50%20105L5%2066V29Z%22%20fill%3D%22none%22%20stroke%3D%22%23eedca6%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-dasharray%3D%221.4%205.6%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E'),url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20112%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23f6ead0%22%20stroke-width%3D%222%22%20opacity%3D%22.92%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M50%2044c-6.4%200-10%204.4-8%209.4c-5-1.2-9.2%201.8-7.8%206.4c1.2%203.8%205.8%205%209.2%203c.4%204.4%205.2%206.4%208.8%203.8c4.2%202.2%208.4.4%208-4.2c3.8%201.2%207.6-.8%207.2-5c-.4-4.2-5-6-8.8-3.8C60%2048.4%2056%2044%2050%2044Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E'),linear-gradient(158deg,#d8bd7e 0%,#c2a668 38%,#a8893a 92%);
+  box-shadow:inset 0 3rpx 7rpx rgba(255,248,224,.6),0 8rpx 18rpx rgba(120,90,40,.28);}
+.sheen{position:absolute;left:18%;right:18%;top:7%;height:34%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.75),transparent);}
+.ds.got .sheen{background:radial-gradient(closest-side,rgba(255,250,232,.85),transparent);height:30%;}
+.enamel{position:absolute;left:50%;top:50%;transform:translate(-50%,-46%);border-radius:50%;display:none;
+  box-shadow:inset 0 2rpx 4rpx rgba(255,255,255,.5),0 1rpx 3rpx rgba(80,60,20,.3);}
+.ds.got .enamel{display:block;}
+.ds-lg .enamel{width:44rpx;height:44rpx;}
+.ds-md .enamel{width:28rpx;height:28rpx;}
+.ds-sm .enamel{width:17rpx;height:17rpx;}
+.en-celadon .enamel{background:radial-gradient(circle at 36% 30%,#b9d0c3,#7f9e8c 78%);}
+.en-azurite .enamel{background:radial-gradient(circle at 36% 30%,#c3d2d6,#7e979e 78%);}
+.en-cinnabar .enamel{background:radial-gradient(circle at 36% 30%,#d8a48c,#a85a3c 78%);}
+.en-jade .enamel{background:radial-gradient(circle at 36% 30%,#cdd7c2,#8fa384 78%);}
+.en-ivory .enamel{background:radial-gradient(circle at 36% 30%,#efe3c4,#c9b079 78%);}
+.enamel-mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-46%);background-size:contain;background-repeat:no-repeat;display:none;
+  background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237d6128%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%208.4c-2.3%200-3.6%201.7-2.9%203.5c-1.8-.4-3.3.8-2.8%202.4.5%201.5%202.2%201.9%203.4%201.1.2%201.7%202%202.4%203.2%201.4%201.5.9%203%20.1%202.9-1.5%201.5.4%202.9-.3%202.7-1.9-.2-1.6-1.9-2.3-3.2-1.4.6-1.8-.6-3.6-3.3-3.6Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');}
+.ds.got .enamel-mark{display:block;}
+.ds-lg .enamel-mark{width:22rpx;height:22rpx;}
+.ds-md .enamel-mark{width:14rpx;height:14rpx;}
+.ds-sm .enamel-mark{display:none;}
+.gloss{position:absolute;top:-30%;bottom:-30%;width:46%;left:-60%;display:none;
+  background:linear-gradient(105deg,transparent,rgba(255,252,240,.75),transparent);transform:skewX(-18deg);}
+.ds.got .gloss{display:block;animation:ds-sweep 3.2s ease-in-out infinite;}
+@keyframes ds-sweep{0%,55%{left:-60%;}85%,100%{left:130%;}}
+.ds.got{animation:ds-pop .5s cubic-bezier(.2,1.4,.4,1) both;}
+@keyframes ds-pop{from{transform:scale(.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+.ds-label{display:flex;flex-direction:column;align-items:center;}
+.ds-name{font-size:var(--fs-small);color:var(--ink-muted);margin-top:10rpx;letter-spacing:1rpx;}
+.ds-hall{font-size:var(--fs-mini);color:var(--ink-muted);margin-top:2rpx;}
+.ds.got .ds-name{color:var(--ink);font-weight:600;}
