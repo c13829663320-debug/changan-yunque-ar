@@ -28,12 +28,15 @@ Page({
     // gallery 缩略条：本地封面 + 高清网络图
     const thumbList = [cover, ...gallery].filter(Boolean).map((url) => ({ url: url as string }));
     const hasGlb = !!goods?.arPreview && /\.glb($|\?)/.test(goods.arPreview);
+    const cartIds = (wx.getStorageSync(CART_KEY) as string[]) || [];
+    const cartAdded = !!goods && cartIds.includes(goods.id);
     this.setData({
       goods: goods || null,
       categoryLabel: goods ? CATEGORY_LABEL[goods.category] : '',
       activeImage: cover,
       activeIndex: 0,
       thumbList,
+      cartAdded,
       arTip: hasGlb
         ? '已接入 XRFrame 后将可 360° 旋转查看商品模型；当前以封面示意召唤效果。'
         : '将镜头对准商品或实物卡片，云阙会为你召唤文物故事与讲解。',
@@ -64,21 +67,25 @@ Page({
 
   noop() {},
 
+  /** 加入购物车 / 已加入则取消（同一按钮切换，状态持久） */
   addCart() {
+    const id = this.data.goods?.id;
+    if (!id) return;
     try {
       const cart = (wx.getStorageSync(CART_KEY) as string[]) || [];
-      const id = this.data.goods?.id;
-      if (id && !cart.includes(id)) cart.push(id);
-      wx.setStorageSync(CART_KEY, cart);
-      wx.showToast({ title: '已加入购物车', icon: 'success' });
-      // 轻量成功反馈：按钮短暂切换为「已加入」，不改变加购逻辑
-      this.setData({ cartAdded: true });
-      clearTimeout(this._cartTimer);
-      this._cartTimer = setTimeout(() => {
+      if (cart.includes(id)) {
+        const next = cart.filter((x) => x !== id);
+        wx.setStorageSync(CART_KEY, next);
         this.setData({ cartAdded: false });
-      }, 1400);
+        wx.showToast({ title: '已移出购物车', icon: 'none' });
+      } else {
+        cart.push(id);
+        wx.setStorageSync(CART_KEY, cart);
+        this.setData({ cartAdded: true });
+        wx.showToast({ title: '已加入购物车', icon: 'success' });
+      }
     } catch (err) {
-      wx.showToast({ title: '加入失败', icon: 'none' });
+      wx.showToast({ title: '操作失败', icon: 'none' });
     }
   },
 

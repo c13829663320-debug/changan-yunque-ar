@@ -78,7 +78,7 @@
       <text class="side-ico">⌂</text>
       <text class="side-text">购物车</text>
     </view>
-    <button class="bar-cart {{cartAdded ? 'added' : ''}}" bindtap="addCart">{{cartAdded ? '已加入 ✓' : '加入购物车'}}</button>
+    <button class="bar-cart {{cartAdded ? 'added' : ''}}" bindtap="addCart">{{cartAdded ? '已加入·点击取消' : '加入购物车'}}</button>
     <button class="bar-buy" bindtap="registerIntention">预售登记</button>
   </view>
 </view>

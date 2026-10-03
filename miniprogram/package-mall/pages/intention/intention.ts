@@ -9,6 +9,16 @@ interface IntVM extends Goods {
   categoryLabel: string;
 }
 
+/** 云端是否真正可用：以 App 初始化云开发成功 且 非 Mock 为准（不能只看 wx.cloud 对象是否存在） */
+function isCloudReady(): boolean {
+  try {
+    const app = getApp() as { globalData?: { cloudReady?: boolean } };
+    return !!app.globalData?.cloudReady && !config.useMock;
+  } catch (e) {
+    return false;
+  }
+}
+
 Page({
   data: {
     items: [] as IntVM[],
@@ -29,16 +39,16 @@ Page({
       .map((id) => getGoods(id))
       .filter((g): g is Goods => !!g)
       .map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
-    const cloudReady = !!(wx.cloud && (wx.cloud as { callFunction?: unknown }).callFunction);
+    const cloudReady = isCloudReady();
     this.setData({
       items,
       submitted: pending.length === 0 && doneIds.length > 0,
       cloudReady,
     });
-    if (cloudReady && !config.useMock) this.queryCloud();
+    if (cloudReady) this.queryCloud();
   },
 
-  /** 云端模式：从云函数查询当前用户的历史意向 */
+  /** 云端模式：从云函数查询当前用户的历史意向（失败静默，保留本地列表） */
   queryCloud() {
     wx.cloud.callFunction({
       name: 'intention',
@@ -57,6 +67,9 @@ Page({
           this.setData({ items: cloudItems, submitted: true });
         }
       },
+      fail: () => {
+        /* 云端查询失败：沿用本地列表，不打扰用户 */
+      },
     });
   },
 
@@ -71,7 +84,7 @@ Page({
   },
 
   submit() {
-    const { name, phone, items, remark, cloudReady } = this.data;
+    const { name, phone, items } = this.data;
     if (!items.length) {
       wx.showToast({ title: '没有意向商品', icon: 'none' });
       return;
@@ -93,25 +106,39 @@ Page({
       this.setData({ submitting: false, submitted: true });
     };
 
+    const cloudReady = isCloudReady();
     if (cloudReady) {
+      let settled = false;
+      // 超时兜底：云端 8 秒无任何回调也本地登记，杜绝一直 loading
+      const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        done();
+        wx.showToast({ title: '网络较慢，已本地登记', icon: 'none' });
+      }, 8000);
       wx.cloud.callFunction({
         name: 'intention',
-        data: { goodsIds, name: name.trim(), phone, remark },
+        data: { goodsIds, name: name.trim(), phone, remark: this.data.remark },
         success: (res) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          done();
           const result = res.result as { success?: boolean } | undefined;
-          if (result && result.success) {
-            done();
-          } else {
-            done();
+          if (!result || !result.success) {
             wx.showToast({ title: '云端暂不可用，已本地登记', icon: 'none' });
           }
         },
         fail: () => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
           done();
           wx.showToast({ title: '演示模式：已本地登记', icon: 'none' });
         },
       });
     } else {
+      // Mock / 未配置云环境：直接本地登记，立即结束
       done();
       wx.showToast({ title: '演示模式：已本地登记', icon: 'none' });
     }

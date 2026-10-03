@@ -25,14 +25,14 @@ const hanyuan: ScenePoint = {
   dialogs: [
     {
       id: 'hy-1',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-1.mp3',
+      audio: 'https://aka.doubaocdn.com/s/7lIUj3nb1Z',
       actor: 'narrator',
       text: '含元殿前广场。你率使团随百官来到宫前，抬头望去——高台巍峨，龙尾道如三折云梯，直抵云端。',
       action: { type: 'look_around' },
     },
     {
       id: 'hy-2',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-2.mp3',
+      audio: 'https://aka.doubaocdn.com/s/Vz5SrwtTUJ',
       actor: 'yunque',
       text: '（仰头）好高的台基……我们从丹凤门一路走来，到这里已经抬了好多级台阶。你看上面那座大殿，就是含元殿了。',
     },
@@ -50,13 +50,13 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-5',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-5.mp3',
+      audio: 'https://aka.doubaocdn.com/s/c1Kp2yokNB',
       actor: 'yunque',
       text: '（小声）我也跟你们一起走……这条道好长，抬头只能看见天和殿角的鸱尾。你扶着使团的节杖，慢慢往上。',
     },
     {
       id: 'hy-6',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-6.mp3',
+      audio: 'https://aka.doubaocdn.com/s/KQqU68kJim',
       actor: 'narrator',
       text: '第一折平台。你驻足回望——长安城在脚下铺开，坊市如棋，渭水如带。风从原上吹来，衣冠猎猎。',
     },
@@ -68,7 +68,7 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-8',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-8.mp3',
+      audio: 'https://aka.doubaocdn.com/s/Ztg1HQhQuf',
       actor: 'yunque',
       text: '（扯了扯你的衣袖）等会儿到了上面，站位可有讲究？我听说站错了班次是要被御史弹劾的……你要不要先问问导引官？',
       choices: [
@@ -96,7 +96,7 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-9',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-9.mp3',
+      audio: 'https://aka.doubaocdn.com/s/OgD0jHvDPA',
       actor: 'narrator',
       text: '第三折。你终于登上含元殿庭。钟鼓忽起，雅乐声从两厢传来——大朝会开始了。',
     },
@@ -108,7 +108,7 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-11',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-11.mp3',
+      audio: 'https://aka.doubaocdn.com/s/6VU4KmAVKm',
       actor: 'yunque',
       text: '（紧张地攥住你的衣角）我、我怕我喊错节拍……等会儿大家一起喊的时候，你跟着周围人就是了，别一个人抢先也别落后。',
       choices: [
@@ -135,19 +135,19 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-12',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-12.mp3',
+      audio: 'https://aka.doubaocdn.com/s/zNg43FFryx',
       actor: 'narrator',
       text: '赞礼官高唱「山呼——」。鸿胪寺导引官抬手，你随万国衣冠一齐躬身，三呼万岁。声浪在殿庭间回荡，钟鼓随之而和。',
     },
     {
       id: 'hy-13',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-13.mp3',
+      audio: 'https://aka.doubaocdn.com/s/NqUVHBKbwL',
       actor: 'narrator',
       text: '再拜。你双手加额，行起舞礼。抬眼时，远远望见殿上御座的方向——那里垂着帷幔，隐隐有人影。云阙低声说：',
     },
     {
       id: 'hy-14',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-14.mp3',
+      audio: 'https://aka.doubaocdn.com/s/vArIMSXzNu',
       actor: 'yunque',
       text: '（轻声）那上面坐的……就是圣人了。天子临朝，万国来朝。你看——东西两列的使臣，正在依次出班朝拜。',
     },
@@ -165,27 +165,27 @@ const hanyuan: ScenePoint = {
     },
     {
       id: 'hy-17',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-17.mp3',
+      audio: 'https://aka.doubaocdn.com/s/4OaouQ4HWa',
       actor: 'yunque',
       text: '（伸手指向殿外）你往南边看——从龙尾道下来，整个长安都在脚下。一百零八坊、东西两市、大明宫的含元殿、宣政殿、紫宸殿……都在这条中轴线上。',
     },
     {
       id: 'hy-18',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-18.mp3',
+      audio: 'https://aka.doubaocdn.com/s/Vbz4pVfrfO',
       actor: 'narrator',
       text: '朝礼毕，百官退班。你立于含元殿庭之上，俯瞰龙首原下的长安城。开启摄像头，可在遗址之上看含元殿当年的复原全景。',
       action: { type: 'ar_restore', name: '含元殿' },
     },
     {
       id: 'hy-19',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-19.mp3',
+      audio: 'https://aka.doubaocdn.com/s/iUcAS3dv8u',
       actor: 'yunque',
       text: '（掌心浮起一片温润的金鳞）我好像……想起了万国来朝的鼓乐声。这片「朝会鳞」，是你替我亲眼见证的。收好它。',
       action: { type: 'collect_scale' },
     },
     {
       id: 'hy-20',
-      audio: 'https://aka.doubaocdn.com/changan/audio/hy-20.mp3',
+      audio: 'https://aka.doubaocdn.com/s/UlQGsfeQLT',
       actor: 'yunque',
       text: '朝会散了，接下来百官要往宣政殿方向去——听说退朝之后，廊下还有「廊下食」，按品级供饭食。走吧，我们也去看看。',
     },

@@ -1,8 +1,16 @@
 import daminggongScenes from '../scenes/daminggong/index';
 import { ScenePoint } from '../types/scene';
 
-/** 重媒体（复原视频/配音）CDN 基址：不进小程序包、在线播放；加载失败由 poster 运镜/字幕兜底 */
-const MEDIA_BASE = 'https://aka.doubaocdn.com/changan';
+/** 复原视频已上传 CDN（不进小程序包、在线播放）；加载失败由 poster 运镜兜底 */
+const RESTORE_VIDEO: Record<string, string> = {
+  danfengmen: 'https://aka.doubaocdn.com/s/TlcwFt5QIg',
+  hanyuan: 'https://aka.doubaocdn.com/s/IL046HDeL7',
+  xuanzheng: 'https://aka.doubaocdn.com/s/WM7y9lpVB1',
+  zichen: 'https://aka.doubaocdn.com/s/JeYxZSamN1',
+  taiyechi: 'https://aka.doubaocdn.com/s/KWTkUwH0hD',
+  linde: 'https://aka.doubaocdn.com/s/cYQ3Q7CUCM',
+  xuanwumen: 'https://aka.doubaocdn.com/s/ttL2luLyrZ',
+};
 
 const allScenes: ScenePoint[] = [...daminggongScenes];
 
@@ -18,7 +26,7 @@ export function getScene(id: string): ScenePoint | undefined {
   // 数据驱动：为每点位挂载动态复原视频（无 3D 时以视频替代），舞台背景 / AR 层 / AR 相机共用
   return {
     ...s,
-    restoreVideo: `${MEDIA_BASE}/scenes/${s.id}.mp4`,
+    restoreVideo: RESTORE_VIDEO[s.id] || '',
     poster: `/package-tour/assets/scenes/${s.id}/poster.jpg`,
   };
 }

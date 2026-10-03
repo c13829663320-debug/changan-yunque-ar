@@ -1,12 +1,15 @@
 <view class="page-wrap cart">
   <block wx:if="{{items.length}}">
     <view class="card cart-item" wx:for="{{items}}" wx:key="id">
-      <view class="ci-cover"><text class="ci-cat">{{item.categoryLabel}}</text></view>
+      <view class="ci-cover">
+        <image wx:if="{{item.cover}}" class="ci-img" src="{{item.cover}}" mode="aspectFill"></image>
+        <text wx:else class="ci-cat">{{item.categoryLabel}}</text>
+      </view>
       <view class="ci-info">
         <text class="ci-name">{{item.name}}</text>
         <text class="ci-price">¥{{item.price}}</text>
       </view>
-      <view class="ci-remove" data-id="{{item.id}}" catchtap="remove">移除</view>
+      <view class="ci-remove" data-id="{{item.id}}" catchtap="remove">删除</view>
     </view>
 
     <view class="card total-row">
