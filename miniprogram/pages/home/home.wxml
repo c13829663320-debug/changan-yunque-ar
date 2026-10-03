@@ -8,10 +8,9 @@
   <view class="page-wrap inner">
     <!-- 云阙互动开场 -->
     <view class="hero {{entered ? 'entered' : ''}}">
-      <view class="yunque-badge">
-        <image class="yunque-portrait" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image>
-        <view class="yunque-halo"></view>
-        <view class="yunque-ring"></view>
+      <view class="yunque-shrine">
+        <image class="shrine-portrait" src="/assets/characters/yunque-portrait.jpg" mode="aspectFill"></image>
+        <view class="shrine-glow"></view>
       </view>
       <view class="bubble">
         <text class="bubble-text">{{greeting}}</text>
