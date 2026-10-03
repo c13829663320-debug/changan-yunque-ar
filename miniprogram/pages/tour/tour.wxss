@@ -39,6 +39,43 @@
   box-shadow: var(--shadow);
 }
 
+/* ---------- 卷首景点切换（多景点时出现） ---------- */
+.spot-switch { position: relative; margin: 22rpx 0 4rpx; }
+.spot-switch-inner {
+  display: flex;
+  background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
+  border-radius: 999rpx;
+  padding: 5rpx;
+}
+.spot-tab {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 0;
+  font-size: var(--fs-body);
+  letter-spacing: 3rpx;
+  color: var(--ink-muted);
+  border-radius: 999rpx;
+  transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
+}
+.spot-tab.on {
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: var(--bg-card);
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.spot-tab-hover { opacity: 0.88; }
+/* 卷首下沿一缕鎏金绢丝，呼应长卷轴头 */
+.spot-switch-line {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -12rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, var(--ochre) 50%, transparent);
+  opacity: 0.6;
+}
+
 /* ---------- 龙鳞七片 ---------- */
 .scale-line { margin: 26rpx 0 26rpx; }
 .scale-head { align-items: baseline; margin-bottom: 16rpx; }

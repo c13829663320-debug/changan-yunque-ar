@@ -13,13 +13,13 @@
 
   <view class="page-wrap body">
     <view class="card">
-      <text class="title-h2">景点概览</text>
+      <view class="sec-title">景点概览</view>
       <image wx:if="{{spot.overviewImage}}" class="ov-img" src="{{spot.overviewImage}}" mode="widthFix" />
       <text class="text-body para">{{spot.summary}}</text>
     </view>
 
     <view class="card">
-      <text class="title-h2">历史时间线</text>
+      <view class="sec-title">历史时间线</view>
       <image wx:if="{{spot.timelineImage}}" class="tl-banner" src="{{spot.timelineImage}}" mode="widthFix" />
       <view class="timeline">
         <view class="tl-item" wx:for="{{spot.timeline}}" wx:key="year">
@@ -34,7 +34,7 @@
     </view>
 
     <view class="card">
-      <text class="title-h2">主要看点</text>
+      <view class="sec-title">主要看点</view>
       <view class="relic" wx:for="{{spot.relics}}" wx:key="name">
         <image wx:if="{{item.image}}" class="relic-img" src="{{item.image}}" mode="widthFix" />
         <text class="relic-name">{{item.name}}</text>
@@ -43,17 +43,19 @@
     </view>
 
     <view class="card">
-      <text class="title-h2">到访信息</text>
-      <text class="info-line">开放：{{spot.openInfo.hours}}</text>
-      <text class="info-line">门票：{{spot.openInfo.ticket}}</text>
-      <text class="info-line">交通：{{spot.openInfo.traffic}}</text>
+      <view class="sec-title">到访信息</view>
+      <view class="info-block">
+        <text class="info-line">开放：{{spot.openInfo.hours}}</text>
+        <text class="info-line">门票：{{spot.openInfo.ticket}}</text>
+        <text class="info-line">交通：{{spot.openInfo.traffic}}</text>
+      </view>
     </view>
 
     <button wx:if="{{canTour}}" class="btn-primary start-tour" bindtap="startTour">跟随云阙巡游</button>
     <button wx:else class="btn-ghost start-tour" disabled>云阙剧场即将上线，敬请期待</button>
 
     <view class="related">
-      <text class="title-h2">相关文创</text>
+      <view class="sec-title">相关文创</view>
       <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="rel-scroll">
         <view class="rel-item" wx:for="{{relatedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="goGoods">
           <view class="rel-cover">

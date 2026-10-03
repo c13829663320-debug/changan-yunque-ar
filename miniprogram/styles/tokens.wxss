@@ -40,7 +40,15 @@ page {
   --radius-lg: 24rpx;
   --radius: 16rpx;
   --radius-sm: 10rpx;
+  --radius-pill: 999rpx;
   --space: 24rpx;
+  --space-xs: 8rpx;
+  --space-sm: 12rpx;
+  --space-lg: 32rpx;
+
+  /* 渐变（全局复用，保持主按钮/标签/强调色一致；纯新增，不改动既有变量） */
+  --grad-cinnabar: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  --grad-gold: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 90%);
 
   /* 阴影 · 克制 */
   --shadow: 0 8rpx 30rpx rgba(90, 74, 50, 0.08);

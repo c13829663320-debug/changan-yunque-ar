@@ -151,12 +151,6 @@
   12% { opacity: 0.7; } 85% { opacity: 0.5; }
   100% { transform: translateY(110vh) rotate(280deg); opacity: 0; }
 }
-.yunque-ring {
-  position: absolute; inset: -14rpx; border-radius: 50%;
-  border: 2rpx dashed rgba(184,150,86,0.55);
-  animation: ringSpin 18s linear infinite;
-}
-@keyframes ringSpin { to { transform: rotate(360deg); } }
 
 /* 分级入场（hero entered 后，后续兄弟依次淡入） */
 .rise { opacity: 0; transform: translateY(26rpx); transition: opacity .7s ease, transform .7s ease; }

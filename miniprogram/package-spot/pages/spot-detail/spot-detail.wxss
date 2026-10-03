@@ -9,9 +9,28 @@
 .hero-tags { display: flex; flex-wrap: wrap; gap: 10rpx; }
 
 .body { padding-top: 24rpx; }
-.para { display: block; margin-top: 14rpx; }
 
-.timeline { margin-top: 18rpx; }
+/* 统一卡片章节标题：朱砂渐变小签条 + 一致间距，四卡片观感统一 */
+.sec-title {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 2rpx;
+  margin-bottom: 18rpx;
+}
+.sec-title::before {
+  content: '';
+  width: 8rpx;
+  height: 30rpx;
+  border-radius: 4rpx;
+  background: linear-gradient(180deg, var(--cinnabar), var(--ochre-deep));
+  margin-right: 14rpx;
+}
+.para { display: block; margin-top: 10rpx; }
+
+.timeline { margin-top: 0; }
 .tl-item { position: relative; padding-left: 36rpx; padding-bottom: 26rpx; }
 .tl-item:not(:last-child)::before { content:''; position:absolute; left:9rpx; top:18rpx; bottom:0; width:2rpx; background:var(--line); }
 .tl-dot { position:absolute; left:4rpx; top:10rpx; width:14rpx; height:14rpx; border-radius:50%; background:var(--dark-gold-soft); }
@@ -20,13 +39,16 @@
 .tl-desc { font-size: var(--fs-small); color: var(--ink-muted); line-height:1.6; }
 
 .relic { padding: 18rpx 0; border-bottom: 1rpx solid var(--line); }
+.relic:first-child { padding-top: 2rpx; }
 .relic:last-child { border-bottom:none; }
 .relic-name { font-size: var(--fs-body); color: var(--ink); font-weight:600; display:block; }
 .relic-desc { font-size: var(--fs-small); color: var(--ink-muted); line-height:1.6; margin-top:6rpx; display:block; }
+.info-block { margin-top: 2rpx; }
 .info-line { font-size: var(--fs-small); color: var(--ink-soft); line-height:1.8; display:block; }
 
 .start-tour { margin: 8rpx 0 24rpx; }
-.rel-scroll { white-space:nowrap; margin-top:16rpx; }
+.related { margin-top: 8rpx; }
+.rel-scroll { white-space:nowrap; margin-top:0; }
 .rel-item { display:inline-flex; flex-direction:column; width:200rpx; margin-right:16rpx; vertical-align:top; }
 .rel-cover { height:200rpx; border-radius:var(--radius); background:linear-gradient(160deg,#ece1cd,#e0d2b8); display:flex; align-items:center; justify-content:center; margin-bottom:10rpx; }
 .rel-cover text { font-size:var(--fs-mini); color:var(--dark-gold); }
@@ -47,10 +69,9 @@
 
 .ov-img, .tl-banner {
   width: 100%; display: block; border-radius: var(--radius);
-  margin: 16rpx 0 4rpx; border: 1rpx solid var(--line);
+  margin: 0 0 8rpx; border: 1rpx solid var(--line);
   box-shadow: 0 6rpx 20rpx rgba(70,62,54,0.10);
 }
-.tl-banner { margin-top: 4rpx; }
 
 .relic-img {
   width: 100%; display: block; border-radius: var(--radius);

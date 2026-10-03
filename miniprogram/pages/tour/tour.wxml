@@ -4,12 +4,28 @@
     <view class="row-between head-row">
       <view class="head-title">
         <text class="title-h2">云阙AR巡游</text>
-        <text class="head-sub">大明宫 · 七阙长卷</text>
+        <text class="head-sub">{{headSub}}</text>
       </view>
       <view class="seg-group">
         <view class="seg {{mode==='cloud'?'on':''}}" data-mode="cloud" bindtap="switchMode">云游</view>
         <view class="seg {{mode==='onsite'?'on':''}}" data-mode="onsite" bindtap="switchMode">现场</view>
       </view>
+    </view>
+
+    <!-- 卷首景点切换：仅列已上线景点；多景点时出现，单景点时自隐 -->
+    <view class="spot-switch" wx:if="{{spots.length > 1}}">
+      <view class="spot-switch-inner">
+        <view
+          class="spot-tab {{spotId===item.id?'on':''}}"
+          wx:for="{{spots}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="switchSpot"
+          hover-class="spot-tab-hover"
+          hover-stay-time="80"
+        >{{item.shortName}}</view>
+      </view>
+      <view class="spot-switch-line"></view>
     </view>
 
     <!-- 龙鳞七片 -->
@@ -71,7 +87,7 @@
     <view class="empty" wx:if="{{scenes.length === 0}}">
       <view class="empty-seal"></view>
       <text class="empty-title">长卷待展</text>
-      <text class="empty-desc">七阙画卷正在缓缓铺陈，请稍候再回。</text>
+      <text class="empty-desc">{{spotName}}的{{total}}阙画卷正在缓缓铺陈，敬请期待。</text>
     </view>
 
     <view class="scroll-rod bottom"><view class="rod-cap left"></view><view class="rod-cap right"></view></view>
