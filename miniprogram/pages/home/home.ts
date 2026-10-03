@@ -45,13 +45,10 @@ Page({
     wx.switchTab({ url: '/pages/tour/tour' });
   },
 
-  /** 现场巡游：切到巡游页并提示现场模式 */
+  /** 现场巡游：打开 AR 扫描识别页（扫描景点/物品 → 云阙讲解） */
   onSiteTour() {
-    wx.switchTab({
-      url: '/pages/tour/tour',
-      success: () => {
-        wx.showToast({ title: '请在大明宫现场开启AR', icon: 'none' });
-      },
+    wx.navigateTo({
+      url: '/package-tour/pages/ar-camera/ar-camera',
     });
   },
 

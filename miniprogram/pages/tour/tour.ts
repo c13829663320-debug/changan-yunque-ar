@@ -104,9 +104,11 @@ Page({
 
   enterScene(id: string) {
     getProgressStore().setCurrent(id);
-    wx.navigateTo({
-      url: `/package-tour/pages/scene/scene?id=${id}&mode=${this.data.mode}`,
-    });
+    const url =
+      this.data.mode === 'onsite'
+        ? `/package-tour/pages/ar-camera/ar-camera?id=${id}`
+        : `/package-tour/pages/scene/scene?id=${id}&mode=cloud`;
+    wx.navigateTo({ url });
   },
 
   onShareAppMessage() {

@@ -1,75 +1,101 @@
 <view class="ar-cam">
   <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
 
-  <!-- 顶部：现场 AR 标题与引导 -->
+  <!-- 顶部：现场 AR 标题 -->
   <view class="cam-top">
-    <view class="top-row">
-      <text class="cam-kicker">现场 AR</text>
-      <text class="cam-title">{{sceneName}}</text>
-    </view>
-    <text class="cam-tip">对准点位解说牌 / 识别图，或进入触发半径</text>
+    <text class="cam-kicker">现场 AR · 云阙识别</text>
+    <text class="cam-title">{{sceneName}}</text>
   </view>
 
-  <!-- 识别 / 方位叠加：动态复原视频（无 3D 以视频替代） -->
-  <view class="cam-overlay" wx:if="{{detected}}">
-    <view class="ov-frame">
-      <video
-        wx:if="{{restoreVideo}}"
-        class="ov-restore"
-        src="{{restoreVideo}}"
-        poster="{{scene.poster}}"
-        autoplay
-        loop
-        muted
-        controls="{{false}}"
-        show-center-play-btn="{{false}}"
-        show-play-btn="{{false}}"
-        show-fullscreen-btn="{{false}}"
-        enable-progress-gesture="{{false}}"
-        object-fit="cover"
-      ></video>
-      <view wx:else class="overlay-palace">
-        <view class="ov-roof"></view>
-        <view class="ov-body"></view>
-      </view>
-      <view class="ov-chip">
-        <view class="ov-dot"></view>
-        <text>动态复原</text>
-      </view>
-    </view>
-    <view class="ov-caption">
-      <text class="ov-name">{{sceneName}} · AR 复原</text>
-      <text class="ov-credit">{{creditNote}}</text>
-    </view>
-  </view>
-
-  <!-- 未识别：取景框 + 轻柔扫描线 -->
-  <view class="reticle" wx:else>
+  <!-- 扫描 / 识别取景框 -->
+  <view class="reticle {{phase === 'recognizing' ? 'busy' : ''}}" wx:if="{{phase !== 'briefing'}}">
     <view class="reticle-corner tl"></view>
     <view class="reticle-corner tr"></view>
     <view class="reticle-corner bl"></view>
     <view class="reticle-corner br"></view>
-    <view class="scan-line"></view>
+    <view class="scan-line" wx:if="{{phase === 'scanning'}}"></view>
+    <view class="reticle-spin" wx:if="{{phase === 'recognizing'}}"></view>
     <view class="reticle-hint">
       <view class="reticle-pulse"></view>
-      <text>正在识别解说牌 / 识别图</text>
+      <text>{{phase === 'recognizing' ? '正在识别图像特征…' : '对准景点 / 物品'}}</text>
     </view>
   </view>
 
-  <view class="cam-bottom">
-    <view class="loc-row">
-      <view class="loc-chip" wx:if="{{distance}}">
-        <text class="loc-glyph">◉</text>
-        <text class="loc-text">{{distance}}</text>
+  <!-- 云阙 AR 讲解弹层 -->
+  <view class="brief {{phase === 'briefing' ? 'show' : ''}}" wx:if="{{phase === 'briefing'}}">
+    <scroll-view scroll-y class="brief-scroll" enhanced show-scrollbar="{{false}}">
+      <!-- 云阙登场 -->
+      <view class="yq-head">
+        <image class="yq-avatar" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image>
+        <view class="yq-meta">
+          <text class="yq-name">云阙</text>
+          <text class="yq-role">盛唐走龙 · 为你讲解</text>
+        </view>
+        <view class="yq-badge">AR</view>
       </view>
-      <view class="loc-chip" wx:if="{{heading}}">
-        <text class="loc-glyph">✥</text>
-        <text class="loc-text">{{heading}}</text>
+
+      <!-- AR 动态复原 -->
+      <view class="restore-box">
+        <video
+          class="restore-video"
+          src="{{restoreVideo}}"
+          poster="{{poster}}"
+          autoplay
+          loop
+          muted
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+          show-play-btn="{{false}}"
+          show-fullscreen-btn="{{false}}"
+          enable-progress-gesture="{{false}}"
+          object-fit="cover"
+        ></video>
+        <view class="restore-chip"><text class="restore-dot"></text><text>AR 动态复原</text></view>
       </view>
+
+      <!-- 云阙讲解词 -->
+      <view class="lines">
+        <view class="line" wx:for="{{yunqueLines}}" wx:key="text">
+          <text class="line-text">{{item.text}}</text>
+        </view>
+      </view>
+
+      <!-- 历史背景 -->
+      <view class="intro-card">
+        <text class="block-title">历史背景</text>
+        <text class="intro-text">{{intro}}</text>
+      </view>
+
+      <!-- 可溯源史料卡 -->
+      <view class="source-toggle" bindtap="onToggleSource">
+        <text class="source-toggle-label">可溯源史料卡</text>
+        <text class="source-arrow">{{showSource ? '收起' : '展开'}} ›</text>
+      </view>
+      <view class="source-card" wx:if="{{showSource}}">
+        <text class="sc-title">{{sourceCard.title}}</text>
+        <view class="sc-work" wx:for="{{sourceCard.works}}" wx:key="name">
+          <text class="sc-work-name">《{{item.name}}》</text>
+          <text wx:if="{{item.quote}}" class="sc-quote">{{item.quote}}</text>
+        </view>
+        <text class="sc-note">{{sourceCard.note}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- 底部操作 -->
+    <view class="brief-actions">
+      <button class="act-ghost" bindtap="onRescan">重扫</button>
+      <button class="act-collect {{collected ? 'done' : ''}}" bindtap="onCollect">
+        {{collected ? '已集龙鳞' : '收集「' + scaleName + '」'}}
+      </button>
+      <button class="act-primary" bindtap="onNext">下一景点 ›</button>
     </view>
-    <button class="btn-primary detect-btn" bindtap="onDetect">
-      {{detected ? '重新识别' : '识别图中复原'}}
+  </view>
+
+  <!-- 扫描底部 -->
+  <view class="cam-bottom" wx:if="{{phase !== 'briefing'}}">
+    <text class="cam-status">{{statusText}}</text>
+    <button class="btn-primary detect-btn" bindtap="onManualDetect">
+      {{phase === 'recognizing' ? '识别中…' : '对准后识别'}}
     </button>
-    <text class="vk-status">{{vkStatus}}</text>
   </view>
 </view>
