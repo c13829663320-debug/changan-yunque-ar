@@ -32,84 +32,123 @@
     <text class="restore-tag">复原画面</text>
   </view>
 
-  <!-- 集鳞仪式动画 -->
+  <!-- 集鳞仪式动画：dragon-scale got 态 + 光晕/放射光芒/上升珠屑 -->
   <view class="scale-fx" wx:if="{{collectingScale}}">
     <view class="scale-fx-glow"></view>
     <view class="scale-fx-rays"></view>
     <view class="scale-fx-scale">
-      <text class="sfx-word">{{scene.scaleName}}</text>
+      <view class="sfx-halo"></view>
+      <view class="sfx-hero">
+        <dragon-scale got size="lg" enamel="{{scaleEnamel}}"></dragon-scale>
+      </view>
+      <text class="sfx-caption">{{scene.scaleName}}</text>
     </view>
     <view class="scale-fx-particles">
       <view class="sfx-pt" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" style="--i:{{index}}"></view>
     </view>
   </view>
 
-  <!-- AR 复原层 -->
+  <!-- AR 复原层：鎏金画框/壁龛 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
-      <view wx:if="{{scene.restoreVideo}}" class="ar-media">
-        <image class="ar-fallback" src="{{scene.poster}}" mode="aspectFill"></image>
-        <video
-          wx:if="{{!isDevtools}}"
-          id="arVideo"
-          class="ar-restore {{arReady ? 'is-playing' : ''}}"
-          src="{{scene.restoreVideo}}"
-          autoplay
-          loop
-          muted
-          controls="{{false}}"
-          show-center-play-btn="{{false}}"
-          show-play-btn="{{false}}"
-          show-fullscreen-btn="{{false}}"
-          enable-progress-gesture="{{false}}"
-          object-fit="cover"
-          bindloadedmetadata="onArMeta"
-          bindtimeupdate="onArTimeUpdate"
-          bindplay="onArPlay"
-          binderror="onArError"
-        ></video>
+      <view class="ar-inner">
+        <view class="ar-corner ar-corner-tl"></view>
+        <view class="ar-corner ar-corner-tr"></view>
+        <view class="ar-corner ar-corner-bl"></view>
+        <view class="ar-corner ar-corner-br"></view>
+        <view class="ar-plaque">
+          <text class="ar-title">AR 复原 · {{scene.name}}</text>
+        </view>
+        <view wx:if="{{scene.restoreVideo}}" class="ar-media">
+          <image class="ar-fallback" src="{{scene.poster}}" mode="aspectFill"></image>
+          <video
+            wx:if="{{!isDevtools}}"
+            id="arVideo"
+            class="ar-restore {{arReady ? 'is-playing' : ''}}"
+            src="{{scene.restoreVideo}}"
+            autoplay
+            loop
+            muted
+            controls="{{false}}"
+            show-center-play-btn="{{false}}"
+            show-play-btn="{{false}}"
+            show-fullscreen-btn="{{false}}"
+            enable-progress-gesture="{{false}}"
+            object-fit="cover"
+            bindloadedmetadata="onArMeta"
+            bindtimeupdate="onArTimeUpdate"
+            bindplay="onArPlay"
+            binderror="onArError"
+          ></video>
+        </view>
+        <view wx:else class="ar-palace">
+          <view class="ar-roof"></view>
+          <view class="ar-body"></view>
+          <view class="ar-base"></view>
+        </view>
+        <text class="ar-tip">{{arTip}}</text>
+        <button class="btn-primary ar-continue" catchtap="closeAR">继续剧情</button>
       </view>
-      <view wx:else class="ar-palace">
-        <view class="ar-roof"></view>
-        <view class="ar-body"></view>
-        <view class="ar-base"></view>
-      </view>
-      <text class="ar-title">AR 复原 · {{scene.name}}</text>
-      <text class="ar-tip">{{arTip}}</text>
-      <button class="btn-primary ar-continue" catchtap="closeAR">继续剧情</button>
     </view>
   </view>
 
-  <!-- 史料卡 -->
+  <!-- 史料卡：卷轴碑帖质感 -->
   <view class="source-mask" wx:if="{{showSource}}" bindtap="closeSource">
     <view class="source-panel" catchtap="noop">
+      <view class="scroll-rod">
+        <view class="rod-knob"></view>
+        <view class="rod-bar"></view>
+        <view class="rod-knob"></view>
+      </view>
       <text class="s-title">{{scene.sourceCard.title}}</text>
       <view class="s-work" wx:for="{{scene.sourceCard.works}}" wx:key="name">
         <text class="work-name">{{item.name}}</text>
         <text class="work-quote" wx:if="{{item.quote}}">「{{item.quote}}」</text>
       </view>
       <text class="s-note">{{scene.sourceCard.note}}</text>
+      <view class="s-seal"><line-icon name="stamp" size="32" theme="light"></line-icon></view>
       <button class="btn-ghost s-close" catchtap="closeSource">我知道了</button>
     </view>
   </view>
 
-  <!-- 分支反馈 -->
+  <!-- 分支反馈：精致小卡 -->
   <view class="feedback-bar" wx:if="{{showFeedback}}">
-    <text class="fb-name">{{feedback.actorName || ''}}</text>
+    <view class="fb-head">
+      <view class="fb-diamond"></view>
+      <text class="fb-name">{{feedback.actorName || ''}}</text>
+    </view>
     <text class="fb-text">{{feedback.text}}</text>
     <button class="btn-primary fb-continue" bindtap="dismissFeedback">继续</button>
   </view>
 
-  <!-- 结算：统一电影感弹窗 + 龙鳞仪式（多景点通用） -->
+  <!-- 结算：统一电影感弹窗 + dragon-scale got 态鎏金 panel -->
   <view class="end-mask" wx:if="{{finished}}">
     <view class="end-panel">
-      <text class="end-spot">{{spotName}} · {{scene.name}}</text>
-      <view class="scale-circle">
-        <view class="scale-halo"></view>
-        <text class="scale-word">{{scene.scaleName}}</text>
+      <view class="end-crest">
+        <view class="crest-line"></view>
+        <view class="crest-diamond"></view>
+        <view class="crest-line"></view>
       </view>
+      <text class="end-spot">{{spotName}} · {{scene.name}}</text>
+
+      <view class="scale-stage">
+        <view class="scale-rays"></view>
+        <view class="scale-halo"></view>
+        <view class="scale-hero">
+          <dragon-scale got size="lg" enamel="{{scaleEnamel}}"></dragon-scale>
+        </view>
+      </view>
+
+      <text class="end-scale-name">{{scene.scaleName}}</text>
       <text class="end-title">你获得一片龙鳞</text>
-      <text class="end-sub">本景点龙鳞 {{scaleCount}} / {{scaleTotal}}</text>
+
+      <view class="end-progress">
+        <view class="ep-track">
+          <view class="ep-fill" style="width: {{scaleTotal ? scaleCount / scaleTotal * 100 : 0}}%;"></view>
+        </view>
+        <text class="end-sub">本景点龙鳞 {{scaleCount}} / {{scaleTotal}}</text>
+      </view>
+
       <button class="btn-primary" bindtap="goNext" wx:if="{{hasNext}}">前往下一点位</button>
       <!-- 终章（当前景点最后一点）结算后：生成祈愿分享卡入口；泛化为 !hasNext，多景点通用 -->
       <button
@@ -138,7 +177,10 @@
       <view class="voice-controls">
         <view class="vc-btn" wx:if="{{node.audio}}" bindtap="replayAudio">重播</view>
         <view class="vc-btn" bindtap="toggleMute">{{voiceMuted ? '开声' : '静音'}}</view>
-        <view class="source-mini" bindtap="openSource">史料卡</view>
+        <view class="source-mini" bindtap="openSource">
+          <line-icon name="source" size="26"></line-icon>
+          <text class="source-mini-text">史料卡</text>
+        </view>
       </view>
     </view>
     <text class="d-text">{{node.text}}</text>

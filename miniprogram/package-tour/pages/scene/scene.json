@@ -3,6 +3,8 @@
   "navigationBarBackgroundColor": "#F1E9D8",
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "share-card": "/package-tour/components/share-card/share-card"
+    "share-card": "/package-tour/components/share-card/share-card",
+    "dragon-scale": "/components/dragon-scale/dragon-scale",
+    "line-icon": "/components/line-icon/line-icon"
   }
 }

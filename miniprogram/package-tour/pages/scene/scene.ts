@@ -5,6 +5,8 @@ import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scen
 
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 const MUTED_KEY = 'changan_yunque_muted';
+/** 珐琅五色按点位顺序轮换（仅展示字段，不参与逻辑/数据流） */
+const ENAMELS = ['celadon', 'azurite', 'cinnabar', 'jade', 'ivory'];
 /** 复原视频“确有帧”看门狗：真机 timeupdate 未按时到达时始终保留 poster 兜底 */
 let stageWatchdog: ReturnType<typeof setTimeout> | null = null;
 let arWatchdog: ReturnType<typeof setTimeout> | null = null;
@@ -39,6 +41,8 @@ Page({
     // 配音开关与集鳞仪式动画
     voiceMuted: false,
     collectingScale: false,
+    /** 本点位龙鳞珐琅色（展示用，由 scene.index 映射，WXML 不取模） */
+    scaleEnamel: 'celadon' as string,
     // 复原视频是否真正开始播放（用于隐藏兜底画面，杜绝黑屏）
     stageReady: false,
     arReady: false,
@@ -65,8 +69,10 @@ Page({
     // 龙鳞分母 = 当前景点的点位(场景)数（每个场景集一片鳞），不写死、支持多景点扩展
     const scaleTotal = getTotalCount(scene.spotId);
     const spotName = getSpot(scene.spotId)?.name || '长安';
+    // 展示字段：珐琅色按点位顺序轮换，供结算弹窗与集鳞仪式复用同一 dragon-scale got 态
+    const scaleEnamel = ENAMELS[(scene.index - 1) % ENAMELS.length];
     this.setData(
-      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, spotName, voiceMuted, isDevtools },
+      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, spotName, voiceMuted, isDevtools, scaleEnamel },
       () => {
         this.startStagePlayback();
       }
