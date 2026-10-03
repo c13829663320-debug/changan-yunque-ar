@@ -4,6 +4,7 @@ import { getScenesBySpot } from '../../data/repositories/sceneRepo';
 import { getRelicsBySpot } from '../../data/repositories/relicRepo';
 import { Spot } from '../../data/types/spot';
 import { audio } from '../../utils/audio-manager';
+import { listAchievements, currentTitle, Achievement } from '../../utils/achievement';
 
 /** 五色珐琅：鳞片按单元在 celadon/azurite/cinnabar/jade/ivory 间依次循环 */
 const ENAMELS = ['celadon', 'azurite', 'cinnabar', 'jade', 'ivory'];
@@ -53,6 +54,11 @@ Page({
     relicImgError: {} as Record<string, boolean>,
     /** 全局背景乐/音效开关（与对话配音静音相互独立） */
     soundOn: true,
+    /** 旅人称号（低调展示：当前最高称号 + 全称号进度） */
+    titleList: [] as Achievement[],
+    currentTitle: '',
+    titleGotCount: 0,
+    titleTotal: 0,
   },
 
   onLoad() {
@@ -67,6 +73,8 @@ Page({
   /** 读取真实进度，驱动分组龙鳞墙、文物图鉴与景点到访态（纯展示计算） */
   syncProgress() {
     const store = getProgressStore();
+    // 旅人称号：数据驱动只读进度，未解锁=灰玉、已解锁=鎏金
+    const titleList = listAchievements();
 
     // 龙鳞墙按景点分组：每景点一组，组内每场景一片鳞；五色珐琅按全局顺序循环
     let enamelIdx = 0;
@@ -125,6 +133,10 @@ Page({
       spotCards,
       relicCells,
       relicTotal: relicCells.length,
+      titleList,
+      currentTitle: currentTitle(),
+      titleGotCount: titleList.filter((a) => a.got).length,
+      titleTotal: titleList.length,
     });
   },
 
@@ -133,6 +145,17 @@ Page({
     const id = (e.currentTarget.dataset as { id: string }).id;
     if (!id) return;
     this.setData({ [`relicImgError.${id}`]: true });
+  },
+
+  /** 点称号徽章：已解锁报喜 / 未解锁轻提示解锁条件（不跳页、不侵入） */
+  onTitleTap(e: WechatMiniprogram.TouchEvent) {
+    const i = Number((e.currentTarget.dataset as { i: number }).i);
+    const a = this.data.titleList[i];
+    if (!a) return;
+    wx.showToast({
+      title: a.got ? `已获 · ${a.title}` : `${a.desc}（${a.cur}/${a.total}）`,
+      icon: 'none',
+    });
   },
 
   /** 龙鳞谱 / 通关文牒详情（新页，query.type 区分） */

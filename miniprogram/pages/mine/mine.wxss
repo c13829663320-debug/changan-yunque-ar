@@ -337,3 +337,40 @@
   align-items: center;
   justify-content: center;
 }
+
+/* —— 旅人称号（低调小卡：复用 tokens，已得鎏金 / 未得灰玉） —— */
+.title-card { padding: 26rpx 24rpx; margin-bottom: 24rpx; }
+.current-title {
+  display: block;
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  letter-spacing: 3rpx;
+  color: var(--dark-gold);
+  text-shadow: 0 1rpx 0 rgba(255, 249, 230, 0.9), 0 2rpx 6rpx rgba(168, 137, 58, 0.22);
+  margin: 2rpx 0 18rpx;
+}
+.current-title.none {
+  color: var(--ink-muted);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  letter-spacing: 1rpx;
+  text-shadow: none;
+}
+.title-badges { display: flex; flex-wrap: wrap; gap: 14rpx; }
+.tb {
+  font-size: var(--fs-small);
+  letter-spacing: 1rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line);
+  background: var(--bg-card);
+  color: var(--ink-muted);
+}
+/* 已解锁：鎏金描边 + 象牙底，与集章 visited 标签同语汇 */
+.tb.on {
+  color: var(--dark-gold);
+  border-color: var(--dark-gold-soft);
+  background: var(--ivory);
+}
+.tb.off { opacity: 0.85; }
+.tb:active { transform: scale(0.96); }

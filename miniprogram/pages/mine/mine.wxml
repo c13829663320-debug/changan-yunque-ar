@@ -26,6 +26,33 @@
       </view>
     </view>
 
+    <!-- 旅人称号（低调：当前最高称号 + 全称号进度，已得鎏金 / 未得灰玉） -->
+    <view class="card title-card rise" style="animation-delay:.05s">
+      <view class="card-head">
+        <view class="card-head-titles">
+          <text class="title-h2">旅人称号</text>
+          <text class="card-sub">巡游至此，云阙记你的名</text>
+        </view>
+        <view class="head-progress">
+          <text class="hp-got">{{titleGotCount}}</text>
+          <text class="hp-sep">/</text>
+          <text class="hp-all">{{titleTotal}}</text>
+        </view>
+      </view>
+      <text class="current-title" wx:if="{{currentTitle}}">「{{currentTitle}}」</text>
+      <text class="current-title none" wx:else>尚未立号 · 待你拾起第一片龙鳞</text>
+      <view class="title-badges">
+        <view
+          class="tb {{item.got ? 'on' : 'off'}}"
+          wx:for="{{titleList}}"
+          wx:key="id"
+          wx:for-index="i"
+          data-i="{{i}}"
+          bindtap="onTitleTap"
+        >{{item.title}}</view>
+      </view>
+    </view>
+
     <!-- 龙鳞集章墙（按景点分组） -->
     <view class="card scale-card rise" style="animation-delay:.08s">
       <view class="card-head">

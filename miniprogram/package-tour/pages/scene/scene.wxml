@@ -149,6 +149,15 @@
         <text class="end-sub">本景点龙鳞 {{scaleCount}} / {{scaleTotal}}</text>
       </view>
 
+      <!-- 集齐奖励：首次集齐单景点 / 全部龙鳞时的称号横幅（复用 tokens，不新造分享） -->
+      <view class="reward-banner" wx:if="{{rewardTitle}}">
+        <view class="rb-seal"></view>
+        <view class="rb-texts">
+          <text class="rb-title">称号解锁 · {{rewardTitle}}</text>
+          <text class="rb-desc">{{rewardDesc}}</text>
+        </view>
+      </view>
+
       <button class="btn-primary" bindtap="goNext" wx:if="{{hasNext}}">前往下一点位</button>
       <!-- 终章（当前景点最后一点）结算后：生成祈愿分享卡入口；泛化为 !hasNext，多景点通用 -->
       <button

@@ -1,4 +1,4 @@
-import { ScenePoint } from '../../types/scene';
+import { ScenePoint, DialogNode } from '../../types/scene';
 
 /**
  * 点位 7 · 玄武门（终章 · 特殊节点）
@@ -135,3 +135,27 @@ const xuanwumen: ScenePoint = {
 };
 
 export default xuanwumen;
+
+/**
+ * 隐藏身世独白（云阙彩蛋）
+ *
+ * 触发：仅当旅人已集齐三城全部龙鳞（成就「长安云阙使」）时，由 scene 页在终章
+ * 「接过龙鳞」(collect_scale) 之前插入这两节点。承接 xwm-9/10 云阙关于「另有
+ * 别鳞散落城中」的伏笔——当旅人真的把它们一一拾回，云阙第一次「听见」它们彼此应和。
+ *
+ * 设计约束：纯独白、无选项、无动作、无配音；只留白暗示云与鳞、云阙与长安的羁绊，
+ * 不写成已坐实的身世，不碰任何史实判定与集鳞逻辑。
+ */
+export const xuanwumenHidden: DialogNode[] = [
+  {
+    id: 'xwm-h1',
+    actor: 'yunque',
+    text: '（忽然顿住，掌心七鳞之外，像又浮起几缕熟悉的微光——慈恩寺塔影下的、青龙寺晚钟里的）……这些鳞，我原以为散得很远很远，远到我这一生都记不起来处。',
+  },
+  {
+    id: 'xwm-h2',
+    actor: 'yunque',
+    text: '（低头看着你身上那一串，声音轻得像怕吹散了）原来，都被你一路捡回来了。风一吹，鳞与鳞之间是会应和的……如今它们在你身上一齐响着。那我大概，也不算独自一人落在这座城里了。',
+  },
+];
+

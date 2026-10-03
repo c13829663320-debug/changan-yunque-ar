@@ -1,8 +1,10 @@
 import { getScene, getNextScene, getTotalCount, getScenesBySpot } from '../../../data/repositories/sceneRepo';
-import { getSpot } from '../../../data/repositories/spotRepo';
+import { getSpot, getSpots } from '../../../data/repositories/spotRepo';
 import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scene';
 import { audio } from '../../../utils/audio-manager';
+import { spotCompletionTitle, hasAllScales, GRAND_TITLE } from '../../../utils/achievement';
+import { xuanwumenHidden } from '../../../data/scenes/daminggong/xuanwumen';
 
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 const MUTED_KEY = 'changan_yunque_muted';
@@ -11,6 +13,25 @@ const ENAMELS = ['celadon', 'azurite', 'cinnabar', 'jade', 'ivory'];
 /** 复原视频“确有帧”看门狗：真机 timeupdate 未按时到达时始终保留 poster 兜底 */
 let stageWatchdog: ReturnType<typeof setTimeout> | null = null;
 let arWatchdog: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * 云阙身世彩蛋：进入玄武门终章，且旅人已把「别城」（大雁塔、青龙寺）的鳞片
+ * 悉数拾回时，在「接过龙鳞」节点前插入两段云阙独白。不满足条件则原样返回
+ * （纯追加、条件触发，不改判定与集鳞逻辑；归愿鳞此时尚未领取，故不以全 17 鳞为条件）。
+ */
+function withHiddenEasterEgg(scene: ScenePoint): ScenePoint {
+  if (scene.id !== 'xuanwumen') return scene;
+  const store = getProgressStore();
+  const otherSpotsDone = getSpots()
+    .filter((sp) => sp.id !== scene.spotId && getScenesBySpot(sp.id).length > 0)
+    .every((sp) => store.getScaleCount(sp.id) >= getScenesBySpot(sp.id).length);
+  if (!otherSpotsDone) return scene;
+  const idx = scene.dialogs.findIndex((n) => n.action?.type === 'collect_scale');
+  if (idx < 0) return { ...scene, dialogs: [...scene.dialogs, ...xuanwumenHidden] };
+  const before = scene.dialogs.slice(0, idx);
+  const after = scene.dialogs.slice(idx);
+  return { ...scene, dialogs: [...before, ...xuanwumenHidden, ...after] };
+}
 
 Page({
   data: {
@@ -39,6 +60,9 @@ Page({
     showShareCard: false,
     wishText: '',
     shareImagePath: '',
+    // 集齐奖励轻提示（首次集齐单景点 / 全部龙鳞时在结算面板展示，复用既有分享卡）
+    rewardTitle: '',
+    rewardDesc: '',
     // 配音开关与集鳞仪式动画
     voiceMuted: false,
     collectingScale: false,
@@ -60,6 +84,9 @@ Page({
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
+    // 隐藏彩蛋：仅玄武门终章且已集齐三城全部龙鳞时，在「接过龙鳞」前插入云阙身世独白
+    // （纯追加、条件触发，不改主流程数据流与判定；未满足条件时 scene 原样使用）
+    const activeScene = withHiddenEasterEgg(scene);
     let isDevtools = false;
     try {
       isDevtools = wx.getSystemInfoSync().platform === 'devtools';
@@ -68,12 +95,12 @@ Page({
     }
     const voiceMuted = wx.getStorageSync(MUTED_KEY) === true;
     // 龙鳞分母 = 当前景点的点位(场景)数（每个场景集一片鳞），不写死、支持多景点扩展
-    const scaleTotal = getTotalCount(scene.spotId);
-    const spotName = getSpot(scene.spotId)?.name || '长安';
+    const scaleTotal = getTotalCount(activeScene.spotId);
+    const spotName = getSpot(activeScene.spotId)?.name || '长安';
     // 展示字段：珐琅色按点位顺序轮换，供结算弹窗与集鳞仪式复用同一 dragon-scale got 态
-    const scaleEnamel = ENAMELS[(scene.index - 1) % ENAMELS.length];
+    const scaleEnamel = ENAMELS[(activeScene.index - 1) % ENAMELS.length];
     this.setData(
-      { mode, scene, dialogTotal: scene.dialogs.length, scaleTotal, spotName, voiceMuted, isDevtools, scaleEnamel },
+      { mode, scene: activeScene, dialogTotal: activeScene.dialogs.length, scaleTotal, spotName, voiceMuted, isDevtools, scaleEnamel },
       () => {
         this.startStagePlayback();
       }
@@ -348,13 +375,30 @@ Page({
 
   finishScene() {
     const store = getProgressStore();
+    // 仅「首次」完成本点位才判定集齐奖励，重进已通关点位不重复弹窗
+    const isNew = !store.isCompleted(this.data.scene.id);
     store.completeScene(this.data.scene);
     const next = getNextScene(this.data.scene.id);
     // 结算龙鳞计数按「当前景点」统计，与分母 scaleTotal(本景点) 一致，跨景点不错位
     const spotDone = getScenesBySpot(this.data.scene.spotId).filter((s) =>
       store.isCompleted(s.id)
     ).length;
-    this.setData({ finished: true, scaleCount: spotDone, hasNext: !!next });
+
+    // 集齐奖励（轻提示，不新造分享逻辑；终章 !hasNext 时既有「生成祈愿分享卡」可复用）
+    let rewardTitle = '';
+    let rewardDesc = '';
+    if (isNew) {
+      const spotTitle = spotCompletionTitle(this.data.scene.spotId);
+      if (hasAllScales()) {
+        rewardTitle = GRAND_TITLE;
+        rewardDesc = '十七鳞尽集 · 云阙的身世，也在风里应和了';
+      } else if (spotTitle) {
+        rewardTitle = spotTitle;
+        rewardDesc = `已集齐${this.data.spotName}全部龙鳞`;
+      }
+    }
+
+    this.setData({ finished: true, scaleCount: spotDone, hasNext: !!next, rewardTitle, rewardDesc });
   },
 
   goNext() {
