@@ -73,6 +73,8 @@
 }
 .stat-num { font-size: 44rpx; color: var(--dark-gold); font-weight: 600; }
 .stat-label { font-size: var(--fs-small); color: var(--ink-muted); margin-top: 6rpx; }
+.stat:active { transform: scale(0.98); }
+.stat { transition: transform 0.15s ease; }
 
 /* —— 卡片统一头 —— */
 .card-head {
@@ -272,3 +274,43 @@
 }
 .album-mini-mark { font-size: 26rpx; color: var(--ink-muted); }
 .album-mini-cell.on .album-mini-mark { color: #9e3b2e; font-weight: 600; }
+
+/* —— 龙鳞墙：按景点分组 —— */
+.wall-group { padding-bottom: 20rpx; margin-bottom: 8rpx; border-bottom: 1rpx dashed var(--line); }
+.wall-group:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.wall-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18rpx 0 6rpx;
+}
+.wall-group-head:first-child { margin-top: 0; }
+.wall-group-name {
+  font-size: var(--fs-body);
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 1rpx;
+  padding-left: 16rpx;
+  position: relative;
+}
+.wall-group-name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 24rpx;
+  border-radius: 4rpx;
+  background: linear-gradient(180deg, var(--dark-gold-soft), var(--dark-gold));
+}
+.wall-group-count { font-size: var(--fs-mini); color: var(--ink-muted); }
+/* 已得鳞提质：柔光高光，仍纯 CSS 无图片 */
+.scale-medal.got {
+  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 80%);
+  border: 1rpx solid var(--dark-gold);
+  box-shadow: var(--shadow-deep), inset 0 2rpx 6rpx rgba(255, 248, 224, 0.55);
+}
+.scale-medal.got .scale-core {
+  background: radial-gradient(circle at 35% 30%, #fff6dd 0%, var(--bg-card) 70%);
+}

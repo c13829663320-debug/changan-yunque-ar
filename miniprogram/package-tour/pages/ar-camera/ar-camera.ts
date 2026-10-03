@@ -25,8 +25,11 @@ interface SeqItem {
   id: string;
 }
 
+/** 本次进入的现场景点：从进入场景反推（无 id 时默认大明宫），使大雁塔等多景点序列正确 */
+let activeSpotId = 'daminggong';
+
 /** 演示扫描序列：每个景点后跟其关联文物，景点与文物交替出现 */
-function buildSequence(spotId = 'daminggong'): SeqItem[] {
+function buildSequence(spotId: string = activeSpotId): SeqItem[] {
   const seq: SeqItem[] = [];
   getScenesBySpot(spotId).forEach((s) => {
     seq.push({ kind: 'spot', id: s.id });
@@ -76,6 +79,10 @@ Page({
       isDevtools = false;
     }
     this.setData({ isDevtools });
+
+    // 从进入时的场景 id 反推所属景点（无 id / 找不到时默认大明宫），保证大雁塔现场序列正确
+    const entryScene = query?.id ? getScene(query.id) : undefined;
+    activeSpotId = entryScene?.spotId || 'daminggong';
 
     const seq = buildSequence();
     let startIdx = 0;
@@ -320,9 +327,12 @@ Page({
   /* ---------- 讲解面板操作 ---------- */
   onCollect() {
     if (this.data.targetKind === 'spot' && this.data.scene) {
+      // 现场（真机 LBS/VK 识别、模拟器 demo 自动打卡均走此入口）：收龙鳞 + 盖通关文牒章
+      // 云游 scene 页只调 completeScene，绝不盖章
       getProgressStore().completeScene(this.data.scene);
+      getProgressStore().stampScene(this.data.scene);
       this.setData({ collected: true });
-      wx.showToast({ title: `已集「${this.data.scaleName}」`, icon: 'none' });
+      wx.showToast({ title: `已集「${this.data.scaleName}」· 盖章`, icon: 'none' });
     } else if (this.data.targetKind === 'relic' && this.data.relic) {
       getProgressStore().collectRelic(this.data.relic.id);
       this.setData({ relicInAlbum: true });
