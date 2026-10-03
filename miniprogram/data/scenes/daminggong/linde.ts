@@ -28,12 +28,14 @@ const linde: ScenePoint = {
   dialogs: [
     {
       id: 'ld-1',
+      audio: '/package-tour/assets/audio/ld-1.mp3',
       actor: 'narrator',
       text: '夜色如墨，你随众宾客步入麟德殿。前、中、后三殿相连、层层进深，灯烛通明，丝竹盈耳。',
       action: { type: 'look_around' },
     },
     {
       id: 'ld-2',
+      audio: '/package-tour/assets/audio/ld-2.mp3',
       actor: 'yunque',
       text: '（拽你袖子）天呐，这殿也太阔了！你看殿中间——那是马吗？马怎么上殿了？快，我们往前排挤挤！',
     },
@@ -45,16 +47,19 @@ const linde: ScenePoint = {
     },
     {
       id: 'ld-4',
+      audio: '/package-tour/assets/audio/ld-4.mp3',
       actor: 'narrator',
       text: '你侧目，邻席坐着卷发高鼻、服饰各异的外邦使节，正饶有兴致地打量着殿中百戏。',
     },
     {
       id: 'ld-5',
+      audio: '/package-tour/assets/audio/ld-5.mp3',
       actor: 'narrator',
       text: '阶下百戏散乐杂陈：竿木攀缘、舞旋翻飞、幻术吐火，一片喧腾。鎏金器皿映着烛光，酒香浮动。',
     },
     {
       id: 'ld-6',
+      audio: '/package-tour/assets/audio/ld-6.mp3',
       actor: 'yunque',
       text: '（眼睛不够用）那个翻跟头的！还有喷火的——比前头看过的都热闹！',
     },
@@ -88,33 +93,39 @@ const linde: ScenePoint = {
     },
     {
       id: 'ld-8',
+      audio: '/package-tour/assets/audio/ld-8.mp3',
       actor: 'narrator',
       text: '礼成，鼓乐骤起。数十匹舞马踏着《倾杯乐》的节拍入场，纵横起伏；及至曲终，竟有马儿屈膝跪地，口衔酒杯，向御座敬酒。开启AR复原，可看麟德殿三殿宴饮舞马的盛景。',
       action: { type: 'ar_restore', name: '麟德殿' },
     },
     {
       id: 'ld-9',
+      audio: '/package-tour/assets/audio/ld-9.mp3',
       actor: 'yunque',
       text: '（看呆了，小声）马……马真的会跪着敬酒！比听说的还要灵！',
     },
     {
       id: 'ld-10',
+      audio: '/package-tour/assets/audio/ld-10.mp3',
       actor: 'narrator',
       text: '典仪道：这舞马敬酒不是戏法——盛唐宫中专养舞马，宴则起舞、衔杯上寿。何家村窖藏出土的「鎏金舞马衔杯银壶」，正是它的模样。可点开史料卡一观。',
       action: { type: 'open_source_card' },
     },
     {
       id: 'ld-11',
+      audio: '/package-tour/assets/audio/ld-11.mp3',
       actor: 'narrator',
       text: '你随众举杯，向御座、也向同席的外邦使节致意。酒香混着丝竹，是这一夜最热闹的时候。',
     },
     {
       id: 'ld-12',
+      audio: '/package-tour/assets/audio/ld-12.mp3',
       actor: 'yunque',
       text: '（趴在案上，腮帮子贴着酒杯，满足叹气）嗝……好饱，好热闹呀。',
     },
     {
       id: 'ld-13',
+      audio: '/package-tour/assets/audio/ld-13.mp3',
       actor: 'yunque',
       text: '（迷迷糊糊伸出手，掌心浮起一片金红的鳞）这片「盛宴鳞」给你。你听——散宴了。夜尽了。大明宫的北门玄武门就在前头，我们去那儿吹吹风，醒醒酒。',
       action: { type: 'collect_scale' },

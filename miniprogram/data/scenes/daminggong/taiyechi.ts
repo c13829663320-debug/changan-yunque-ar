@@ -25,12 +25,14 @@ const taiyechi: ScenePoint = {
   dialogs: [
     {
       id: 'tyc-1',
+      audio: '/package-tour/assets/audio/tyc-1.mp3',
       actor: 'narrator',
       text: '暮色四合，你随御舟缓缓划入太液池。水面平得像磨过的玉，岸旁灯烛初上，映出碎金似的光。',
       action: { type: 'look_around' },
     },
     {
       id: 'tyc-2',
+      audio: '/package-tour/assets/audio/tyc-2.mp3',
       actor: 'yunque',
       text: '（扒着船舷）哇——这池子也太大了！水中央那些长着树的小洲，是小岛吗？',
     },
@@ -42,11 +44,13 @@ const taiyechi: ScenePoint = {
     },
     {
       id: 'tyc-4',
+      audio: '/package-tour/assets/audio/tyc-4.mp3',
       actor: 'narrator',
       text: '帝王以一池三山，把海上仙境搬进宫苑。人居长安城里，也仿佛能望见缥缈仙山。',
     },
     {
       id: 'tyc-5',
+      audio: '/package-tour/assets/audio/tyc-5.mp3',
       actor: 'yunque',
       text: '那……哪一座是蓬莱？听说蓬莱最远最险，只有神仙才住得上去。',
     },
@@ -80,38 +84,45 @@ const taiyechi: ScenePoint = {
     },
     {
       id: 'tyc-7',
+      audio: '/package-tour/assets/audio/tyc-7.mp3',
       actor: 'narrator',
       text: '一句对罢，水面忽起薄雾。烟水深处，一座筑着玲珑山亭的岛渐渐清晰——正是蓬莱山。开启AR复原，可看太液池一池三山的完整盛景。',
       action: { type: 'ar_restore', name: '太液池' },
     },
     {
       id: 'tyc-8',
+      audio: '/package-tour/assets/audio/tyc-8.mp3',
       actor: 'yunque',
       text: '（望着复原图，轻声）原来三座山这样遥遥相望……像把一整座仙境，沉沉叠进了这池水里。',
     },
     {
       id: 'tyc-9',
+      audio: '/package-tour/assets/audio/tyc-9.mp3',
       actor: 'narrator',
       text: '贺拾遗闲闲道：这套「一池三山」自秦汉而来，到唐时仍在沿用。可点开史料卡，看看它见载于何书。',
       action: { type: 'open_source_card' },
     },
     {
       id: 'tyc-10',
+      audio: '/package-tour/assets/audio/tyc-10.mp3',
       actor: 'narrator',
       text: '船上笑声渐起，云阙却没跟着笑。她正望着蓬莱山在水中的倒影，出了神。',
     },
     {
       id: 'tyc-11',
+      audio: '/package-tour/assets/audio/tyc-11.mp3',
       actor: 'yunque',
       text: '（声音很轻）……这水现在真清啊，山亭的影子都照得见。我好像见过它另一个样子：也是这片水，却荒了——山平了，灯也一盏不剩。',
     },
     {
       id: 'tyc-12',
+      audio: '/package-tour/assets/audio/tyc-12.mp3',
       actor: 'narrator',
       text: '她没再说下去，只是拢了拢衣袖，像把一段遥远的心事，悄悄放回了水里。',
     },
     {
       id: 'tyc-13',
+      audio: '/package-tour/assets/audio/tyc-13.mp3',
       actor: 'yunque',
       text: '（忽然抬头，掌心浮起一片温润青鳞）不想这些了。这片「池苑鳞」给你——你看，天已经全黑了。前头麟德殿今夜设宴，外邦的客人都到了。快些去，去晚了，舞马就要开场了。',
       action: { type: 'collect_scale' },

@@ -32,12 +32,14 @@ const xuanzheng: ScenePoint = {
   dialogs: [
     {
       id: 'xz-1',
+      audio: '/package-tour/assets/audio/xz-1.mp3',
       actor: 'narrator',
       text: '朔望大朝刚散，宣政殿外廊。晨光斜过廊柱，光禄寺的小吏正把食案一案一案排开，百官三三两两，退到廊下。',
       action: { type: 'look_around' },
     },
     {
       id: 'xz-2',
+      audio: '/package-tour/assets/audio/xz-2.mp3',
       actor: 'yunque',
       text: '（踮脚张望）退朝了……怎么廊下摆了这么多小案子，还放着碗碗盏盏的？这是要做什么呀？',
     },
@@ -49,6 +51,7 @@ const xuanzheng: ScenePoint = {
     },
     {
       id: 'xz-4',
+      audio: '/package-tour/assets/audio/xz-4.mp3',
       actor: 'yunque',
       text: '（扯你袖子，小声）那我们坐哪儿？靠近殿门那几案看着最体面、最热闹……',
       choices: [
@@ -76,6 +79,7 @@ const xuanzheng: ScenePoint = {
     },
     {
       id: 'xz-5',
+      audio: '/package-tour/assets/audio/xz-5.mp3',
       actor: 'narrator',
       text: '食案上不过一碗白饭、一盂羹汤，再添两三样时蔬肉脍——按品级厚薄有差，约摸四菜一汤，算不得珍馐，却是一口热乎。',
     },
@@ -87,6 +91,7 @@ const xuanzheng: ScenePoint = {
     },
     {
       id: 'xz-7',
+      audio: '/package-tour/assets/audio/xz-7.mp3',
       actor: 'yunque',
       text: '（凑到你案前）这规矩是谁定的呀？上朝还管饭，天下还有这等好事？',
     },
@@ -98,6 +103,7 @@ const xuanzheng: ScenePoint = {
     },
     {
       id: 'xz-9',
+      audio: '/package-tour/assets/audio/xz-9.mp3',
       actor: 'yunque',
       text: '（掰着手指算，忽然停住）贞观四年……那不是大明宫还没盖起来的时候吗？',
     },
@@ -109,17 +115,20 @@ const xuanzheng: ScenePoint = {
     },
     {
       id: 'xz-11',
+      audio: '/package-tour/assets/audio/xz-11.mp3',
       actor: 'yunque',
       text: '（捧起羹汤喝了一口，眼睛弯起来）原来这碗饭，是从太极宫一路吃到大明宫的……（抬头看你）吃饱啦，下一站去哪儿？',
     },
     {
       id: 'xz-12',
+      audio: '/package-tour/assets/audio/xz-12.mp3',
       actor: 'narrator',
       text: '你放下食箸，回望宣政殿。开启摄像头，可在原址之上看这座中朝正殿的复原全貌。',
       action: { type: 'ar_restore', name: '宣政殿' },
     },
     {
       id: 'xz-13',
+      audio: '/package-tour/assets/audio/xz-13.mp3',
       actor: 'yunque',
       text: '（望着复原图，掌心浮起一片温润金鳞）这里曾是百司奏事、殿试册封的地方。这片「廊下鳞」，归你——吃完这顿，前面紫宸殿，才是真正与天子面对面的地方。',
       action: { type: 'collect_scale' },

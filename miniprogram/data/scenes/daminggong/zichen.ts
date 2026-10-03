@@ -30,12 +30,14 @@ const zichen: ScenePoint = {
   dialogs: [
     {
       id: 'zc-1',
+      audio: '/package-tour/assets/audio/zc-1.mp3',
       actor: 'narrator',
       text: '你随閤门值卫，由閤门入紫宸殿。这一道门，唤作「入閤」——外朝的仗卫在閤外收起，殿内只余被天子亲召的几位近臣。',
       action: { type: 'look_around' },
     },
     {
       id: 'zc-2',
+      audio: '/package-tour/assets/audio/zc-2.mp3',
       actor: 'yunque',
       text: '（难得收了笑，放轻脚步）……这里好静。和含元殿那种万国来朝的排场，完全不一样。',
     },
@@ -47,16 +49,19 @@ const zichen: ScenePoint = {
     },
     {
       id: 'zc-4',
+      audio: '/package-tour/assets/audio/zc-4.mp3',
       actor: 'narrator',
       text: '御座之上，天子只与寥寥数人对面而坐。廊柱投下的阴影里，一名宦官垂手肃立，目不斜视，却像把每一句话都听进了耳里。',
     },
     {
       id: 'zc-5',
+      audio: '/package-tour/assets/audio/zc-5.mp3',
       actor: 'yunque',
       text: '（拽你衣袖，用气声）那个人……一直站在那儿。他是谁？为什么大家都低着头，不去看他？',
     },
     {
       id: 'zc-6',
+      audio: '/package-tour/assets/audio/zc-6.mp3',
       actor: 'narrator',
       text: '天子问及北边军情，话锋一转，忽然点到你的名字。你斟酌着，该如何回奏——',
       choices: [
@@ -84,37 +89,44 @@ const zichen: ScenePoint = {
     },
     {
       id: 'zc-7',
+      audio: '/package-tour/assets/audio/zc-7.mp3',
       actor: 'yunque',
       text: '（你退下时，她在你耳边用气声补了一句）还好还好……方才那句错话，可不敢乱说。',
     },
     {
       id: 'zc-8',
+      audio: '/package-tour/assets/audio/zc-8.mp3',
       actor: 'narrator',
       text: '奏对毕，天子挥袖示意。你随班退出閤门——方才殿上那几句话，已被廊下那人听得一字不落。',
     },
     {
       id: 'zc-9',
+      audio: '/package-tour/assets/audio/zc-9.mp3',
       actor: 'yunque',
       text: '（出了閤门才敢低声）刚才在里面，我连气都不敢大出……那个垂手站着的人，到底是做什么的？',
     },
     {
       id: 'zc-10',
+      audio: '/package-tour/assets/audio/zc-10.mp3',
       actor: 'narrator',
       text: '云阙没有立刻回答。她回头望了一眼那道深閤，眼神里掠过一丝你读不懂的恍惚。',
     },
     {
       id: 'zc-11',
+      audio: '/package-tour/assets/audio/zc-11.mp3',
       actor: 'yunque',
       text: '（轻声）我说不上来……只是觉得，站在廊下的那个人，眼睛里不只有恭敬。这里往后，或许会慢慢变了模样。',
     },
     {
       id: 'zc-12',
+      audio: '/package-tour/assets/audio/zc-12.mp3',
       actor: 'narrator',
       text: '你回望紫宸殿。开启摄像头，可在原址之上看这座内朝正殿的复原。',
       action: { type: 'ar_restore', name: '紫宸殿' },
     },
     {
       id: 'zc-13',
+      audio: '/package-tour/assets/audio/zc-13.mp3',
       actor: 'yunque',
       text: '（掌心浮起金鳞）这片「召对鳞」给你。在这儿说的话，是要放在心上的。（指了指北面）出了这边，便是太液池——去水边松口气吧。',
       action: { type: 'collect_scale' },

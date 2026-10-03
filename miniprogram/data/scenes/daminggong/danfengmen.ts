@@ -26,6 +26,7 @@ const danfengmen: ScenePoint = {
   dialogs: [
     {
       id: 'dfm-1',
+      audio: '/package-tour/assets/audio/dfm-1.mp3',
       actor: 'narrator',
       text: '清晨，丹凤门前广场。金色晨光落在五道城门上，百官列队，钟鼓将鸣。',
       action: { type: 'look_around' },
@@ -38,6 +39,7 @@ const danfengmen: ScenePoint = {
     },
     {
       id: 'dfm-3',
+      audio: '/package-tour/assets/audio/dfm-3.mp3',
       actor: 'yunque',
       text: '（小声）好多人呀……你也是来上朝的吗？前面有五道门，我们……该走哪一道？',
       choices: [
@@ -65,6 +67,7 @@ const danfengmen: ScenePoint = {
     },
     {
       id: 'dfm-4',
+      audio: '/package-tour/assets/audio/dfm-4.mp3',
       actor: 'yunque',
       text: '原来中间那道是留给皇帝的……（仰头）那这座大门，叫什么名字？',
     },
@@ -76,12 +79,14 @@ const danfengmen: ScenePoint = {
     },
     {
       id: 'dfm-6',
+      audio: '/package-tour/assets/audio/dfm-6.mp3',
       actor: 'narrator',
       text: '你随百官穿过门道。开启摄像头，可在原址之上看丹凤门复原全貌。',
       action: { type: 'ar_restore', name: '丹凤门' },
     },
     {
       id: 'dfm-7',
+      audio: '/package-tour/assets/audio/dfm-7.mp3',
       actor: 'yunque',
       text: '好高的门……（掌心浮起一片金鳞）我好像，记起了一点点什么。这片「启程鳞」，送给你。',
       action: { type: 'collect_scale' },
