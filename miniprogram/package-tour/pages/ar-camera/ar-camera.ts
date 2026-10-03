@@ -53,6 +53,7 @@ Page({
     poster: '',
     scaleName: '',
     collected: false,
+    briefReady: false,
     // 文物
     relic: null as Relic | null,
     relicImage: '',
@@ -114,6 +115,7 @@ Page({
       culturalNote: '',
       scaleName: scene.scaleName,
       collected: getProgressStore().isCompleted(scene.id),
+      briefReady: false,
       relic: null,
       relicImage: '',
       relicInAlbum: false,
@@ -226,6 +228,23 @@ Page({
       /* noop */
     }
     this.playYunqueAudio();
+  },
+
+  // ===== 复原视频：加载即播，真正 bindplay 后才隐藏兜底画面 =====
+  onBriefMeta() {
+    setTimeout(() => {
+      try {
+        wx.createVideoContext('briefVideo', this).play();
+      } catch (e) {
+        /* noop */
+      }
+    }, 30);
+  },
+  onBriefPlay() {
+    if (!this.data.briefReady) this.setData({ briefReady: true });
+  },
+  onBriefError() {
+    this.setData({ briefReady: false });
   },
 
   playYunqueAudio() {

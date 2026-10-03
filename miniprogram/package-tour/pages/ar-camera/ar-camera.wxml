@@ -40,13 +40,13 @@
         <view class="yq-badge">{{targetKind === 'relic' ? '文物' : 'AR'}}</view>
       </view>
 
-      <!-- 景点：动态复原视频 -->
+      <!-- 景点：动态复原视频（带兜底画面，任何环境不黑） -->
       <view class="restore-box" wx:if="{{targetKind === 'spot'}}">
+        <image class="restore-fallback" src="{{poster}}" mode="aspectFill"></image>
         <video
           id="briefVideo"
-          class="restore-video"
+          class="restore-video {{briefReady ? 'is-playing' : ''}}"
           src="{{restoreVideo}}"
-          poster="{{poster}}"
           autoplay
           loop
           muted
@@ -56,8 +56,11 @@
           show-fullscreen-btn="{{false}}"
           enable-progress-gesture="{{false}}"
           object-fit="cover"
+          bindloadedmetadata="onBriefMeta"
+          bindplay="onBriefPlay"
+          binderror="onBriefError"
         ></video>
-        <view class="restore-chip"><text class="restore-dot"></text><text>AR 动态复原</text></view>
+        <view class="restore-chip"><text class="restore-dot"></text><text>{{briefReady ? 'AR 动态复原' : '复原画面'}}</text></view>
       </view>
 
       <!-- 文物：文物配图 -->

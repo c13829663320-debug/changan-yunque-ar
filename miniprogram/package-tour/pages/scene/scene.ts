@@ -32,6 +32,9 @@ Page({
     // 配音开关与集鳞仪式动画
     voiceMuted: false,
     collectingScale: false,
+    // 复原视频是否真正开始播放（用于隐藏兜底画面，杜绝黑屏）
+    stageReady: false,
+    arReady: false,
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -132,7 +135,7 @@ Page({
       this.data.mode === 'onsite'
         ? '现场将通过识别图与方位在遗址上叠加殿宇（M2接入真机AR）'
         : '示意复原；M1接入XRFrame后呈现完整3D殿宇与光影';
-    this.setData({ showAR: true, arTip }, () => {
+    this.setData({ showAR: true, arTip, arReady: false }, () => {
       try {
         wx.createVideoContext('arVideo').play();
       } catch (e) {
@@ -155,13 +158,42 @@ Page({
 
   noop() {},
 
-  // 主动播放舞台视频（模拟器 autoplay 可能不生效；poster 已保证有画面）
+  // 主动播放舞台视频（模拟器 autoplay 可能不生效；兜底画面已保证不黑）
   playStageVideo() {
     try {
       wx.createVideoContext('stageVideo').play();
     } catch (e) {
       /* noop */
     }
+  },
+
+  // ===== 复原视频：加载即播，真正 bindplay 后才隐藏兜底画面 =====
+  onStageMeta() {
+    try {
+      wx.createVideoContext('stageVideo').play();
+    } catch (e) {
+      /* noop */
+    }
+  },
+  onStagePlay() {
+    if (!this.data.stageReady) this.setData({ stageReady: true });
+  },
+  onStageError() {
+    this.setData({ stageReady: false });
+  },
+
+  onArMeta() {
+    try {
+      wx.createVideoContext('arVideo').play();
+    } catch (e) {
+      /* noop */
+    }
+  },
+  onArPlay() {
+    if (!this.data.arReady) this.setData({ arReady: true });
+  },
+  onArError() {
+    this.setData({ arReady: false });
   },
 
   playAudio(src?: string) {

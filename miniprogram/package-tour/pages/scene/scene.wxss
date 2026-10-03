@@ -221,3 +221,52 @@
   30% { opacity: 1; }
   100% { opacity: 0; transform: rotate(calc(var(--i) * 36deg)) translateY(-260rpx) scale(1); }
 }
+
+/* ===== 复原视频兜底：彻底消除模拟器黑屏 ===== */
+@keyframes kenburns {
+  from { transform: scale(1.03); }
+  to { transform: scale(1.15); }
+}
+/* 舞台兜底画面（video 未播放时显示，带缓慢电影运镜） */
+.stage-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  animation: kenburns 24s ease-in-out infinite alternate;
+}
+.stage-video { visibility: hidden; background: transparent; }
+.stage-video.is-playing { visibility: visible; }
+
+/* AR 复原容器与兜底画面 */
+.ar-media {
+  position: relative;
+  width: 100%;
+  height: 500rpx;
+  margin-bottom: 24rpx;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1rpx solid var(--line);
+  box-shadow: 0 8rpx 24rpx rgba(70, 62, 54, 0.12);
+}
+.ar-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: kenburns 20s ease-in-out infinite alternate;
+}
+.ar-restore {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  visibility: hidden;
+}
+.ar-restore.is-playing { visibility: visible; }

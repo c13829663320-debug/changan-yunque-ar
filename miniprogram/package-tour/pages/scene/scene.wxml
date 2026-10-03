@@ -1,12 +1,17 @@
 <view class="scene scene-tone-{{scene.index}}">
   <!-- 舞台（动态复原视频作背景，无 3D 以视频替代） -->
   <view class="stage has-video">
+    <image
+      wx:if="{{scene.poster}}"
+      class="stage-fallback"
+      src="{{scene.poster}}"
+      mode="aspectFill"
+    ></image>
     <video
       wx:if="{{scene.restoreVideo}}"
       id="stageVideo"
-      class="stage-video"
+      class="stage-video {{stageReady ? 'is-playing' : ''}}"
       src="{{scene.restoreVideo}}"
-      poster="{{scene.poster}}"
       autoplay
       loop
       muted
@@ -17,6 +22,9 @@
       show-mute-btn="{{false}}"
       enable-progress-gesture="{{false}}"
       object-fit="cover"
+      bindloadedmetadata="onStageMeta"
+      bindplay="onStagePlay"
+      binderror="onStageError"
     ></video>
     <view class="stage-scrim"></view>
     <view class="figure-wrap {{node.actor}}">
@@ -44,22 +52,26 @@
   <!-- AR 复原层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
-      <video
-        wx:if="{{scene.restoreVideo}}"
-        id="arVideo"
-        class="ar-restore"
-        src="{{scene.restoreVideo}}"
-        poster="{{scene.poster}}"
-        autoplay
-        loop
-        muted
-        controls="{{false}}"
-        show-center-play-btn="{{false}}"
-        show-play-btn="{{false}}"
-        show-fullscreen-btn="{{false}}"
-        enable-progress-gesture="{{false}}"
-        object-fit="contain"
-      ></video>
+      <view wx:if="{{scene.restoreVideo}}" class="ar-media">
+        <image class="ar-fallback" src="{{scene.poster}}" mode="aspectFill"></image>
+        <video
+          id="arVideo"
+          class="ar-restore {{arReady ? 'is-playing' : ''}}"
+          src="{{scene.restoreVideo}}"
+          autoplay
+          loop
+          muted
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+          show-play-btn="{{false}}"
+          show-fullscreen-btn="{{false}}"
+          enable-progress-gesture="{{false}}"
+          object-fit="cover"
+          bindloadedmetadata="onArMeta"
+          bindplay="onArPlay"
+          binderror="onArError"
+        ></video>
+      </view>
       <view wx:else class="ar-palace">
         <view class="ar-roof"></view>
         <view class="ar-body"></view>
