@@ -23,10 +23,10 @@
 
   <!-- 云阙 AR 讲解弹层 -->
   <view class="brief {{phase === 'briefing' ? 'show' : ''}}" wx:if="{{phase === 'briefing'}}">
-    <scroll-view scroll-y class="brief-scroll" enhanced show-scrollbar="{{false}}">
-      <!-- 云阙登场 -->
+    <!-- 顶部固定：云阙 + AR复原视频（原生 video 不放进 scroll-view，避免黑屏） -->
+    <view class="brief-top">
       <view class="yq-head">
-        <image class="yq-avatar" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image>
+        <image class="yq-avatar" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image>
         <view class="yq-meta">
           <text class="yq-name">云阙</text>
           <text class="yq-role">盛唐走龙 · 为你讲解</text>
@@ -34,9 +34,9 @@
         <view class="yq-badge">AR</view>
       </view>
 
-      <!-- AR 动态复原 -->
       <view class="restore-box">
         <video
+          id="briefVideo"
           class="restore-video"
           src="{{restoreVideo}}"
           poster="{{poster}}"
@@ -52,21 +52,21 @@
         ></video>
         <view class="restore-chip"><text class="restore-dot"></text><text>AR 动态复原</text></view>
       </view>
+    </view>
 
-      <!-- 云阙讲解词 -->
+    <!-- 可滚动：讲解词 / 历史背景 / 史料卡 -->
+    <scroll-view scroll-y class="brief-scroll" enhanced show-scrollbar="{{false}}">
       <view class="lines">
         <view class="line" wx:for="{{yunqueLines}}" wx:key="text">
           <text class="line-text">{{item.text}}</text>
         </view>
       </view>
 
-      <!-- 历史背景 -->
       <view class="intro-card">
         <text class="block-title">历史背景</text>
         <text class="intro-text">{{intro}}</text>
       </view>
 
-      <!-- 可溯源史料卡 -->
       <view class="source-toggle" bindtap="onToggleSource">
         <text class="source-toggle-label">可溯源史料卡</text>
         <text class="source-arrow">{{showSource ? '收起' : '展开'}} ›</text>

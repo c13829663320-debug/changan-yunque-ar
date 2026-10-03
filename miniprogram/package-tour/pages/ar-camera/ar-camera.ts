@@ -128,7 +128,15 @@ Page({
   onRecognized() {
     if (this.data.phase === 'briefing') return;
     this.clearTimers();
-    this.setData({ phase: 'briefing' });
+    this.setData({ phase: 'briefing' }, () => {
+      setTimeout(() => {
+        try {
+          wx.createVideoContext('briefVideo', this).play();
+        } catch (e) {
+          /* noop */
+        }
+      }, 120);
+    });
     try {
       (wx as any).vibrateShort?.({ type: 'light' });
     } catch (e) {
