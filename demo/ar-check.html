@@ -1,0 +1,333 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>AR取景核验</title>
+<style>/* 盛唐敦煌壁画美学 · Design Token
+   低饱和、沉静华贵：象牙白/月白/浅石青/淡青绿/浅赭，暗金与低饱和朱砂少量点缀 */
+body {
+  /* 主色 */
+  --ivory: #f4ecdd;          /* 象牙白 · 底 */
+  --ivory-deep: #ece1cd;
+  --moon: #e6ebea;           /* 月白 · 冷高光 */
+  --azurite: #8fa6ab;        /* 浅石青 */
+  --azurite-deep: #6f8b92;
+  --celadon: #a6bfae;        /* 淡青绿 */
+  --celadon-deep: #86a590;
+  --ochre: #c7a987;          /* 浅赭 */
+  --ochre-deep: #b08d68;
+
+  /* 点缀 */
+  --dark-gold: #a8893a;      /* 暗金 · 少量 */
+  --dark-gold-soft: #c2a668;
+  --cinnabar: #9e4a2a;       /* 低饱和朱砂 · 局部重心 */
+  --cinnabar-soft: #b06a4a;
+
+  /* 墨色文字 */
+  --ink: #463e36;
+  --ink-soft: #6a5f52;
+  --ink-muted: #93867a;
+
+  /* 语义 */
+  --bg: #f4ecdd;
+  --bg-card: #fbf6ec;
+  --bg-card-deep: #f1e8d6;
+  --line: #e0d4bf;
+
+  /* 字号 */
+  --fs-title: 22px;
+  --fs-h2: 17px;
+  --fs-body: 14px;
+  --fs-small: 12px;
+  --fs-mini: 10px;
+
+  /* 圆角与间距 */
+  --radius-lg: 12px;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --space: 12px;
+
+  /* 阴影 · 克制 */
+  --shadow: 0 4px 15px rgba(90, 74, 50, 0.08);
+  --shadow-deep: 0 6px 20px rgba(90, 74, 50, 0.14);
+
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, "PingFang SC", "Songti SC", "Noto Serif SC", serif;
+}
+
+/* 通用样式类 */
+.page-wrap {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 12px 14px calc(20px + 0px);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.title-lg {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+
+.title-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.text-body { font-size: var(--fs-body); color: var(--ink-soft); line-height: 1.7; }
+.text-muted { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.6; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 499.5px;
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: #fbf3e4;
+  font-size: 15px;
+  letter-spacing: 2px;
+  border: none;
+}
+.btn-primary::after { border: none; }
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 499.5px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+  font-size: 14px;
+  border: 0.5px solid var(--line);
+}
+.btn-ghost::after { border: none; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 499.5px;
+  font-size: var(--fs-mini);
+  background: var(--bg-card-deep);
+  color: var(--ink-soft);
+  margin-right: 6px;
+}
+.tag-gold { background: rgba(168, 137, 58, 0.12); color: var(--dark-gold); }
+.tag-cinnabar { background: rgba(158, 74, 42, 0.1); color: var(--cinnabar); }
+
+.row-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-sm { gap: 6px; }
+
+/* —— 全局打磨（Line5）：轻按反馈与平滑过渡 —— */
+.card, .mode-card, .grid-item, .stat {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.card:active, .mode-card:active, .grid-item:active { transform: scale(0.985); }
+.btn-primary, .btn-ghost, .bar-cart, .bar-buy { transition: opacity 0.2s ease, transform 0.15s ease; }
+.btn-primary:active, .bar-buy:active { transform: scale(0.98); opacity: 0.92; }
+image { transition: opacity 0.3s ease; }
+
+
+/* AR 相机取景页 · 盛唐敦煌美学打磨
+   深色取景语境下，文字/描边以 token 为准，叠加面板用中性暗底兜底保证可读 */
+
+.ar-cam { position: relative; width: 100%; height: 100vh; overflow: hidden; background: var(--ink); }
+.cam { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* —— 顶部标题面板 —— */
+.cam-top {
+  position: absolute; top: calc(14px + 0px); left: 14px; right: 14px;
+  background: rgba(244, 236, 221, 0.94);
+  background: color-mix(in srgb, var(--ivory) 94%, transparent);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 11px 14px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.top-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+.cam-kicker { font-size: var(--fs-mini); letter-spacing: 2px; color: var(--dark-gold); }
+.cam-title { font-size: var(--fs-body); font-weight: 600; color: var(--ink); letter-spacing: 0.5px; }
+.cam-tip { display: block; margin-top: 4px; font-size: var(--fs-mini); color: var(--ink-muted); }
+
+/* —— 识别成功：动态复原视频 —— */
+.cam-overlay {
+  position: absolute; left: 0; right: 0; top: 23%;
+  display: flex; flex-direction: column; align-items: center;
+  animation: ovIn 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes ovIn {
+  from { opacity: 0; transform: translateY(13px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.ov-frame {
+  position: relative;
+  padding: 5px;
+  border-radius: var(--radius-lg);
+  background: rgba(30, 25, 20, 0.42);
+  background: color-mix(in srgb, var(--ink) 42%, transparent);
+  border: 0.5px solid rgba(194, 166, 104, 0.55);
+  border: 0.5px solid color-mix(in srgb, var(--dark-gold-soft) 55%, transparent);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.ov-restore {
+  display: block;
+  width: 310px; height: 270px;
+  border-radius: var(--radius);
+}
+.overlay-palace { display: flex; flex-direction: column; align-items: center; opacity: 0.92; }
+.ov-roof {
+  width: 180px; height: 45px;
+  background: linear-gradient(180deg, var(--ochre-deep), var(--ochre));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.ov-body {
+  width: 130px; height: 80px;
+  background: repeating-linear-gradient(90deg, var(--ochre) 0 12px, var(--ivory-deep) 12px 24px);
+  border: 0.5px solid var(--ochre-deep);
+}
+.ov-chip {
+  position: absolute; top: -0.5px; left: 14px;
+  display: flex; align-items: center; gap: 4px;
+  padding: 3px 10px;
+  background: var(--dark-gold);
+  color: var(--ivory-deep);
+  font-size: var(--fs-mini); letter-spacing: 1px;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.ov-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ivory-deep); }
+
+.ov-caption { margin-top: 11px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.ov-name {
+  font-size: var(--fs-small); color: var(--ivory); letter-spacing: 0.5px;
+  background: rgba(38, 32, 26, 0.62);
+  background: color-mix(in srgb, var(--ink) 62%, transparent);
+  border: 0.5px solid rgba(194, 166, 104, 0.4);
+  border: 0.5px solid color-mix(in srgb, var(--dark-gold-soft) 40%, transparent);
+  border-radius: 499.5px;
+  padding: 5px 15px;
+}
+.ov-credit { font-size: var(--fs-mini); color: var(--dark-gold-soft); letter-spacing: 1.5px; }
+
+/* —— 取景框 / 扫描线（轻柔循环） —— */
+.reticle {
+  position: absolute; top: 26%; left: 50%; transform: translateX(-50%);
+  width: 230px; height: 230px;
+}
+.reticle-corner {
+  position: absolute; width: 32px; height: 32px;
+  border: 2.5px solid var(--ivory);
+  opacity: 0.92;
+}
+.reticle-corner::after {
+  content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--dark-gold);
+}
+.reticle-corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; border-top-left-radius: 5px; }
+.reticle-corner.tl::after { top: -3.5px; left: -3.5px; }
+.reticle-corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; border-top-right-radius: 5px; }
+.reticle-corner.tr::after { top: -3.5px; right: -3.5px; }
+.reticle-corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; border-bottom-left-radius: 5px; }
+.reticle-corner.bl::after { bottom: -3.5px; left: -3.5px; }
+.reticle-corner.br { bottom: 0; right: 0; border-left: none; border-top: none; border-bottom-right-radius: 5px; }
+.reticle-corner.br::after { bottom: -3.5px; right: -3.5px; }
+
+.scan-line {
+  position: absolute; left: 8px; right: 8px; top: 4%; height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--dark-gold-soft), transparent);
+  box-shadow: 0 0 9px rgba(194, 166, 104, 0.5);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--dark-gold-soft) 55%, transparent);
+  animation: scanMove 3.6s ease-in-out infinite;
+}
+@keyframes scanMove {
+  0% { top: 4%; opacity: 0.25; }
+  50% { opacity: 0.9; }
+  100% { top: 94%; opacity: 0.25; }
+}
+
+.reticle-hint {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: 15px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 4.5px 12px; border-radius: 499.5px;
+  background: rgba(38, 32, 26, 0.55);
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+  white-space: nowrap;
+}
+.reticle-hint text { font-size: var(--fs-mini); color: var(--ivory); letter-spacing: 0.5px; }
+.reticle-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--dark-gold-soft);
+  animation: breathe 1.8s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+/* —— 底部：定位朝向 + 主按钮 + 状态 —— */
+.cam-bottom {
+  position: absolute; left: 14px; right: 14px; bottom: calc(18px + 0px);
+  display: flex; flex-direction: column; align-items: center;
+}
+.loc-row { display: flex; gap: 8px; margin-bottom: 11px; }
+.loc-chip {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 499.5px;
+  background: rgba(38, 32, 26, 0.55);
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+  border: 0.5px solid rgba(244, 236, 221, 0.22);
+  border: 0.5px solid color-mix(in srgb, var(--ivory) 22%, transparent);
+}
+.loc-glyph { font-size: var(--fs-mini); color: var(--dark-gold-soft); }
+.loc-text { font-size: var(--fs-mini); color: var(--ivory-deep); letter-spacing: 0.5px; }
+
+.detect-btn {
+  width: 100%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+  border: 0.5px solid rgba(194, 166, 104, 0.5);
+  border: 0.5px solid color-mix(in srgb, var(--dark-gold-soft) 50%, transparent);
+}
+.vk-status {
+  margin-top: 8px; text-align: center; line-height: 1.7;
+  font-size: var(--fs-mini);
+  color: rgba(244, 236, 221, 0.82);
+  color: color-mix(in srgb, var(--ivory) 82%, transparent);
+}
+
+body{margin:0;} div,span{box-sizing:border-box;}
+.cam-fake{background:
+  radial-gradient(120% 90% at 50% 18%, rgba(150,120,80,0.28), transparent 60%),
+  radial-gradient(100% 100% at 50% 110%, rgba(40,32,24,0.9), #171310 60%), #1c1712;}
+span{display:block;} .top-row span,.loc-chip span,.reticle-hint span{display:inline;}
+</style></head><body><div class="ar-cam">
+  <div class="cam cam-fake"></div>
+  <div class="cam-top">
+    <div class="top-row"><span class="cam-kicker">现场 AR</span><span class="cam-title">宣政殿</span></div>
+    <span class="cam-tip">对准点位解说牌 / 识别图，或进入触发半径</span>
+  </div>
+  <div class="reticle">
+    <div class="reticle-corner tl"></div><div class="reticle-corner tr"></div>
+    <div class="reticle-corner bl"></div><div class="reticle-corner br"></div>
+    <div class="scan-line"></div>
+    <div class="reticle-hint"><div class="reticle-pulse"></div><span>正在识别解说牌 / 识别图</span></div>
+  </div>
+  <div class="cam-bottom">
+    <div class="loc-row">
+      <div class="loc-chip"><span class="loc-glyph">◉</span><span class="loc-text">距点位 35米</span></div>
+      <div class="loc-chip"><span class="loc-glyph">✥</span><span class="loc-text">方位 西北</span></div>
+    </div>
+    <div class="btn-primary detect-btn">识别图中复原</div>
+    <span class="vk-status">VKSession 就绪 · 未识别到图中目标</span>
+  </div>
+</div></body></html>
