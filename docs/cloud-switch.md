@@ -20,8 +20,11 @@
 
 ## 1. 创建云环境
 
-1. 微信开发者工具 → 云开发 → 开通，新建环境，记下 **环境 ID**。
-2. 把环境 ID 填入 `miniprogram/config/index.ts`：
+> 前提：云开发与小程序 AppID 绑定。请确认开发者工具项目 AppID 为你自己的真实 AppID（本仓库已填 `wxf9d2785d37c216d4`），不能是 `touristappid` 游客模式，否则「云开发」面板打不开。
+
+1. 微信开发者工具顶部点「云开发」→ 首次按提示「开通」→ 新建环境（名称随意，如 `changan-prod`；计费选基础版/按量付费，演示用免费额度即可），等待初始化完成。
+2. 在环境列表或「设置」里复制 **环境 ID**（形如 `changan-prod-9gxxxxxx`）。
+3. 把环境 ID 填入 `miniprogram/config/index.ts`：
 
 ```ts
 cloudEnvId: '你的云环境ID',
@@ -33,11 +36,11 @@ cloudEnvId: '你的云环境ID',
 
 仓库已带 `cloudfunctions/intention/`（读写云数据库 `intentions` 集合）：
 
-1. 右键 `cloudfunctions/intention` → 上传并部署：云端安装依赖。
-2. 在云开发控制台新建集合 `intentions`，权限选「仅创建者可读写」。
-3. 函数入参/出参：
-   - 入参 `{ goodsId: string, contact?: string }`
-   - 出参 `{ success: boolean, _id?: string, message?: string }`
+1. 在云开发控制台「数据库」→ 新建集合 `intentions`，权限选「仅创建者可读写」。
+2. 在开发者工具左侧资源管理器找到 `cloudfunctions/intention` 文件夹，右键「上传并部署：云端安装依赖（不上传 node_modules）」。
+3. 函数入参/出参（见 `cloudfunctions/intention/index.js`）：
+   - 写（默认 action=create，批量写入）：入参 `{ goodsIds: string[], name, phone, remark }`，出参 `{ success, ids?, message? }`
+   - 读：入参 `{ action: 'query' }`，出参 `{ success, list, total }`（按当前用户 openid 自动过滤）
 
 ### 前端接线（把本地 storage 意向单升级为云端）
 
