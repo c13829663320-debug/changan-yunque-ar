@@ -1,4 +1,5 @@
 import { getRelicsBySpot, getRelic } from '../../../data/repositories/relicRepo';
+import { getScenesBySpot } from '../../../data/repositories/sceneRepo';
 import { getEnabledSpots, getSpot } from '../../../data/repositories/spotRepo';
 import { getProgressStore } from '../../../store/progress';
 import { Relic } from '../../../data/types/relic';
@@ -108,8 +109,14 @@ Page({
   },
 
   goScan() {
-    // ar-camera 仅以 query.id（场景）反推所属景点、不接收 spotId；
-    // 当前有文物的景点默认即大明宫，故保持原跳转、不臆造参数
-    wx.redirectTo({ url: '/package-tour/pages/ar-camera/ar-camera' });
+    // ar-camera 仅以 query.id（场景）反推所属景点、并定位序列起点；
+    // 带当前景点首个场景 id 进入，使大雁塔图鉴「去现场扫描」进入大雁塔序列（而非默认大明宫）
+    const first = getScenesBySpot(this.data.spotId)[0];
+    const id = first ? first.id : '';
+    wx.redirectTo({
+      url: id
+        ? `/package-tour/pages/ar-camera/ar-camera?id=${id}`
+        : '/package-tour/pages/ar-camera/ar-camera',
+    });
   },
 });
