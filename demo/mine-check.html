@@ -1,0 +1,447 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>mine-check</title><style>/* 盛唐敦煌壁画美学 · Design Token
+   低饱和、沉静华贵：象牙白/月白/浅石青/淡青绿/浅赭，暗金与低饱和朱砂少量点缀 */
+body {
+  /* 主色 */
+  --ivory: #f4ecdd;          /* 象牙白 · 底 */
+  --ivory-deep: #ece1cd;
+  --moon: #e6ebea;           /* 月白 · 冷高光 */
+  --azurite: #8fa6ab;        /* 浅石青 */
+  --azurite-deep: #6f8b92;
+  --celadon: #a6bfae;        /* 淡青绿 */
+  --celadon-deep: #86a590;
+  --ochre: #c7a987;          /* 浅赭 */
+  --ochre-deep: #b08d68;
+
+  /* 点缀 */
+  --dark-gold: #a8893a;      /* 暗金 · 少量 */
+  --dark-gold-soft: #c2a668;
+  --cinnabar: #9e4a2a;       /* 低饱和朱砂 · 局部重心 */
+  --cinnabar-soft: #b06a4a;
+
+  /* 墨色文字 */
+  --ink: #463e36;
+  --ink-soft: #6a5f52;
+  --ink-muted: #93867a;
+
+  /* 语义 */
+  --bg: #f4ecdd;
+  --bg-card: #fbf6ec;
+  --bg-card-deep: #f1e8d6;
+  --line: #e0d4bf;
+
+  /* 字号 */
+  --fs-title: 22px;
+  --fs-h2: 17px;
+  --fs-body: 14px;
+  --fs-small: 12px;
+  --fs-mini: 10px;
+
+  /* 圆角与间距 */
+  --radius-lg: 12px;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --space: 12px;
+
+  /* 阴影 · 克制 */
+  --shadow: 0 4px 15px rgba(90, 74, 50, 0.08);
+  --shadow-deep: 0 6px 20px rgba(90, 74, 50, 0.14);
+
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, "PingFang SC", "Songti SC", "Noto Serif SC", serif;
+}
+
+/* 通用样式类 */
+.page-wrap {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 12px 14px calc(20px + 0px);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.title-lg {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+
+.title-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.text-body { font-size: var(--fs-body); color: var(--ink-soft); line-height: 1.7; }
+.text-muted { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.6; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 499.5px;
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: #fbf3e4;
+  font-size: 15px;
+  letter-spacing: 2px;
+  border: none;
+}
+.btn-primary::after { border: none; }
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 499.5px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+  font-size: 14px;
+  border: 0.5px solid var(--line);
+}
+.btn-ghost::after { border: none; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 499.5px;
+  font-size: var(--fs-mini);
+  background: var(--bg-card-deep);
+  color: var(--ink-soft);
+  margin-right: 6px;
+}
+.tag-gold { background: rgba(168, 137, 58, 0.12); color: var(--dark-gold); }
+.tag-cinnabar { background: rgba(158, 74, 42, 0.1); color: var(--cinnabar); }
+
+.row-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-sm { gap: 6px; }
+
+/* —— 全局打磨（Line5）：轻按反馈与平滑过渡 —— */
+.card, .mode-card, .grid-item, .stat {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.card:active, .mode-card:active, .grid-item:active { transform: scale(0.985); }
+.btn-primary, .btn-ghost, .bar-cart, .bar-buy { transition: opacity 0.2s ease, transform 0.15s ease; }
+.btn-primary:active, .bar-buy:active { transform: scale(0.98); opacity: 0.92; }
+image { transition: opacity 0.3s ease; }
+
+
+.mine {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* —— 头部 —— */
+.mine-head {
+  position: relative;
+  padding: 36px 0 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(120% 100% at 50% 0%, var(--moon), transparent 70%),
+    linear-gradient(180deg, var(--ivory-deep), var(--bg));
+  overflow: hidden;
+}
+.mine-head::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  border: 0.5px solid var(--dark-gold-soft);
+  opacity: 0.4;
+}
+.avatar {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--dark-gold-soft);
+  box-shadow: var(--shadow-deep);
+  margin-bottom: 10px;
+}
+.avatar-img { width: 100%; height: 100%; }
+.mine-name {
+  font-size: var(--fs-title);
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+.mine-sub {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.mine-body { padding-top: 3px; }
+
+/* —— 克制的入场动效（仅一次，不循环） —— */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+
+/* —— 统计 —— */
+.stat-grid { display: flex; gap: 10px; margin-bottom: 12px; }
+.stat {
+  flex: 1;
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-num { font-size: 22px; color: var(--dark-gold); font-weight: 600; }
+.stat-label { font-size: var(--fs-small); color: var(--ink-muted); margin-top: 3px; }
+
+/* —— 卡片统一头 —— */
+.card-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.card-head-titles { display: flex; flex-direction: column; }
+.card-sub {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* —— 龙鳞集章墙 —— */
+.scale-card { padding: 15px 12px; }
+.scale-progress {
+  font-size: var(--fs-h2);
+  color: var(--dark-gold);
+  font-weight: 600;
+}
+.scale-wall { display: flex; flex-wrap: wrap; }
+.scale-cell {
+  width: 25%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 0 8px;
+}
+.scale-medal {
+  width: 46px;
+  height: 48px;
+  /* 鳞/水滴形 */
+  border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card-deep);
+  border: 0.5px solid var(--line);
+  transition: transform 0.2s ease;
+}
+.scale-medal.got {
+  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 80%);
+  border: 0.5px solid var(--dark-gold);
+  box-shadow: var(--shadow-deep);
+}
+.scale-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--line);
+}
+.scale-medal.got .scale-core {
+  background: var(--bg-card);
+}
+.scale-name {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+.scale-name.on { color: var(--ink); font-weight: 600; }
+.scale-hall {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* —— 景点巡游卡片 —— */
+.spot-card { padding: 15px 12px; }
+.spot-list { display: flex; flex-direction: column; }
+.spot-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: var(--bg-card-deep);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius);
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
+}
+.spot-row:last-child { margin-bottom: 0; }
+.spot-row:active { transform: scale(0.99); }
+.spot-row.soon { opacity: 0.72; }
+.spot-emblem {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--ivory-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spot-emblem.on { box-shadow: var(--shadow); }
+.spot-emblem-img { width: 100%; height: 100%; }
+.spot-emblem-text { font-size: var(--fs-small); color: var(--ink-muted); }
+.spot-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.spot-name { font-size: var(--fs-body); color: var(--ink); font-weight: 600; }
+.spot-sub { font-size: var(--fs-mini); color: var(--ink-muted); margin-top: 3px; }
+.spot-meta { margin-top: 5px; display: flex; }
+.spot-tag {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: 499.5px;
+  padding: 1.5px 7px;
+}
+.spot-tag.visited {
+  color: var(--dark-gold);
+  border-color: var(--dark-gold-soft);
+  background: var(--ivory);
+}
+.spot-badge {
+  font-size: var(--fs-mini);
+  border-radius: 499.5px;
+  padding: 3px 9px;
+  flex-shrink: 0;
+}
+.spot-badge.on { color: var(--dark-gold); border: 0.5px solid var(--dark-gold-soft); }
+.spot-badge.soon { color: var(--ink-muted); background: var(--bg-card); }
+
+/* —— 我的入口 —— */
+.menu-card { padding: 15px 12px; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--line);
+}
+.menu-item:last-child { border-bottom: none; }
+/* 意向单重点入口 */
+.menu-item.hot {
+  padding: 10px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--cinnabar-soft) 0%, var(--ochre-deep) 100%);
+  border: none;
+  border-radius: var(--radius);
+}
+.hot-left { display: flex; align-items: center; gap: 9px; }
+.hot-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--cinnabar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+.hot-info { display: flex; flex-direction: column; }
+.hot-label { color: var(--bg-card); font-weight: 600; }
+.hot-sub {
+  font-size: var(--fs-mini);
+  color: var(--ivory-deep);
+  margin-top: 2px;
+}
+.m-label { font-size: var(--fs-body); color: var(--ink-soft); }
+.m-arrow { font-size: 18px; color: var(--ink-muted); }
+.menu-item.hot .m-arrow { color: var(--bg-card); }
+
+.reset-btn { margin-top: 6px; }
+
+
+body{margin:0;background:#f4ecdd;}
+.page-wrap{width:375px;margin:0 auto;}
+div,span{box-sizing:border-box;}
+span{display:block;}
+.grid-price-symbol,.scale-num-sep{display:inline;}
+button{font-family:inherit;}
+</style></head>
+<body><div class="mine">
+  <div class="mine-head">
+    <div class="avatar"><img class="avatar-img" src="../miniprogram/assets/characters/yunque-girl.jpg"></div>
+    <span class="mine-name">云阙旅人</span><span class="mine-sub">已集 2 片龙鳞 · 走过 2 处</span>
+  </div>
+  <div class="page-wrap mine-body">
+    <div class="stat-grid rise">
+      <div class="stat"><span class="stat-num">2</span><span class="stat-label">龙鳞</span></div>
+      <div class="stat"><span class="stat-num">2</span><span class="stat-label">集章</span></div>
+      <div class="stat"><span class="stat-num">0</span><span class="stat-label">数藏</span></div>
+    </div>
+    <div class="card scale-card rise">
+      <div class="card-head"><div class="card-head-titles"><span class="title-h2">龙鳞集章</span><span class="card-sub">七鳞聚齐 · 云阙归愿</span></div>
+        <span class="scale-progress">2 / 7</span></div>
+      <div class="scale-wall"><div class="scale-cell">
+    <div class="scale-medal got"><div class="scale-core"></div></div>
+    <span class="scale-name on">启程鳞</span><span class="scale-hall">丹凤门</span></div><div class="scale-cell">
+    <div class="scale-medal got"><div class="scale-core"></div></div>
+    <span class="scale-name on">朝会鳞</span><span class="scale-hall">含元殿</span></div><div class="scale-cell">
+    <div class="scale-medal "><div class="scale-core"></div></div>
+    <span class="scale-name ">廊下鳞</span><span class="scale-hall">宣政殿</span></div><div class="scale-cell">
+    <div class="scale-medal "><div class="scale-core"></div></div>
+    <span class="scale-name ">召对鳞</span><span class="scale-hall">紫宸殿</span></div><div class="scale-cell">
+    <div class="scale-medal "><div class="scale-core"></div></div>
+    <span class="scale-name ">池苑鳞</span><span class="scale-hall">太液池</span></div><div class="scale-cell">
+    <div class="scale-medal "><div class="scale-core"></div></div>
+    <span class="scale-name ">盛宴鳞</span><span class="scale-hall">麟德殿</span></div><div class="scale-cell">
+    <div class="scale-medal "><div class="scale-core"></div></div>
+    <span class="scale-name ">归愿鳞</span><span class="scale-hall">玄武门</span></div></div>
+    </div>
+    <div class="card spot-card rise">
+      <div class="card-head"><div class="card-head-titles"><span class="title-h2">景点巡游</span><span class="card-sub">已到访 2 处宫殿</span></div></div>
+      <div class="spot-list"><div class="spot-row ">
+    <div class="spot-emblem on"><span class="spot-emblem-text">西安</span></div>
+    <div class="spot-info"><span class="spot-name">大明宫国家遗址公园</span><span class="spot-sub">千宫之宫 · 七阙长卷</span>
+      <div class="spot-meta"><span class="spot-tag visited">已到访 2/7 处</span></div></div>
+    <span class="spot-badge on">可巡游</span></div><div class="spot-row soon">
+    <div class="spot-emblem "><span class="spot-emblem-text">西安</span></div>
+    <div class="spot-info"><span class="spot-name">大雁塔文化景区</span><span class="spot-sub">大慈恩寺 · 玄奘译场</span>
+      <div class="spot-meta"><span class="spot-tag ">尚未到访</span></div></div>
+    <span class="spot-badge soon">即将上线</span></div></div>
+    </div>
+    <div class="card menu-card rise">
+      <div class="card-head"><div class="card-head-titles"><span class="title-h2">我的</span><span class="card-sub">意向 · 预约 · 收藏</span></div></div>
+      <div class="menu-item hot"><div class="hot-left"><div class="hot-icon">意</div><div class="hot-info"><span class="m-label hot-label">我的意向单</span><span class="hot-sub">预售与意向登记 · 优先通知</span></div></div><span class="m-arrow">›</span></div>
+      <div class="menu-item"><span class="m-label">体验预约</span><span class="m-arrow">›</span></div>
+      <div class="menu-item"><span class="m-label">史料卡收藏</span><span class="m-arrow">›</span></div>
+      <div class="menu-item"><span class="m-label">我的祈愿分享</span><span class="m-arrow">›</span></div>
+      <div class="menu-item"><span class="m-label">关于长安云阙</span><span class="m-arrow">›</span></div>
+    </div>
+    <div class="btn-ghost reset-btn rise">重置巡游进度</div>
+  </div></div></body></html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>tour-check</title><style>/* 盛唐敦煌壁画美学 · Design Token
+   低饱和、沉静华贵：象牙白/月白/浅石青/淡青绿/浅赭，暗金与低饱和朱砂少量点缀 */
+body {
+  /* 主色 */
+  --ivory: #f4ecdd;          /* 象牙白 · 底 */
+  --ivory-deep: #ece1cd;
+  --moon: #e6ebea;           /* 月白 · 冷高光 */
+  --azurite: #8fa6ab;        /* 浅石青 */
+  --azurite-deep: #6f8b92;
+  --celadon: #a6bfae;        /* 淡青绿 */
+  --celadon-deep: #86a590;
+  --ochre: #c7a987;          /* 浅赭 */
+  --ochre-deep: #b08d68;
+
+  /* 点缀 */
+  --dark-gold: #a8893a;      /* 暗金 · 少量 */
+  --dark-gold-soft: #c2a668;
+  --cinnabar: #9e4a2a;       /* 低饱和朱砂 · 局部重心 */
+  --cinnabar-soft: #b06a4a;
+
+  /* 墨色文字 */
+  --ink: #463e36;
+  --ink-soft: #6a5f52;
+  --ink-muted: #93867a;
+
+  /* 语义 */
+  --bg: #f4ecdd;
+  --bg-card: #fbf6ec;
+  --bg-card-deep: #f1e8d6;
+  --line: #e0d4bf;
+
+  /* 字号 */
+  --fs-title: 22px;
+  --fs-h2: 17px;
+  --fs-body: 14px;
+  --fs-small: 12px;
+  --fs-mini: 10px;
+
+  /* 圆角与间距 */
+  --radius-lg: 12px;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --space: 12px;
+
+  /* 阴影 · 克制 */
+  --shadow: 0 4px 15px rgba(90, 74, 50, 0.08);
+  --shadow-deep: 0 6px 20px rgba(90, 74, 50, 0.14);
+
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, "PingFang SC", "Songti SC", "Noto Serif SC", serif;
+}
+
+/* 通用样式类 */
+.page-wrap {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 12px 14px calc(20px + 0px);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.title-lg {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+
+.title-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.text-body { font-size: var(--fs-body); color: var(--ink-soft); line-height: 1.7; }
+.text-muted { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.6; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 499.5px;
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: #fbf3e4;
+  font-size: 15px;
+  letter-spacing: 2px;
+  border: none;
+}
+.btn-primary::after { border: none; }
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 499.5px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+  font-size: 14px;
+  border: 0.5px solid var(--line);
+}
+.btn-ghost::after { border: none; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 499.5px;
+  font-size: var(--fs-mini);
+  background: var(--bg-card-deep);
+  color: var(--ink-soft);
+  margin-right: 6px;
+}
+.tag-gold { background: rgba(168, 137, 58, 0.12); color: var(--dark-gold); }
+.tag-cinnabar { background: rgba(158, 74, 42, 0.1); color: var(--cinnabar); }
+
+.row-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-sm { gap: 6px; }
+
+/* —— 全局打磨（Line5）：轻按反馈与平滑过渡 —— */
+.card, .mode-card, .grid-item, .stat {
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.card:active, .mode-card:active, .grid-item:active { transform: scale(0.985); }
+.btn-primary, .btn-ghost, .bar-cart, .bar-buy { transition: opacity 0.2s ease, transform 0.15s ease; }
+.btn-primary:active, .bar-buy:active { transform: scale(0.98); opacity: 0.92; }
+image { transition: opacity 0.3s ease; }
+
+
+/* ============================================================
+   云阙巡游 · tour 页打磨
+   盛唐敦煌长卷美学：低饱和、沉静华贵；暗金仅用于龙鳞，朱砂克制
+   全部颜色/字号/圆角/间距/阴影均引用 tokens.wxss
+   ============================================================ */
+
+.tour { padding-top: 10px; }
+
+/* ---------- 顶部卡片：标题 + 模式切换 ---------- */
+.progress-head { padding-bottom: 15px; }
+.head-row { align-items: flex-start; }
+.head-title { display: flex; flex-direction: column; }
+.head-sub {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  letter-spacing: 1.5px;
+  margin-top: 3px;
+}
+
+/* 云游 / 现场 分段控件 */
+.seg-group {
+  display: flex;
+  background: var(--bg-card-deep);
+  border: 0.5px solid var(--line);
+  border-radius: 499.5px;
+  padding: 2.5px;
+}
+.seg {
+  padding: 5px 14px;
+  font-size: var(--fs-small);
+  letter-spacing: 1px;
+  color: var(--ink-muted);
+  border-radius: 499.5px;
+  transition: color 0.25s ease, background 0.3s ease, box-shadow 0.25s ease;
+}
+.seg.on {
+  background: linear-gradient(135deg, var(--cinnabar) 0%, var(--ochre-deep) 100%);
+  color: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- 龙鳞七片 ---------- */
+.scale-line { margin: 13px 0 13px; }
+.scale-head { align-items: baseline; margin-bottom: 8px; }
+.scale-text { font-size: var(--fs-small); color: var(--ink-soft); letter-spacing: 1px; }
+.scale-num { font-size: var(--fs-h2); font-weight: 600; color: var(--dark-gold); }
+.scale-num-sep { font-size: var(--fs-small); color: var(--ink-muted); font-weight: 400; }
+
+/* 龙鳞托：一条鎏金暗槽 */
+.scale-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card-deep);
+  border: 0.5px solid var(--line);
+  border-radius: 499.5px;
+  padding: 9px 13px;
+  margin-top: 2px;
+}
+.scale-chip { width: 19px; height: 23px; }
+.scale-face {
+  width: 100%;
+  height: 100%;
+  /* 龙鳞：上缘微弧收分、下缘聚尖，如覆瓦 */
+  clip-path: polygon(12% 0, 88% 0, 100% 26%, 100% 64%, 50% 100%, 0 64%, 0 26%);
+  background: var(--line);
+  opacity: 0.55;
+  transition: background 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+.scale-chip.got .scale-face {
+  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 90%);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+.scale-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+}
+
+.continue-btn { margin-top: 3px; }
+
+/* ============================================================
+   卷轴路线
+   ============================================================ */
+.scroll-wrap { position: relative; padding: 3px 1px 0; }
+
+/* 卷轴轴头（上下两端的绫杆） */
+.scroll-rod {
+  position: relative;
+  height: 8px;
+  border-radius: 499.5px;
+  background: linear-gradient(90deg, var(--ochre-deep) 0%, var(--ochre) 50%, var(--ochre-deep) 100%);
+  box-shadow: var(--shadow);
+}
+.scroll-rod.bottom { margin-top: 13px; }
+.rod-cap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--dark-gold-soft), var(--dark-gold));
+}
+.rod-cap.left { left: -3px; }
+.rod-cap.right { right: -3px; }
+
+/* 绢丝中轴：贯穿各节点的路线 */
+.route { position: relative; padding: 7px 2px 2px 5px; }
+.route-item {
+  position: relative;
+  display: flex;
+  padding-bottom: 13px;
+  /* 长卷徐徐展开：逐点淡入上移 */
+  animation: riseIn 0.5s ease both;
+}
+.route-item:nth-child(1) { animation-delay: 0.04s; }
+.route-item:nth-child(2) { animation-delay: 0.12s; }
+.route-item:nth-child(3) { animation-delay: 0.20s; }
+.route-item:nth-child(4) { animation-delay: 0.28s; }
+.route-item:nth-child(5) { animation-delay: 0.36s; }
+.route-item:nth-child(6) { animation-delay: 0.44s; }
+.route-item:nth-child(7) { animation-delay: 0.52s; }
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(13px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 连接线（绢丝） */
+.route-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15.5px;
+  top: 33px;
+  width: 1px;
+  height: calc(100% - 20px);
+  background: linear-gradient(180deg, var(--line) 0%, var(--ochre) 60%, var(--line) 100%);
+}
+
+/* 节点圆 */
+.node {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card-deep);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 11px;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.node-index { font-size: var(--fs-small); color: var(--ink-muted); }
+/* 节点上的小徽记（完成点的鎏金芯） */
+.node-badge {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--dark-gold);
+  border: 1px solid var(--bg-card);
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+
+/* 路线卡片 */
+.route-card {
+  flex: 1;
+  background: var(--bg-card);
+  border: 0.5px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 11px 12px;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.3s ease;
+}
+.route-name { font-size: var(--fs-h2); font-weight: 600; color: var(--ink); letter-spacing: 0.5px; }
+.route-state { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 0.5px; }
+.route-role {
+  display: block;
+  font-size: var(--fs-mini);
+  color: var(--ink-soft);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+.route-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 7px;
+}
+.route-scale { font-size: var(--fs-mini); color: var(--ochre-deep); letter-spacing: 0.5px; }
+
+/* 可点反馈 */
+.route-hover .route-card { transform: scale(0.985); box-shadow: var(--shadow-deep); }
+
+/* ---------- 三态 ---------- */
+/* 已完成：鎏金节点 + 金芯 */
+.route-item.completed .node { background: var(--dark-gold); border-color: var(--dark-gold); }
+.route-item.completed .node-index { color: var(--bg-card); font-weight: 600; }
+.route-item.completed .node-badge { transform: scale(1); }
+.route-item.completed .route-state { color: var(--dark-gold); }
+.route-item.completed .route-scale { color: var(--dark-gold); }
+
+/* 当前点位（可进入）：朱砂收边 + 轻柔呼吸光圈，明确"现在就去" */
+.route-item.unlocked .node {
+  background: var(--bg-card);
+  border-color: var(--cinnabar);
+  box-shadow: 0 0 0 2px rgba(158, 74, 42, 0.10);
+  animation: breath 2.6s ease-in-out infinite;
+}
+.route-item.unlocked .node-index { color: var(--cinnabar); font-weight: 600; }
+.route-item.unlocked .route-state { color: var(--cinnabar); }
+.route-item.unlocked .route-card {
+  border-color: var(--cinnabar-soft);
+  box-shadow: var(--shadow-deep);
+}
+.route-cta { font-size: var(--fs-mini); color: var(--cinnabar); letter-spacing: 0.5px; }
+
+@keyframes breath {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(158, 74, 42, 0.10); }
+  50% { box-shadow: 0 0 0 6px rgba(158, 74, 42, 0); }
+}
+
+/* 锁定：低饱和淡出 */
+.route-item.locked { opacity: 0.6; }
+.route-item.locked .node { background: var(--bg-card-deep); }
+.route-item.locked .route-card { box-shadow: none; }
+.route-lock { font-size: var(--fs-mini); color: var(--ink-muted); letter-spacing: 0.5px; }
+
+/* ============================================================
+   空状态
+   ============================================================ */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0 24px;
+}
+.empty-seal {
+  width: 48px;
+  height: 55px;
+  clip-path: polygon(15% 0, 85% 0, 100% 24%, 100% 62%, 50% 100%, 0 62%, 0 24%);
+  background: linear-gradient(160deg, var(--line), var(--ochre));
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.empty-title { font-size: var(--fs-h2); color: var(--ink-soft); letter-spacing: 1.5px; }
+.empty-desc {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+
+body{margin:0;background:#f4ecdd;}
+.page-wrap{width:375px;margin:0 auto;}
+div,span{box-sizing:border-box;}
+span{display:block;}
+.grid-price-symbol,.scale-num-sep{display:inline;}
+button{font-family:inherit;}
+</style></head>
+<body><div class="page-wrap tour">
+  <div class="card progress-head">
+    <div class="row-between head-row">
+      <div class="head-title"><span class="title-h2">云阙AR巡游</span><span class="head-sub">大明宫 · 七阙长卷</span></div>
+      <div class="seg-group"><div class="seg on">云游</div><div class="seg">现场</div></div>
+    </div>
+    <div class="scale-line">
+      <div class="row-between scale-head"><span class="scale-text">龙鳞集录</span><span class="scale-num">2<span class="scale-num-sep"> / </span>7</span></div>
+      <div class="scale-row"><div class="scale-chip got"><div class="scale-face"></div></div><div class="scale-chip got"><div class="scale-face"></div></div><div class="scale-chip "><div class="scale-face"></div></div><div class="scale-chip "><div class="scale-face"></div></div><div class="scale-chip "><div class="scale-face"></div></div><div class="scale-chip "><div class="scale-face"></div></div><div class="scale-chip "><div class="scale-face"></div></div></div>
+      <span class="scale-hint">云游模式 · 在线复原盛唐宫殿</span>
+    </div>
+    <div class="btn-primary continue-btn">继续巡游</div>
+  </div>
+  <div class="scroll-wrap">
+    <div class="scroll-rod"><div class="rod-cap left"></div><div class="rod-cap right"></div></div>
+    <div class="route"><div class="route-item completed ">
+      <div class="node"><span class="node-index">1</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">丹凤门</span><span class="route-state">已完成</span></div>
+        <span class="route-role">你将成为：入宫使臣</span>
+        <div class="route-foot"><span class="route-scale">◈ 启程鳞</span></div>
+      </div></div><div class="route-item completed ">
+      <div class="node"><span class="node-index">2</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">含元殿</span><span class="route-state">已完成</span></div>
+        <span class="route-role">你将成为：朝会官员</span>
+        <div class="route-foot"><span class="route-scale">◈ 朝会鳞</span></div>
+      </div></div><div class="route-item unlocked is-current">
+      <div class="node"><span class="node-index">3</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">宣政殿</span><span class="route-state">可进入</span></div>
+        <span class="route-role">你将成为：朝堂廊下官员</span>
+        <div class="route-foot"><span class="route-scale">◈ 廊下鳞</span><span class="route-cta">前往 →</span></div>
+      </div></div><div class="route-item locked ">
+      <div class="node"><span class="node-index">4</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">紫宸殿</span><span class="route-state">待解锁</span></div>
+        <span class="route-role">你将成为：入閤近臣</span>
+        <div class="route-foot"><span class="route-scale">◈ 召对鳞</span><span class="route-lock">未解锁</span></div>
+      </div></div><div class="route-item locked ">
+      <div class="node"><span class="node-index">5</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">太液池</span><span class="route-state">待解锁</span></div>
+        <span class="route-role">你将成为：临池文人</span>
+        <div class="route-foot"><span class="route-scale">◈ 池苑鳞</span><span class="route-lock">未解锁</span></div>
+      </div></div><div class="route-item locked ">
+      <div class="node"><span class="node-index">6</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">麟德殿</span><span class="route-state">待解锁</span></div>
+        <span class="route-role">你将成为：赴宴宾客</span>
+        <div class="route-foot"><span class="route-scale">◈ 盛宴鳞</span><span class="route-lock">未解锁</span></div>
+      </div></div><div class="route-item locked ">
+      <div class="node"><span class="node-index">7</span><div class="node-badge"></div></div>
+      <div class="route-card">
+        <div class="row-between"><span class="route-name">玄武门</span><span class="route-state">待解锁</span></div>
+        <span class="route-role">你将成为：归愿之人</span>
+        <div class="route-foot"><span class="route-scale">◈ 归愿鳞</span><span class="route-lock">未解锁</span></div>
+      </div></div></div>
+    <div class="scroll-rod bottom"><div class="rod-cap left"></div><div class="rod-cap right"></div></div>
+  </div></div></body></html>
