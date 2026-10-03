@@ -1,6 +1,20 @@
 .ar-cam { position: fixed; inset: 0; background: #1a1714; }
 .cam { position: absolute; inset: 0; width: 100%; height: 100%; }
 
+/* 无可用相机时的内容底图（慢推 Ken Burns，模拟现场取景氛围） */
+.scan-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  animation: scanBgPush 24s ease-in-out infinite alternate;
+}
+@keyframes scanBgPush { from { transform: scale(1.04); } to { transform: scale(1.16); } }
+/* 暗角：压暗四边，保证取景框 / 顶部标题 / 底部按钮文字可读 */
+.scan-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 46%, transparent 42%, rgba(15, 11, 8, 0.62) 100%),
+    linear-gradient(180deg, rgba(15, 11, 8, 0.45), transparent 26%, transparent 74%, rgba(15, 11, 8, 0.55));
+}
+
 /* 左上角退出按钮 */
 .exit-btn {
   position: absolute; top: calc(env(safe-area-inset-top) + 18rpx); left: 28rpx; z-index: 20;
@@ -52,6 +66,55 @@
   animation: rot 0.9s linear infinite;
 }
 @keyframes rot { to { transform: rotate(360deg); } }
+
+/* ===== 识别命中：走龙 · 龙鳞鎏金动效（纯内联 SVG/CSS，复用 --dark-gold/--grad-gold/--cinnabar） ===== */
+.dragon-fx {
+  position: absolute; top: 50%; left: 50%; width: 260rpx; height: 260rpx;
+  margin: -130rpx 0 0 -130rpx; pointer-events: none;
+}
+/* 光晕呼吸 */
+.df-halo {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 180, 116, 0.42) 0%, rgba(216, 168, 106, 0.16) 46%, transparent 70%);
+  animation: dfHalo 1.3s ease-in-out infinite;
+}
+@keyframes dfHalo { 0%, 100% { transform: scale(0.72); opacity: 0.55; } 50% { transform: scale(1.06); opacity: 1; } }
+/* 旋转金环 */
+.df-ring {
+  position: absolute; inset: 46rpx; border-radius: 50%;
+  border: 2rpx solid rgba(216, 168, 106, 0.55); border-top-color: #fff2d6; border-right-color: rgba(232, 201, 135, 0.15);
+  animation: rot 0.9s linear infinite;
+}
+/* 走龙：内联 SVG 鎏金曲线 + 龙首珠，自绘缩放/流光 */
+.df-dragon {
+  position: absolute; inset: 0; background-position: center; background-repeat: no-repeat;
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M22%2074C34%2060%2030%2044%2048%2040C66%2036%2062%2020%2078%2016%22%20fill%3D%22none%22%20stroke%3D%22%23e8c987%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2279%22%20cy%3D%2215%22%20r%3D%224.6%22%20fill%3D%22%23f6e6b8%22%2F%3E%3C%2Fsvg%3E');
+  filter: drop-shadow(0 0 10rpx rgba(216, 168, 106, 0.65));
+  animation: dfDragon 1.3s ease-out infinite;
+}
+@keyframes dfDragon {
+  0% { transform: scale(0.55) rotate(-10deg); opacity: 0.35; }
+  45% { opacity: 1; }
+  100% { transform: scale(1.08) rotate(5deg); opacity: 0.92; }
+}
+/* 龙鳞：六瓣鎏金，环绕放射依次弹出 */
+.df-scales .df-scale {
+  position: absolute; width: 32rpx; height: 36rpx;
+  clip-path: polygon(50% 0, 100% 26%, 100% 66%, 50% 100%, 0 66%, 0 26%);
+  background: var(--grad-gold); opacity: 0;
+  box-shadow: 0 0 12rpx rgba(216, 168, 106, 0.55);
+}
+.df-scale.s1 { top: 6rpx; left: 50%; margin-left: -16rpx; animation: dfScale 1.3s ease-out infinite; }
+.df-scale.s2 { top: 30rpx; right: 26rpx; animation: dfScale 1.3s ease-out 0.12s infinite; }
+.df-scale.s3 { bottom: 30rpx; right: 26rpx; animation: dfScale 1.3s ease-out 0.24s infinite; }
+.df-scale.s4 { bottom: 6rpx; left: 50%; margin-left: -16rpx; animation: dfScale 1.3s ease-out 0.36s infinite; }
+.df-scale.s5 { bottom: 30rpx; left: 26rpx; animation: dfScale 1.3s ease-out 0.48s infinite; }
+.df-scale.s6 { top: 30rpx; left: 26rpx; animation: dfScale 1.3s ease-out 0.6s infinite; }
+@keyframes dfScale {
+  0% { opacity: 0; transform: scale(0.2) translateY(0); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1) translateY(-14rpx); }
+}
 
 .reticle-hint {
   position: absolute; left: 50%; bottom: -92rpx; transform: translateX(-50%);

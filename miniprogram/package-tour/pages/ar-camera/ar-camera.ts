@@ -11,6 +11,10 @@ let recTimer: ReturnType<typeof setTimeout> | null = null;
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
 /** 复原视频“确有帧”看门狗：真机 timeupdate 未按时到达时始终保留 poster 兜底 */
 let briefWatchdog: ReturnType<typeof setTimeout> | null = null;
+/** VK 就绪标志：start 成功回调置 true。一旦就绪，即便暂未识别到 anchor 也不抢跳降级 */
+let vkReady = false;
+/** VK 就绪看门狗：onLoad 后约 5s 仍未就绪（createVKSession 静默挂起）则自动降级内容模式 */
+let vkReadyTimer: ReturnType<typeof setTimeout> | null = null;
 
 type Phase = 'scanning' | 'recognizing' | 'briefing';
 type TargetKind = 'spot' | 'relic';
@@ -44,6 +48,12 @@ Page({
     hasVK: false,
     /** 是否运行在开发者工具模拟器：模拟器 video 同层渲染会纯黑，故永不渲染 video、只放 poster */
     isDevtools: false,
+    /** 运行模式：site=现场开摄像头扫描→识别；cloud=云游纯内容（不建VK/不开摄像头/不定位，直接讲解） */
+    mode: 'site' as 'site' | 'cloud',
+    /** 相机不可用（binderror / 无相机）：停止渲染 camera，改铺内容底图，绝不纯黑 */
+    cameraFailed: false,
+    /** 扫描/识别页内容底图：景点 poster→arRestoreImage→bg，文物 relicImage */
+    fallbackImage: '',
     targetKind: 'spot' as TargetKind,
     // 通用
     targetName: '',
@@ -78,7 +88,11 @@ Page({
     } catch (e) {
       isDevtools = false;
     }
-    this.setData({ isDevtools });
+
+    // 现场 / 云游模式：query.mode（或 query.from）= cloud 时为云游纯内容模式，否则默认现场 site
+    const mode: 'site' | 'cloud' =
+      query?.mode === 'cloud' || query?.from === 'cloud' ? 'cloud' : 'site';
+    this.setData({ isDevtools, mode });
 
     // 从进入时的场景 id 反推所属景点（无 id / 找不到时默认大明宫），保证大雁塔现场序列正确
     const entryScene = query?.id ? getScene(query.id) : undefined;
@@ -92,6 +106,14 @@ Page({
     }
     this.setData({ seqTotal: seq.length });
     this.loadSeqIndex(startIdx);
+
+    // 云游模式：不创建 VK、不开摄像头、不定位；铺内容底图后自动走「识别动效→讲解」纯内容流
+    if (mode === 'cloud') {
+      setTimeout(() => {
+        if (this.data.phase === 'scanning') this.startRecognize();
+      }, 500);
+      return;
+    }
 
     const hasVK = typeof (wx as any).createVKSession === 'function';
     this.setData({ hasVK });
@@ -128,6 +150,8 @@ Page({
       era: '',
       restoreVideo: scene.restoreVideo || '',
       poster: scene.poster || '',
+      // 内容兜底链：poster → arRestoreImage → bg，保证扫描底图与讲解画面任何环境不黑
+      fallbackImage: scene.poster || scene.arRestoreImage || scene.bg || '',
       intro: scene.intro,
       yunqueLines,
       sourceCard: scene.sourceCard,
@@ -155,6 +179,7 @@ Page({
       targetName: relic.name,
       era: relic.era,
       relicImage: relic.image,
+      fallbackImage: relic.image,
       relicInAlbum: getProgressStore().isRelicCollected(relic.id),
       goodsId: relic.goodsId || '',
       intro: relic.intro,
@@ -173,6 +198,7 @@ Page({
 
   /* ---------- 真机：VKSession marker 识别 ---------- */
   initVK() {
+    vkReady = false;
     try {
       vkSession = (wx as any).createVKSession({
         track: { plane: { mode: 1 }, marker: true },
@@ -180,17 +206,50 @@ Page({
       }) as WechatMiniprogram.VKSession;
       vkSession.start((err: any) => {
         if (err) {
-          this.initLBSFallback();
-          this.scheduleDemoScan();
+          this.degradeToContent();
+          return;
+        }
+        // start 成功回调 = VK 就绪。一旦就绪，即使用户尚未对准 marker（暂无 anchor）也不抢跳降级
+        vkReady = true;
+        if (vkReadyTimer) {
+          clearTimeout(vkReadyTimer);
+          vkReadyTimer = null;
         }
       });
       vkSession.on('updateAnchors', (res: any) => {
         if (res && res.anchors && res.anchors.length) this.startRecognize();
       });
     } catch (e) {
-      this.initLBSFallback();
-      this.scheduleDemoScan();
+      this.degradeToContent();
+      return;
     }
+    // 就绪看门狗：onLoad 后约 5s 仍未就绪（createVKSession 静默挂起，start/anchor 均无回调）
+    // → 自动降级为「复原图/视频 + 云阙讲解」内容模式，不黑、可继续
+    vkReadyTimer = setTimeout(() => {
+      if (!vkReady) this.degradeToContent();
+    }, 5000);
+  },
+
+  /* VK 静默挂起 / 明确不可用：销毁会话（停用相机占用），降级为 LBS + 演示扫描的内容模式 */
+  degradeToContent() {
+    this.destroyVK();
+    this.initLBSFallback();
+    this.scheduleDemoScan();
+  },
+
+  /* 销毁 VK 会话并清理就绪看门狗（幂等，可重复调用） */
+  destroyVK() {
+    if (vkReadyTimer) {
+      clearTimeout(vkReadyTimer);
+      vkReadyTimer = null;
+    }
+    vkReady = false;
+    try {
+      (vkSession as any)?.destroy?.();
+    } catch (e) {
+      /* noop */
+    }
+    vkSession = null;
   },
 
   /* ---------- 兜底：LBS 进入触发半径（仅景点有坐标） ---------- */
@@ -407,17 +466,14 @@ Page({
   },
 
   onCamError() {
-    wx.showToast({ title: '相机开启失败，请检查权限', icon: 'none' });
+    // 相机不可用（权限拒绝 / 无相机 / 不支持设备）：停止渲染 camera，改铺内容底图，绝不纯黑
+    this.setData({ cameraFailed: true });
+    wx.showToast({ title: '相机不可用，已切换为复原内容浏览', icon: 'none' });
   },
 
   onUnload() {
     this.clearTimers();
     this.stopAudio();
-    try {
-      (vkSession as any)?.destroy?.();
-    } catch (e) {
-      /* noop */
-    }
-    vkSession = null;
+    this.destroyVK();
   },
 });

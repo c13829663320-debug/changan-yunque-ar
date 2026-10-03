@@ -1,5 +1,24 @@
 <view class="ar-cam">
-  <camera wx:if="{{phase !== 'briefing'}}" class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
+  <!-- 仅现场真机且相机可用时才渲染 camera；模拟器 / 相机失败 / 云游模式一律不渲染，改铺内容底图 -->
+  <camera
+    wx:if="{{phase !== 'briefing' && !isDevtools && !cameraFailed && mode !== 'cloud'}}"
+    class="cam"
+    device-position="back"
+    flash="off"
+    binderror="onCamError"
+  ></camera>
+
+  <!-- 无可用相机（模拟器/相机失败/云游）时的内容底图 + 暗角：保证扫描/识别页任何环境不黑、可继续 -->
+  <image
+    wx:if="{{phase !== 'briefing' && (isDevtools || cameraFailed || mode === 'cloud') && fallbackImage}}"
+    class="scan-bg"
+    src="{{fallbackImage}}"
+    mode="aspectFill"
+  ></image>
+  <view
+    wx:if="{{phase !== 'briefing' && (isDevtools || cameraFailed || mode === 'cloud') && fallbackImage}}"
+    class="scan-vignette"
+  ></view>
 
   <!-- 左上角：退出到首页 -->
   <view class="exit-btn {{phase === 'briefing' ? 'on-light' : ''}}" bindtap="onExit">
@@ -9,7 +28,7 @@
 
   <!-- 顶部标题（扫描 / 识别时） -->
   <view class="cam-top" wx:if="{{phase !== 'briefing'}}">
-    <text class="cam-kicker">现场 AR · 云阙识别</text>
+    <text class="cam-kicker">{{mode === 'cloud' ? '云游 · 云阙讲解' : '现场 AR · 云阙识别'}}</text>
     <text class="cam-title">{{targetName}}</text>
     <text wx:if="{{targetKind === 'relic' && era}}" class="cam-era">{{era}}</text>
   </view>
@@ -21,10 +40,23 @@
     <view class="reticle-corner bl"></view>
     <view class="reticle-corner br"></view>
     <view class="scan-line" wx:if="{{phase === 'scanning'}}"></view>
-    <view class="reticle-spin" wx:if="{{phase === 'recognizing'}}"></view>
+    <!-- 识别命中：走龙 · 龙鳞鎏金动效（纯内联 SVG/CSS，复用 gold/cinnabar tokens） -->
+    <view class="dragon-fx" wx:if="{{phase === 'recognizing'}}">
+      <view class="df-halo"></view>
+      <view class="df-ring"></view>
+      <view class="df-dragon"></view>
+      <view class="df-scales">
+        <view class="df-scale s1"></view>
+        <view class="df-scale s2"></view>
+        <view class="df-scale s3"></view>
+        <view class="df-scale s4"></view>
+        <view class="df-scale s5"></view>
+        <view class="df-scale s6"></view>
+      </view>
+    </view>
     <view class="reticle-hint">
       <view class="reticle-pulse"></view>
-      <text>{{phase === 'recognizing' ? '正在识别图像特征…' : '对准景点 / 物品'}}</text>
+      <text>{{phase === 'recognizing' ? '云阙正在识取龙鳞…' : (mode === 'cloud' ? '云阙为你展开' : '对准景点 / 物品')}}</text>
     </view>
   </view>
 
@@ -42,7 +74,7 @@
 
       <!-- 景点：动态复原视频（带兜底画面，任何环境不黑） -->
       <view class="restore-box" wx:if="{{targetKind === 'spot'}}">
-        <image class="restore-fallback" src="{{poster}}" mode="aspectFill"></image>
+        <image class="restore-fallback" src="{{fallbackImage}}" mode="aspectFill"></image>
         <video
           wx:if="{{!isDevtools}}"
           id="briefVideo"
