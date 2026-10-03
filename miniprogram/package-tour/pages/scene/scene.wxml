@@ -27,6 +27,18 @@
     <text class="place-tag">{{scene.name}} · {{scene.role}}</text>
   </view>
 
+  <!-- 集鳞仪式动画 -->
+  <view class="scale-fx" wx:if="{{collectingScale}}">
+    <view class="scale-fx-glow"></view>
+    <view class="scale-fx-rays"></view>
+    <view class="scale-fx-scale">
+      <text class="sfx-word">{{scene.scaleName}}</text>
+    </view>
+    <view class="scale-fx-particles">
+      <view class="sfx-pt" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this" style="--i:{{index}}"></view>
+    </view>
+  </view>
+
   <!-- AR 复原层 -->
   <view class="ar-mask" wx:if="{{showAR}}" bindtap="closeAR">
     <view class="ar-frame" catchtap="noop">
@@ -106,7 +118,11 @@
   <view class="dialog-bar" wx:if="{{!finished && !showFeedback}}">
     <view class="actor-line">
       <text class="a-name">{{actorDisplay}}</text>
-      <view class="source-mini" bindtap="openSource">史料卡</view>
+      <view class="voice-controls">
+        <view class="vc-btn" wx:if="{{node.audio}}" bindtap="replayAudio">重播</view>
+        <view class="vc-btn" bindtap="toggleMute">{{voiceMuted ? '开声' : '静音'}}</view>
+        <view class="source-mini" bindtap="openSource">史料卡</view>
+      </view>
     </view>
     <text class="d-text">{{node.text}}</text>
     <view class="choices" wx:if="{{showChoices}}">

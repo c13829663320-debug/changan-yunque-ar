@@ -147,3 +147,77 @@
   background: #14110d;
   box-shadow: 0 8rpx 24rpx rgba(70, 62, 54, 0.12);
 }
+
+/* ===== 配音控制 ===== */
+.voice-controls { display: flex; align-items: center; gap: 12rpx; }
+.vc-btn {
+  font-size: var(--fs-mini); color: var(--dark-gold);
+  border: 1rpx solid var(--dark-gold-soft); border-radius: 999rpx;
+  padding: 4rpx 18rpx; line-height: 1.7; background: var(--bg-card);
+}
+
+/* ===== 集鳞仪式动画 ===== */
+.scale-fx {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 46%, rgba(198,160,86,0.20), rgba(40,32,20,0.55));
+  animation: sfxFade 1.3s ease forwards;
+}
+@keyframes sfxFade {
+  0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+}
+.scale-fx-glow {
+  position: absolute; width: 360rpx; height: 360rpx; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,224,150,0.85), rgba(214,170,90,0.25) 55%, transparent 72%);
+  animation: sfxGlow 1.3s ease-out forwards;
+}
+@keyframes sfxGlow {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { opacity: 1; } 100% { transform: scale(1.5); opacity: 0.4; }
+}
+.scale-fx-rays {
+  position: absolute; width: 520rpx; height: 520rpx; border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    rgba(255,225,160,0) 0deg, rgba(255,225,160,0.55) 12deg, rgba(255,225,160,0) 24deg,
+    rgba(255,225,160,0.45) 60deg, rgba(255,225,160,0) 72deg,
+    rgba(255,225,160,0.5) 120deg, rgba(255,225,160,0) 132deg,
+    rgba(255,225,160,0.4) 180deg, rgba(255,225,160,0) 192deg,
+    rgba(255,225,160,0.5) 240deg, rgba(255,225,160,0) 252deg,
+    rgba(255,225,160,0.45) 300deg, rgba(255,225,160,0) 312deg);
+  animation: sfxSpin 1.3s ease-out forwards; opacity: 0.7;
+}
+@keyframes sfxSpin {
+  0% { transform: rotate(0) scale(0.4); opacity: 0; }
+  35% { opacity: 0.9; }
+  100% { transform: rotate(120deg) scale(1.15); opacity: 0.2; }
+}
+.scale-fx-scale {
+  position: relative; z-index: 2;
+  width: 200rpx; height: 200rpx; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #fbe6ad, #d9a948 70%, #b6812c);
+  border: 3rpx solid rgba(255,235,180,0.9);
+  box-shadow: 0 0 60rpx rgba(255,210,120,0.9), inset 0 0 30rpx rgba(255,240,200,0.7);
+  display: flex; align-items: center; justify-content: center;
+  animation: sfxScale 1.3s cubic-bezier(0.2,1.3,0.4,1) forwards;
+}
+@keyframes sfxScale {
+  0% { transform: scale(0) rotate(-120deg); opacity: 0; }
+  55% { transform: scale(1.15) rotate(10deg); opacity: 1; }
+  75% { transform: scale(1) rotate(0); }
+  100% { transform: scale(1.05); opacity: 1; }
+}
+.sfx-word { color: #5b3f14; font-size: 32rpx; font-weight: 700; letter-spacing: 2rpx; }
+.scale-fx-particles { position: absolute; inset: 0; }
+.sfx-pt {
+  position: absolute; left: 50%; top: 46%;
+  width: 14rpx; height: 14rpx; margin: -7rpx 0 0 -7rpx;
+  border-radius: 50%; background: #ffe6a8;
+  box-shadow: 0 0 12rpx rgba(255,220,140,0.9);
+  animation: sfxPt 1.3s ease-out forwards;
+}
+@keyframes sfxPt {
+  0% { opacity: 0; transform: rotate(calc(var(--i) * 36deg)) translateY(20rpx) scale(0.5); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(calc(var(--i) * 36deg)) translateY(-260rpx) scale(1); }
+}

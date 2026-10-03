@@ -3,6 +3,7 @@ import { getProgressStore } from '../../../store/progress';
 import { ScenePoint, DialogNode, ChoiceFeedback } from '../../../data/types/scene';
 
 let audioCtx: WechatMiniprogram.InnerAudioContext | null = null;
+const MUTED_KEY = 'changan_yunque_muted';
 
 Page({
   data: {
@@ -28,6 +29,9 @@ Page({
     showShareCard: false,
     wishText: '',
     shareImagePath: '',
+    // 配音开关与集鳞仪式动画
+    voiceMuted: false,
+    collectingScale: false,
   },
 
   onLoad(query: Record<string, string | undefined>) {
@@ -39,7 +43,8 @@ Page({
       setTimeout(() => wx.navigateBack(), 800);
       return;
     }
-    this.setData({ mode, scene, total: scene.dialogs.length });
+    const voiceMuted = wx.getStorageSync(MUTED_KEY) === true;
+    this.setData({ mode, scene, total: scene.dialogs.length, voiceMuted });
     this.renderNode(0);
   },
 
@@ -87,7 +92,12 @@ Page({
       return;
     }
     if (node.action?.type === 'collect_scale') {
-      this.finishScene();
+      if (this.data.collectingScale) return;
+      this.setData({ collectingScale: true });
+      setTimeout(() => {
+        this.setData({ collectingScale: false });
+        this.finishScene();
+      }, 1300);
       return;
     }
     if (dialogIndex + 1 >= scene.dialogs.length) {
@@ -138,9 +148,14 @@ Page({
   noop() {},
 
   playAudio(src?: string) {
-    if (!src) return;
     try {
       audioCtx?.destroy();
+      audioCtx = null;
+    } catch (e) {
+      /* noop */
+    }
+    if (!src || this.data.voiceMuted) return;
+    try {
       const ctx = wx.createInnerAudioContext();
       ctx.src = src;
       ctx.play();
@@ -148,6 +163,26 @@ Page({
     } catch (err) {
       console.warn('[audio] play failed:', err);
     }
+  },
+
+  toggleMute() {
+    const voiceMuted = !this.data.voiceMuted;
+    wx.setStorageSync(MUTED_KEY, voiceMuted);
+    this.setData({ voiceMuted });
+    if (voiceMuted) {
+      try {
+        audioCtx?.destroy();
+        audioCtx = null;
+      } catch (e) {
+        /* noop */
+      }
+    } else {
+      this.playAudio(this.data.node.audio);
+    }
+  },
+
+  replayAudio() {
+    this.playAudio(this.data.node.audio);
   },
 
   finishScene() {
