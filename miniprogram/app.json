@@ -4,7 +4,8 @@
     "pages/home/home",
     "pages/tour/tour",
     "pages/mall/mall",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/mine/detail/detail"
   ],
   "subpackages": [
     {

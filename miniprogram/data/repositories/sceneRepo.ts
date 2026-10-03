@@ -1,4 +1,5 @@
 import daminggongScenes from '../scenes/daminggong/index';
+import dayantaScenes from '../scenes/dayanta/index';
 import { ScenePoint } from '../types/scene';
 
 /** 复原视频已上传 CDN（不进小程序包、在线播放）；加载失败由 poster 运镜兜底 */
@@ -10,9 +11,15 @@ const RESTORE_VIDEO: Record<string, string> = {
   taiyechi: 'https://aka.doubaocdn.com/s/KWTkUwH0hD',
   linde: 'https://aka.doubaocdn.com/s/cYQ3Q7CUCM',
   xuanwumen: 'https://aka.doubaocdn.com/s/ttL2luLyrZ',
+  // 大雁塔 5 点位复原视频（Seedance 2.5）
+  shanmen: 'https://aka.doubaocdn.com/s/4UP0yY80Kt',
+  yichang: 'https://aka.doubaocdn.com/s/u1LUUJUnxR',
+  shengjiaobei: 'https://aka.doubaocdn.com/s/befUUj2CXh',
+  timing: 'https://aka.doubaocdn.com/s/AvAzGYxoZl',
+  'yata-ding': 'https://aka.doubaocdn.com/s/zWO8DXVeau',
 };
 
-const allScenes: ScenePoint[] = [...daminggongScenes];
+const allScenes: ScenePoint[] = [...daminggongScenes, ...dayantaScenes];
 
 export function getScenesBySpot(spotId: string): ScenePoint[] {
   return allScenes
@@ -27,7 +34,8 @@ export function getScene(id: string): ScenePoint | undefined {
   return {
     ...s,
     restoreVideo: RESTORE_VIDEO[s.id] || '',
-    poster: `/package-tour/assets/scenes/${s.id}/poster.jpg`,
+    // 大雁塔 poster 走 CDN（s.poster）；大明宫无 poster 字段时回退包内本地 poster
+    poster: s.poster || `/package-tour/assets/scenes/${s.id}/poster.jpg`,
   };
 }
 

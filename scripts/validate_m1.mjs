@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * validate_m1.mjs — M1 静态校验闸门（文件系统级，不执行 TS）
+ * validate_m1.mjs — 静态校验闸门（文件系统级，不执行 TS）
  * 用法: node scripts/validate_m1.mjs
  * 校验:
  *  1. app.json 所有页面/分包页面四件套齐全
  *  2. miniprogram 下所有 .json 可解析
- *  3. 七剧场文件齐全，含 id/sourceCard/choices/ar_restore/collect_scale
- *  4. index.ts 聚合七个剧场
+ *  3. 多景点剧场文件齐全，含 id/sourceCard/choices/ar_restore/collect_scale/龙鳞
+ *  4. 各景点 index.ts 聚合其全部剧场；sceneRepo 聚合全部景点
  *  5. 商品数据与封面（本地封面≤95KB，网络封面免本地校验）
- *  6. 主包/全包体积
+ *  6. 主包/逐分包/全包体积（主包≤2MB、单分包≤2MB、全包≤20MB）
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -20,6 +20,32 @@ const mp = join(root, 'miniprogram');
 let failures = 0;
 const fail = (m) => { failures++; console.error('  ✗ ' + m); };
 const ok = (m) => console.log('  ✓ ' + m);
+
+/** 景点 → 目录 + [场景id, 龙鳞名]（数据驱动，新增景点只改这里） */
+const SPOTS = [
+  {
+    id: 'daminggong',
+    pairs: [
+      ['danfengmen', '启程鳞'],
+      ['hanyuan', '朝会鳞'],
+      ['xuanzheng', '廊下鳞'],
+      ['zichen', '召对鳞'],
+      ['taiyechi', '池苑鳞'],
+      ['linde', '盛宴鳞'],
+      ['xuanwumen', '归愿鳞'],
+    ],
+  },
+  {
+    id: 'dayanta',
+    pairs: [
+      ['shanmen', '初谒鳞'],
+      ['yichang', '翻经鳞'],
+      ['shengjiaobei', '圣教鳞'],
+      ['timing', '登科鳞'],
+      ['yata-ding', '归雁鳞'],
+    ],
+  },
+];
 
 // 1. 页面四件套
 console.log('[1] 页面文件齐全');
@@ -57,39 +83,40 @@ walk(mp, (f) => {
 });
 if (failures === 0) ok(`${jsonCount} 个 JSON 全部合法`);
 
-// 3. 七剧场结构
-console.log('[3] 七剧场结构完整');
-const sceneDir = join(mp, 'data/scenes/daminggong');
-const expected = [
-  ['danfengmen', '启程鳞'],
-  ['hanyuan', '朝会鳞'],
-  ['xuanzheng', '廊下鳞'],
-  ['zichen', '召对鳞'],
-  ['taiyechi', '池苑鳞'],
-  ['linde', '盛宴鳞'],
-  ['xuanwumen', '归愿鳞'],
-];
-for (const [id, scale] of expected) {
-  const f = join(sceneDir, id + '.ts');
-  if (!existsSync(f)) { fail(`缺少剧场 ${id}.ts`); continue; }
-  const src = readFileSync(f, 'utf8');
-  if (!src.includes(`id: '${id}'`)) fail(`${id}: id 不匹配`);
-  if (!src.includes('sourceCard')) fail(`${id}: 缺史料卡`);
-  if (!src.includes('choices')) fail(`${id}: 缺轻分支 choices`);
-  if (!src.includes("'ar_restore'")) fail(`${id}: 缺 AR 复原`);
-  if (!src.includes("'collect_scale'")) fail(`${id}: 缺集鳞`);
-  if (!src.includes(scale)) fail(`${id}: 缺龙鳞「${scale}」`);
+// 3. 多景点剧场结构
+console.log('[3] 多景点剧场结构完整');
+for (const spot of SPOTS) {
+  const sceneDir = join(mp, 'data/scenes', spot.id);
+  for (const [id, scale] of spot.pairs) {
+    const f = join(sceneDir, id + '.ts');
+    if (!existsSync(f)) { fail(`[${spot.id}] 缺少剧场 ${id}.ts`); continue; }
+    const src = readFileSync(f, 'utf8');
+    if (!src.includes(`id: '${id}'`)) fail(`${id}: id 不匹配`);
+    if (!src.includes(`spotId: '${spot.id}'`)) fail(`${id}: spotId 非 ${spot.id}`);
+    if (!src.includes('sourceCard')) fail(`${id}: 缺史料卡`);
+    if (!src.includes('choices')) fail(`${id}: 缺轻分支 choices`);
+    if (!src.includes("'ar_restore'")) fail(`${id}: 缺 AR 复原`);
+    if (!src.includes("'collect_scale'")) fail(`${id}: 缺集鳞`);
+    if (!src.includes(scale)) fail(`${id}: 缺龙鳞「${scale}」`);
+  }
 }
-if (failures === 0) ok('七剧场 id/史料卡/分支/AR/集鳞/龙鳞齐全（复原视频上云、poster兜底）');
+if (failures === 0) ok(`${SPOTS.map((s) => s.pairs.length).join('+')} 剧场（${SPOTS.map((s) => s.id).join('/')}）结构齐全`);
 
-// 4. index 聚合
-console.log('[4] index.ts 聚合七剧场');
-const indexSrc = readFileSync(join(sceneDir, 'index.ts'), 'utf8');
-for (const [id] of expected) {
-  if (!indexSrc.includes(`./${id}`)) fail(`index.ts 未聚合 ${id}`);
+// 4. 各景点 index 聚合 + sceneRepo 聚合全部景点
+console.log('[4] 景点聚合');
+for (const spot of SPOTS) {
+  const sceneDir = join(mp, 'data/scenes', spot.id);
+  const indexSrc = readFileSync(join(sceneDir, 'index.ts'), 'utf8');
+  for (const [id] of spot.pairs) {
+    if (!indexSrc.includes(`./${id}`)) fail(`[${spot.id}] index.ts 未聚合 ${id}`);
+  }
 }
-if (existsSync(join(sceneDir, 'others.meta.ts'))) fail('others.meta.ts 仍存在，应被独立剧场取代');
-if (failures === 0) ok('index.ts 聚合七剧场，others.meta.ts 已移除');
+const sceneRepoSrc = readFileSync(join(mp, 'data/repositories/sceneRepo.ts'), 'utf8');
+for (const spot of SPOTS) {
+  if (!sceneRepoSrc.includes(`scenes/${spot.id}/index`)) fail(`sceneRepo 未聚合景点 ${spot.id}`);
+}
+if (existsSync(join(mp, 'data/scenes/daminggong/others.meta.ts'))) fail('others.meta.ts 仍存在');
+if (failures === 0) ok('各景点 index.ts 聚合、sceneRepo 聚合全部景点，others.meta.ts 已移除');
 
 // 5. 商品数据与封面（本地封面校验体积；网络封面免本地文件）
 console.log('[5] 商品数据与封面');
@@ -121,11 +148,14 @@ const fsSizeKB = (p) => {
 };
 const du = (p) => {
   if (!existsSync(p)) return 0;
+  // Windows：纯 Node 字节求和（确定性，正是微信代码体积口径），不依赖 shell du
+  if (process.platform === 'win32') return fsSizeKB(p);
   try {
     const out = execSync(`du -sk "${p}"`).toString().trim().split('\t')[0];
-    return parseInt(out, 10);
+    const kb = parseInt(out, 10);
+    return Number.isNaN(kb) ? fsSizeKB(p) : kb;
   } catch {
-    return fsSizeKB(p); // 纯 Windows 无 du 时的跨平台兜底
+    return fsSizeKB(p); // 无 du 时的跨平台兜底
   }
 };
 const subs = (appJson.subpackages || []).map((sp) => ({ name: sp.root, dir: join(mp, sp.root) }));
@@ -143,5 +173,5 @@ console.log(`  全包约 ${(totalSize / 1024).toFixed(2)} MB（限 20MB）`);
 if (mainSize > 2048) fail('主包超 2MB');
 if (totalSize > 20480) fail('全包超 20MB');
 
-console.log('\n' + (failures === 0 ? '✅ M1 静态校验通过' : `❌ M1 静态校验失败：${failures} 项`));
+console.log('\n' + (failures === 0 ? '✅ 静态校验通过' : `❌ 静态校验失败：${failures} 项`));
 process.exit(failures === 0 ? 0 : 1);

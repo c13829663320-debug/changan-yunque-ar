@@ -10,6 +10,9 @@ const dayanta: Spot = {
   name: '大雁塔 · 大慈恩寺',
   subtitle: '玄奘译经之地 · 雁塔题名',
   city: '西安',
+  cover: 'https://aka.doubaocdn.com/s/wv5PRszVhz',
+  overviewImage: 'https://aka.doubaocdn.com/s/8J59Gid2dV',
+  timelineImage: 'https://aka.doubaocdn.com/s/l7R9ZyTx7K',
   summary:
     '大慈恩寺大雁塔为玄奘法师译经、藏经之所，是丝绸之路与唐代佛教文化的标志；“雁塔题名”更是古代读书人至高的荣耀。',
   tags: ['世界文化遗产', '唐代译场', '雁塔题名'],
@@ -41,18 +44,18 @@ const dayanta: Spot = {
     },
   ],
   relics: [
-    { name: '大雁塔', desc: '七层楼阁式砖塔，丝绸之路上的佛教文化地标。' },
-    { name: '《大唐西域记》', desc: '玄奘口述、辩机编集，记述西行沿途百余国见闻。' },
-    { name: '雁塔题名碑', desc: '唐代进士题名刻石，后世多有重刻与拓本。' },
-    { name: '玄奘负笈像', desc: '背负经笈、手持法器的求法僧形象。' },
+    { name: '大雁塔', desc: '七层楼阁式砖塔，丝绸之路上的佛教文化地标。', image: 'https://aka.doubaocdn.com/s/SJnUaodMWT' },
+    { name: '《大唐西域记》', desc: '玄奘口述、辩机编集，记述西行沿途百余国见闻。', image: 'https://aka.doubaocdn.com/s/DpMxHmplYs' },
+    { name: '雁塔题名碑', desc: '唐代进士题名刻石，后世多有重刻与拓本。', image: 'https://aka.doubaocdn.com/s/P0biPjU15E' },
+    { name: '玄奘负笈像', desc: '背负经笈、手持法器的求法僧形象。', image: 'https://aka.doubaocdn.com/s/lj1yrniVaX' },
   ],
   openInfo: {
     hours: '08:00—17:00',
     ticket: '大慈恩寺门票，登塔另购',
     traffic: '地铁 3 / 4 号线 大雁塔站',
   },
-  sceneIds: [],
-  enabled: false,
+  sceneIds: ['shanmen', 'yichang', 'shengjiaobei', 'timing', 'yata-ding'],
+  enabled: true,
 };
 
 export default dayanta;
