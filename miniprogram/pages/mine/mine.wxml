@@ -1,7 +1,7 @@
 <view class="mine">
   <!-- 头部 -->
   <view class="mine-head">
-    <view class="avatar"><image class="avatar-img" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image></view>
+    <view class="avatar"><image class="avatar-img" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image></view>
     <text class="mine-name">云阙旅人</text>
     <text class="mine-sub">已集 {{scaleCount}} 片龙鳞 · 走过 {{stampCount}} 处</text>
   </view>
