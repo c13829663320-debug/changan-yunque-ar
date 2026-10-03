@@ -166,6 +166,7 @@
     wish="{{wishText}}"
     scale-count="{{scaleCount}}"
     scale-name="{{scene.scaleName}}"
+    spot-id="{{scene.spotId}}"
     bind:ready="onShareCardReady"
     bind:close="onShareCardClose"
   ></share-card>
