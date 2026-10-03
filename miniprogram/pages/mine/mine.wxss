@@ -1,26 +1,64 @@
+.mine {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* —— 头部 —— */
 .mine-head {
-  padding: 60rpx 0 50rpx;
+  position: relative;
+  padding: 72rpx 0 56rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
   background:
-    radial-gradient(120% 100% at 50% 0%, rgba(166, 191, 174, 0.3), transparent 70%),
-    linear-gradient(180deg, #ece1cd, #f4ecdd);
+    radial-gradient(120% 100% at 50% 0%, var(--moon), transparent 70%),
+    linear-gradient(180deg, var(--ivory-deep), var(--bg));
+  overflow: hidden;
+}
+.mine-head::before {
+  content: '';
+  position: absolute;
+  top: 36rpx;
+  width: 230rpx;
+  height: 230rpx;
+  border-radius: 50%;
+  border: 1rpx solid var(--dark-gold-soft);
+  opacity: 0.4;
 }
 .avatar {
-  width: 130rpx;
-  height: 130rpx;
+  position: relative;
+  width: 136rpx;
+  height: 136rpx;
   border-radius: 50%;
   overflow: hidden;
-  border: 2rpx solid var(--dark-gold-soft);
-  box-shadow: var(--shadow);
-  margin-bottom: 18rpx;
+  border: 3rpx solid var(--dark-gold-soft);
+  box-shadow: var(--shadow-deep);
+  margin-bottom: 20rpx;
 }
 .avatar-img { width: 100%; height: 100%; }
-.mine-name { font-size: var(--fs-title); color: var(--ink); font-weight: 600; }
-.mine-sub { font-size: var(--fs-small); color: var(--ink-muted); margin-top: 10rpx; }
+.mine-name {
+  font-size: var(--fs-title);
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 4rpx;
+}
+.mine-sub {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 12rpx;
+  letter-spacing: 1rpx;
+}
 
-.mine-body { padding-top: 26rpx; }
+.mine-body { padding-top: 6rpx; }
+
+/* —— 克制的入场动效（仅一次，不循环） —— */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+
+/* —— 统计 —— */
 .stat-grid { display: flex; gap: 20rpx; margin-bottom: 24rpx; }
 .stat {
   flex: 1;
@@ -36,20 +74,173 @@
 .stat-num { font-size: 44rpx; color: var(--dark-gold); font-weight: 600; }
 .stat-label { font-size: var(--fs-small); color: var(--ink-muted); margin-top: 6rpx; }
 
-/* 全部景点 */
-.spot-list-card { padding: 28rpx 24rpx; margin-bottom: 24rpx; }
-.spot-li { display: flex; align-items: center; justify-content: space-between; padding: 22rpx 0; border-bottom: 1rpx solid var(--line); }
-.spot-li:last-child { border-bottom: none; }
-.spot-li-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.spot-li-name { font-size: var(--fs-body); color: var(--ink); }
-.spot-li-sub { font-size: var(--fs-mini); color: var(--ink-muted); margin-top: 6rpx; }
-.spot-li-badge { font-size: var(--fs-mini); border-radius: 999rpx; padding: 4rpx 18rpx; flex-shrink: 0; }
-.spot-li-badge.on { color: var(--dark-gold); border: 1rpx solid var(--dark-gold-soft); }
-.spot-li-badge.soon { color: var(--ink-muted); background: var(--bg-card-deep); }
+/* —— 卡片统一头 —— */
+.card-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+.card-head-titles { display: flex; flex-direction: column; }
+.card-sub {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-top: 8rpx;
+  letter-spacing: 1rpx;
+}
 
-.menu { padding: 0 28rpx; }
-.menu-item { display: flex; align-items: center; justify-content: space-between; padding: 30rpx 0; border-bottom: 1rpx solid var(--line); }
+/* —— 龙鳞集章墙 —— */
+.scale-card { padding: 30rpx 24rpx; }
+.scale-progress {
+  font-size: var(--fs-h2);
+  color: var(--dark-gold);
+  font-weight: 600;
+}
+.scale-wall { display: flex; flex-wrap: wrap; }
+.scale-cell {
+  width: 25%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 0 16rpx;
+}
+.scale-medal {
+  width: 92rpx;
+  height: 96rpx;
+  /* 鳞/水滴形 */
+  border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
+  transition: transform 0.2s ease;
+}
+.scale-medal.got {
+  background: linear-gradient(155deg, var(--dark-gold-soft) 0%, var(--dark-gold) 80%);
+  border: 1rpx solid var(--dark-gold);
+  box-shadow: var(--shadow-deep);
+}
+.scale-core {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: var(--line);
+}
+.scale-medal.got .scale-core {
+  background: var(--bg-card);
+}
+.scale-name {
+  font-size: var(--fs-small);
+  color: var(--ink-muted);
+  margin-top: 12rpx;
+  letter-spacing: 1rpx;
+}
+.scale-name.on { color: var(--ink); font-weight: 600; }
+.scale-hall {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-top: 4rpx;
+}
+
+/* —— 景点巡游卡片 —— */
+.spot-card { padding: 30rpx 24rpx; }
+.spot-list { display: flex; flex-direction: column; }
+.spot-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  background: var(--bg-card-deep);
+  border: 1rpx solid var(--line);
+  border-radius: var(--radius);
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
+}
+.spot-row:last-child { margin-bottom: 0; }
+.spot-row:active { transform: scale(0.99); }
+.spot-row.soon { opacity: 0.72; }
+.spot-emblem {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--ivory-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spot-emblem.on { box-shadow: var(--shadow); }
+.spot-emblem-img { width: 100%; height: 100%; }
+.spot-emblem-text { font-size: var(--fs-small); color: var(--ink-muted); }
+.spot-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.spot-name { font-size: var(--fs-body); color: var(--ink); font-weight: 600; }
+.spot-sub { font-size: var(--fs-mini); color: var(--ink-muted); margin-top: 6rpx; }
+.spot-meta { margin-top: 10rpx; display: flex; }
+.spot-tag {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  background: var(--bg-card);
+  border: 1rpx solid var(--line);
+  border-radius: 999rpx;
+  padding: 3rpx 14rpx;
+}
+.spot-tag.visited {
+  color: var(--dark-gold);
+  border-color: var(--dark-gold-soft);
+  background: var(--ivory);
+}
+.spot-badge {
+  font-size: var(--fs-mini);
+  border-radius: 999rpx;
+  padding: 6rpx 18rpx;
+  flex-shrink: 0;
+}
+.spot-badge.on { color: var(--dark-gold); border: 1rpx solid var(--dark-gold-soft); }
+.spot-badge.soon { color: var(--ink-muted); background: var(--bg-card); }
+
+/* —— 我的入口 —— */
+.menu-card { padding: 30rpx 24rpx; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
 .menu-item:last-child { border-bottom: none; }
+/* 意向单重点入口 */
+.menu-item.hot {
+  padding: 20rpx;
+  margin-bottom: 12rpx;
+  background: linear-gradient(135deg, var(--cinnabar-soft) 0%, var(--ochre-deep) 100%);
+  border: none;
+  border-radius: var(--radius);
+}
+.hot-left { display: flex; align-items: center; gap: 18rpx; }
+.hot-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--cinnabar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+.hot-info { display: flex; flex-direction: column; }
+.hot-label { color: var(--bg-card); font-weight: 600; }
+.hot-sub {
+  font-size: var(--fs-mini);
+  color: var(--ivory-deep);
+  margin-top: 4rpx;
+}
 .m-label { font-size: var(--fs-body); color: var(--ink-soft); }
 .m-arrow { font-size: 36rpx; color: var(--ink-muted); }
-.reset-btn { margin-top: 10rpx; }
+.menu-item.hot .m-arrow { color: var(--bg-card); }
+
+.reset-btn { margin-top: 12rpx; }

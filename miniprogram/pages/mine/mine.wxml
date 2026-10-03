@@ -1,4 +1,5 @@
 <view class="mine">
+  <!-- 头部 -->
   <view class="mine-head">
     <view class="avatar"><image class="avatar-img" src="/assets/characters/yunque-girl.jpg" mode="aspectFill"></image></view>
     <text class="mine-name">云阙旅人</text>
@@ -6,38 +7,92 @@
   </view>
 
   <view class="page-wrap mine-body">
-    <view class="stat-grid">
+    <!-- 统计 -->
+    <view class="stat-grid rise" style="animation-delay:.02s">
       <view class="stat"><text class="stat-num">{{scaleCount}}</text><text class="stat-label">龙鳞</text></view>
       <view class="stat"><text class="stat-num">{{stampCount}}</text><text class="stat-label">集章</text></view>
       <view class="stat"><text class="stat-num">0</text><text class="stat-label">数藏</text></view>
     </view>
 
-    <!-- 全部景点（模板可复用） -->
-    <view class="card spot-list-card">
-      <text class="title-h2">全部景点</text>
-      <view
-        class="spot-li"
-        wx:for="{{spots}}"
-        wx:key="id"
-        data-id="{{item.id}}"
-        bindtap="goSpot"
-      >
-        <view class="spot-li-info">
-          <text class="spot-li-name">{{item.name}}</text>
-          <text class="spot-li-sub">{{item.subtitle}}</text>
+    <!-- 龙鳞集章墙 -->
+    <view class="card scale-card rise" style="animation-delay:.08s">
+      <view class="card-head">
+        <view class="card-head-titles">
+          <text class="title-h2">龙鳞集章</text>
+          <text class="card-sub">七鳞聚齐 · 云阙归愿</text>
         </view>
-        <text class="spot-li-badge {{item.enabled ? 'on' : 'soon'}}">{{item.enabled ? '可巡游' : '即将上线'}}</text>
+        <text class="scale-progress">{{scaleCount}} / {{scaleTotal}}</text>
+      </view>
+      <view class="scale-wall">
+        <view class="scale-cell" wx:for="{{scaleWall}}" wx:key="name">
+          <view class="scale-medal {{item.got ? 'got' : ''}}">
+            <view class="scale-core"></view>
+          </view>
+          <text class="scale-name {{item.got ? 'on' : ''}}">{{item.name}}</text>
+          <text class="scale-hall">{{item.hall}}</text>
+        </view>
       </view>
     </view>
 
-    <view class="card menu">
-      <view class="menu-item" data-k="intention" bindtap="onMenu"><text class="m-label">我的意向单</text><text class="m-arrow">›</text></view>
+    <!-- 景点巡游 -->
+    <view class="card spot-card rise" style="animation-delay:.14s">
+      <view class="card-head">
+        <view class="card-head-titles">
+          <text class="title-h2">景点巡游</text>
+          <text class="card-sub">已到访 {{stampCount}} 处宫殿</text>
+        </view>
+      </view>
+      <view class="spot-list">
+        <view
+          class="spot-row {{item.enabled ? '' : 'soon'}}"
+          wx:for="{{spotCards}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="goSpot"
+        >
+          <view class="spot-emblem {{item.enabled ? 'on' : ''}}">
+            <image wx:if="{{item.cover}}" class="spot-emblem-img" src="{{item.cover}}" mode="aspectFill"></image>
+            <text wx:else class="spot-emblem-text">{{item.city}}</text>
+          </view>
+          <view class="spot-info">
+            <text class="spot-name">{{item.name}}</text>
+            <text class="spot-sub">{{item.subtitle}}</text>
+            <view class="spot-meta">
+              <text class="spot-tag {{item.visitedCount > 0 ? 'visited' : ''}}">{{item.visitedText}}</text>
+            </view>
+          </view>
+          <text class="spot-badge {{item.enabled ? 'on' : 'soon'}}">{{item.enabled ? '可巡游' : '即将上线'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的入口 -->
+    <view class="card menu-card rise" style="animation-delay:.2s">
+      <view class="card-head">
+        <view class="card-head-titles">
+          <text class="title-h2">我的</text>
+          <text class="card-sub">意向 · 预约 · 收藏</text>
+        </view>
+      </view>
+
+      <!-- 意向单：重点入口（保持现有跳转） -->
+      <view class="menu-item hot" data-k="intention" bindtap="onMenu">
+        <view class="hot-left">
+          <view class="hot-icon">意</view>
+          <view class="hot-info">
+            <text class="m-label hot-label">我的意向单</text>
+            <text class="hot-sub">预售与意向登记 · 优先通知</text>
+          </view>
+        </view>
+        <text class="m-arrow">›</text>
+      </view>
+
       <view class="menu-item" data-k="booking" bindtap="onMenu"><text class="m-label">体验预约</text><text class="m-arrow">›</text></view>
       <view class="menu-item" data-k="source" bindtap="onMenu"><text class="m-label">史料卡收藏</text><text class="m-arrow">›</text></view>
       <view class="menu-item" data-k="share" bindtap="onMenu"><text class="m-label">我的祈愿分享</text><text class="m-arrow">›</text></view>
       <view class="menu-item" data-k="about" bindtap="onMenu"><text class="m-label">关于长安云阙</text><text class="m-arrow">›</text></view>
     </view>
 
-    <button class="btn-ghost reset-btn" bindtap="onReset">重置巡游进度</button>
+    <button class="btn-ghost reset-btn rise" style="animation-delay:.26s" bindtap="onReset">重置巡游进度</button>
   </view>
 </view>
