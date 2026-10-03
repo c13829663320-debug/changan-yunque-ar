@@ -11,11 +11,14 @@ Page({
     showAR: false,
     arTip: '',
     activeImage: '',
+    activeIndex: 0,
     thumbList: [] as { url: string }[],
     isSummoning: false,
+    cartAdded: false,
   },
 
   _summonTimer: 0 as number,
+  _cartTimer: 0 as number,
 
   onLoad(query) {
     const id = query?.id || '';
@@ -29,6 +32,7 @@ Page({
       goods: goods || null,
       categoryLabel: goods ? CATEGORY_LABEL[goods.category] : '',
       activeImage: cover,
+      activeIndex: 0,
       thumbList,
       arTip: hasGlb
         ? '已接入 XRFrame 后将可 360° 旋转查看商品模型；当前以封面示意召唤效果。'
@@ -38,7 +42,10 @@ Page({
 
   pickImage(e: WechatMiniprogram.TouchEvent) {
     const url = (e.currentTarget.dataset as { url: string }).url;
-    if (url) this.setData({ activeImage: url });
+    if (url) {
+      const idx = this.data.thumbList.findIndex((t) => t.url === url);
+      this.setData({ activeImage: url, activeIndex: idx >= 0 ? idx : 0 });
+    }
   },
 
   previewAR() {
@@ -64,6 +71,12 @@ Page({
       if (id && !cart.includes(id)) cart.push(id);
       wx.setStorageSync(CART_KEY, cart);
       wx.showToast({ title: '已加入购物车', icon: 'success' });
+      // 轻量成功反馈：按钮短暂切换为「已加入」，不改变加购逻辑
+      this.setData({ cartAdded: true });
+      clearTimeout(this._cartTimer);
+      this._cartTimer = setTimeout(() => {
+        this.setData({ cartAdded: false });
+      }, 1400);
     } catch (err) {
       wx.showToast({ title: '加入失败', icon: 'none' });
     }
