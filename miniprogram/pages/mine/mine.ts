@@ -33,6 +33,8 @@ Page({
   data: {
     scaleCount: 0,
     stampCount: 0,
+    relicCount: 0,
+    relicTotal: 5,
     spots: [] as Spot[],
     scaleWall: [] as ScaleCell[],
     scaleTotal: SCALE_WALL_META.length,
@@ -74,6 +76,7 @@ Page({
     this.setData({
       scaleCount: s.scales.length,
       stampCount: s.stamps.length,
+      relicCount: s.collectedRelicIds.length,
       scaleWall,
       spotCards,
     });
@@ -82,6 +85,11 @@ Page({
   goSpot(e: WechatMiniprogram.TouchEvent) {
     const id = (e.currentTarget.dataset as { id: string }).id;
     wx.navigateTo({ url: `/package-spot/pages/spot-detail/spot-detail?id=${id}` });
+  },
+
+  /** 文物图鉴（分包页） */
+  goAlbum() {
+    wx.navigateTo({ url: '/package-tour/pages/album/album' });
   },
 
   onMenu(e: WechatMiniprogram.TouchEvent) {

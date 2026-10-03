@@ -3,7 +3,7 @@
   <view class="mine-head">
     <view class="avatar"><image class="avatar-img" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image></view>
     <text class="mine-name">云阙旅人</text>
-    <text class="mine-sub">已集 {{scaleCount}} 片龙鳞 · 走过 {{stampCount}} 处</text>
+    <text class="mine-sub">已集 {{scaleCount}} 鳞 · 收录 {{relicCount}} 件文物 · 走过 {{stampCount}} 处</text>
   </view>
 
   <view class="page-wrap mine-body">
@@ -11,7 +11,7 @@
     <view class="stat-grid rise" style="animation-delay:.02s">
       <view class="stat"><text class="stat-num">{{scaleCount}}</text><text class="stat-label">龙鳞</text></view>
       <view class="stat"><text class="stat-num">{{stampCount}}</text><text class="stat-label">集章</text></view>
-      <view class="stat"><text class="stat-num">0</text><text class="stat-label">数藏</text></view>
+      <view class="stat"><text class="stat-num">{{relicCount}}</text><text class="stat-label">文物</text></view>
     </view>
 
     <!-- 龙鳞集章墙 -->
@@ -30,6 +30,22 @@
           </view>
           <text class="scale-name {{item.got ? 'on' : ''}}">{{item.name}}</text>
           <text class="scale-hall">{{item.hall}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 文物图鉴入口 -->
+    <view class="card album-card rise" style="animation-delay:.11s" bindtap="goAlbum">
+      <view class="card-head">
+        <view class="card-head-titles">
+          <text class="title-h2">文物图鉴</text>
+          <text class="card-sub">现场扫描 · 收录长安遗珍</text>
+        </view>
+        <text class="scale-progress">{{relicCount}} / {{relicTotal}}</text>
+      </view>
+      <view class="album-mini">
+        <view class="album-mini-cell {{index < relicCount ? 'on' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+          <text class="album-mini-mark">{{index < relicCount ? '藏' : '锁'}}</text>
         </view>
       </view>
     </view>

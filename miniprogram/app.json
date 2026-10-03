@@ -12,7 +12,8 @@
       "name": "tour",
       "pages": [
         "pages/scene/scene",
-        "pages/ar-camera/ar-camera"
+        "pages/ar-camera/ar-camera",
+        "pages/album/album"
       ]
     },
     {
