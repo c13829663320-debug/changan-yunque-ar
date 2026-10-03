@@ -1,4 +1,9 @@
 <view class="page-wrap mall">
+  <view class="mall-head">
+    <text class="mall-title">云阙商城</text>
+    <text class="mall-sub">文物灵感 · AIGC 再现，盛唐好物集</text>
+  </view>
+
   <scroll-view scroll-x enhanced show-scrollbar="{{false}}" class="cat-bar">
     <view
       class="cat {{activeCat === item.id ? 'on' : ''}}"
@@ -10,15 +15,28 @@
   </scroll-view>
 
   <view class="goods-grid">
-    <view class="grid-item" wx:for="{{goods}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+    <view
+      class="grid-item"
+      wx:for="{{goods}}"
+      wx:key="id"
+      style="animation-delay: {{index * 60}}ms"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
       <view class="grid-cover">
         <image wx:if="{{item.cover}}" class="grid-cover-img" src="{{item.cover}}" mode="aspectFill"></image>
-        <text wx:else class="cover-cat">{{item.categoryLabel}}</text>
+        <view wx:else class="grid-cover-fallback">
+          <text class="cover-cat">{{item.categoryLabel}}</text>
+        </view>
+        <view class="cover-scrim"></view>
+        <text wx:if="{{item.presale}}" class="cover-badge">预售</text>
       </view>
-      <text class="grid-name">{{item.name}}</text>
-      <view class="row-between">
-        <text class="grid-price">¥{{item.price}}</text>
-        <text class="presale-tag">预售登记</text>
+      <view class="grid-info">
+        <text class="grid-name">{{item.name}}</text>
+        <text class="grid-desc">{{item.desc}}</text>
+        <view class="grid-foot">
+          <text class="grid-price"><text class="grid-price-symbol">¥</text>{{item.price}}</text>
+        </view>
       </view>
     </view>
   </view>

@@ -2,10 +2,12 @@
   <!-- 首屏封面 / gallery 切换 -->
   <view class="gd-cover">
     <image class="gd-cover-img" src="{{activeImage}}" mode="aspectFill"></image>
+    <view class="gd-cover-scrim"></view>
     <text class="gd-cat">{{categoryLabel}}</text>
+    <text class="gd-counter" wx:if="{{thumbList.length}}">{{activeIndex + 1}} / {{thumbList.length}}</text>
     <view class="gd-gallery" wx:if="{{thumbList.length}}">
       <view
-        class="gd-thumb {{activeImage === item.url ? 'on' : ''}}"
+        class="gd-thumb {{activeIndex === index ? 'on' : ''}}"
         wx:for="{{thumbList}}"
         wx:key="url"
         data-url="{{item.url}}"
@@ -17,23 +19,23 @@
   </view>
 
   <view class="page-wrap gd-body">
-    <view class="gd-head card">
+    <view class="gd-head card anim" style="animation-delay:60ms">
       <text class="gd-name">{{goods.name}}</text>
       <view class="gd-price-row">
-        <text class="gd-price">¥{{goods.price}}</text>
-        <text class="gd-presale">预售 · 意向登记</text>
+        <text class="gd-price"><text class="gd-price-symbol">¥</text>{{goods.price}}</text>
+        <text class="gd-presale" wx:if="{{goods.presale}}">预售 · 意向登记</text>
       </view>
       <view class="gd-tags">
-        <text class="tag" wx:for="{{goods.tags}}" wx:key="*this">{{item}}</text>
+        <text class="tag {{index === 0 ? 'tag-gold' : ''}}" wx:for="{{goods.tags}}" wx:key="*this">{{item}}</text>
       </view>
     </view>
 
-    <view class="card">
+    <view class="card anim" style="animation-delay:140ms">
       <text class="title-h2">商品介绍</text>
       <text class="text-body para">{{goods.desc}}</text>
     </view>
 
-    <view class="card relic-card" wx:if="{{goods.culturalNote}}">
+    <view class="card relic-card anim" wx:if="{{goods.culturalNote}}" style="animation-delay:220ms">
       <view class="relic-head">
         <text class="relic-icon">鼎</text>
         <text class="relic-title">文物灵感</text>
@@ -42,9 +44,14 @@
       <text class="text-body para">{{goods.culturalNote}}</text>
     </view>
 
-    <button class="btn-ghost ar-btn" bindtap="previewAR">
-      <text class="ar-btn-icon">◉</text> AR 预览 / 召唤云阙
-    </button>
+    <view class="ar-entry anim" style="animation-delay:300ms" bindtap="previewAR">
+      <view class="ar-entry-ico">◉</view>
+      <view class="ar-entry-text">
+        <text class="ar-entry-title">AR 预览 · 召唤云阙</text>
+        <text class="ar-entry-sub">{{goods.arPreview ? '接入 XRFrame 后可 360° 查看 3D 模型' : '实景扫描，召唤文物故事与讲解'}}</text>
+      </view>
+      <text class="ar-entry-arrow">›</text>
+    </view>
   </view>
 
   <!-- AR 预览层（数据驱动：有 glb 走 3D 提示，无 glb 用封面+动效优雅示意） -->
@@ -71,7 +78,7 @@
       <text class="side-ico">⌂</text>
       <text class="side-text">购物车</text>
     </view>
-    <button class="bar-cart" bindtap="addCart">加入购物车</button>
+    <button class="bar-cart {{cartAdded ? 'added' : ''}}" bindtap="addCart">{{cartAdded ? '已加入 ✓' : '加入购物车'}}</button>
     <button class="bar-buy" bindtap="registerIntention">预售登记</button>
   </view>
 </view>
