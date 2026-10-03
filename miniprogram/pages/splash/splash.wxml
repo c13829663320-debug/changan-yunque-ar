@@ -1,0 +1,23 @@
+<view class="splash" bindtap="onSkip">
+  <!-- 金色光点上浮 -->
+  <view class="particles">
+    <view
+      wx:for="{{particles}}"
+      wx:key="i"
+      class="particle"
+      style="left:{{item.left}}%;animation-delay:{{item.delay}}s;animation-duration:{{item.dur}}s"
+    ></view>
+  </view>
+
+  <view class="stage">
+    <view class="logo-aura">
+      <view class="logo-clip">
+        <image class="logo" src="/assets/brand/brand-mark.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="title">长安云阙</view>
+    <view class="slogan">跟着云阙 · 云游长安</view>
+  </view>
+
+  <view class="skip">跳过 ›</view>
+</view>
