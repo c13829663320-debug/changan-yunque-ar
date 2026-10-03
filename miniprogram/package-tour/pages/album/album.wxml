@@ -2,24 +2,45 @@
   <view class="album-head">
     <text class="album-kicker">长安遗珍 · 现场收录</text>
     <text class="album-title">文物图鉴</text>
+
+    <!-- 景点切换：多景点时出现，单景点自隐（复用 tour 鎏金分段样式） -->
+    <view class="spot-switch" wx:if="{{spots.length > 1}}">
+      <view class="spot-switch-inner">
+        <view
+          class="spot-tab {{spotId === item.id ? 'on' : ''}}"
+          wx:for="{{spots}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="switchSpot"
+          hover-class="spot-tab-hover"
+          hover-stay-time="80"
+        >{{item.shortName}}</view>
+      </view>
+      <view class="spot-switch-line"></view>
+    </view>
+
     <view class="album-progress">
       <view class="album-progress-bar" style="width: {{total ? (gotCount * 100 / total) : 0}}%;"></view>
     </view>
-    <text class="album-progress-text">已收录 {{gotCount}} / {{total}} 件</text>
+    <text class="album-progress-text">{{total ? '已收录 ' + gotCount + ' / ' + total + ' 件' : '正在整理收录'}}</text>
   </view>
 
   <view class="album-grid">
     <view
-      class="relic-cell {{item.got ? '' : 'locked'}}"
+      class="relic-cell {{item.got ? 'got' : 'locked'}}"
       wx:for="{{cells}}"
       wx:key="id"
       data-id="{{item.id}}"
       bindtap="onTapCell"
+      hover-class="relic-cell-hover"
+      hover-stay-time="60"
     >
       <view class="relic-thumb">
         <image class="relic-thumb-img" src="{{item.image}}" mode="aspectFill"></image>
         <view wx:if="{{!item.got}}" class="relic-lock">
-          <text class="relic-lock-glyph">锁</text>
+          <view class="relic-lock-badge">
+            <line-icon name="lock" size="{{40}}"></line-icon>
+          </view>
         </view>
       </view>
       <text class="relic-name {{item.got ? '' : 'dim'}}">{{item.name}}</text>
@@ -27,9 +48,20 @@
     </view>
   </view>
 
+  <!-- 空态引导卡：鎏金细框 + 极淡暗纹；无文物数据景点走「整理收录」 -->
   <view class="album-tip">
-    <text class="album-tip-text">到大明宫遗址现场，用「现场巡游」扫描文物即可收录；收录后可查看云阙讲解、文物档案与可溯源史料。</text>
-    <button class="album-scan-btn" bindtap="goScan">去现场扫描</button>
+    <view class="tip-icon">
+      <line-icon name="{{hasRelics ? 'relic' : 'stamp'}}" size="{{46}}"></line-icon>
+    </view>
+    <block wx:if="{{!hasRelics}}">
+      <text class="album-tip-title">{{spotName}}文物</text>
+      <text class="album-tip-text">文物正在整理收录，敬请期待。</text>
+    </block>
+    <block wx:else>
+      <text class="album-tip-title">{{spotName}}遗珍</text>
+      <text class="album-tip-text">到{{spotName}}现场，用「现场巡游」扫描文物即可收录；收录后可查看云阙讲解、文物档案与可溯源史料。</text>
+      <button class="album-scan-btn" bindtap="goScan">去现场扫描</button>
+    </block>
   </view>
 
   <!-- 详情弹层 -->
@@ -37,7 +69,10 @@
     <view class="detail-sheet" catchtap="noop">
       <view class="detail-banner">
         <image class="detail-banner-img" src="{{detail.image}}" mode="aspectFill"></image>
-        <view class="detail-close" bindtap="closeDetail"><text class="detail-close-glyph">✕</text></view>
+        <view class="detail-banner-frame"></view>
+        <view class="detail-close" bindtap="closeDetail" hover-class="detail-close-hover">
+          <text class="detail-close-glyph">✕</text>
+        </view>
         <view class="detail-banner-meta">
           <text class="detail-name">{{detail.name}}</text>
           <text class="detail-era">{{detail.era}}</text>
@@ -45,14 +80,21 @@
       </view>
 
       <scroll-view scroll-y class="detail-scroll" enhanced show-scrollbar="{{false}}">
-        <view class="detail-lines">
-          <view class="detail-line" wx:for="{{lines}}" wx:key="*this">
-            <text class="detail-line-text">{{item}}</text>
+        <view class="detail-block">
+          <view class="detail-sign">
+            <text class="detail-sign-text">云阙讲解</text>
+          </view>
+          <view class="detail-lines">
+            <view class="detail-line" wx:for="{{lines}}" wx:key="*this">
+              <text class="detail-line-text">{{item}}</text>
+            </view>
           </view>
         </view>
 
-        <view class="detail-arch">
-          <text class="detail-arch-title">文物档案</text>
+        <view class="detail-block detail-arch">
+          <view class="detail-sign detail-sign-gold">
+            <text class="detail-sign-text">文物档案</text>
+          </view>
           <text class="detail-arch-text">{{detail.intro}}</text>
         </view>
 
@@ -60,8 +102,10 @@
           <text class="detail-note-text">{{detail.culturalNote}}</text>
         </view>
 
-        <view wx:if="{{detail.sourceCard}}" class="detail-source">
-          <text class="detail-source-title">{{detail.sourceCard.title}}</text>
+        <view wx:if="{{detail.sourceCard}}" class="detail-block detail-source">
+          <view class="detail-sign detail-sign-gold">
+            <text class="detail-sign-text">史料卡 · {{detail.sourceCard.title}}</text>
+          </view>
           <view class="detail-source-work" wx:for="{{detail.sourceCard.works}}" wx:for-item="w" wx:key="name">
             <text class="detail-source-name">《{{w.name}}》</text>
             <text wx:if="{{w.quote}}" class="detail-source-quote">{{w.quote}}</text>

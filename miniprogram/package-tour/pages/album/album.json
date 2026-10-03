@@ -2,5 +2,7 @@
   "navigationBarTitleText": "文物图鉴",
   "navigationBarBackgroundColor": "#F4ECDD",
   "navigationBarTextStyle": "black",
-  "usingComponents": {}
+  "usingComponents": {
+    "line-icon": "/components/line-icon/line-icon"
+  }
 }
