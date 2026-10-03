@@ -15,6 +15,8 @@ Page({
     heading: '',
     restoreSrc: '',
     restoreVideo: '',
+    /** 纯展示：复原视频角标署名（不改识别/播放逻辑） */
+    creditNote: '文物灵感 · AIGC 再现',
   },
 
   onLoad(query: Record<string, string | undefined>) {

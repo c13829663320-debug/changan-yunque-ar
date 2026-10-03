@@ -1,46 +1,70 @@
 <view class="ar-cam">
   <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
 
+  <!-- 顶部：现场 AR 标题与引导 -->
   <view class="cam-top">
-    <text class="cam-title">现场AR · {{sceneName}}</text>
+    <view class="top-row">
+      <text class="cam-kicker">现场 AR</text>
+      <text class="cam-title">{{sceneName}}</text>
+    </view>
     <text class="cam-tip">对准点位解说牌 / 识别图，或进入触发半径</text>
   </view>
 
   <!-- 识别 / 方位叠加：动态复原视频（无 3D 以视频替代） -->
   <view class="cam-overlay" wx:if="{{detected}}">
-    <video
-      wx:if="{{restoreVideo}}"
-      class="ov-restore"
-      src="{{restoreVideo}}"
-      autoplay
-      loop
-      muted
-      controls="{{false}}"
-      show-center-play-btn="{{false}}"
-      show-play-btn="{{false}}"
-      show-fullscreen-btn="{{false}}"
-      enable-progress-gesture="{{false}}"
-      object-fit="cover"
-    ></video>
-    <view wx:else class="overlay-palace">
-      <view class="ov-roof"></view>
-      <view class="ov-body"></view>
+    <view class="ov-frame">
+      <video
+        wx:if="{{restoreVideo}}"
+        class="ov-restore"
+        src="{{restoreVideo}}"
+        autoplay
+        loop
+        muted
+        controls="{{false}}"
+        show-center-play-btn="{{false}}"
+        show-play-btn="{{false}}"
+        show-fullscreen-btn="{{false}}"
+        enable-progress-gesture="{{false}}"
+        object-fit="cover"
+      ></video>
+      <view wx:else class="overlay-palace">
+        <view class="ov-roof"></view>
+        <view class="ov-body"></view>
+      </view>
+      <view class="ov-chip">
+        <view class="ov-dot"></view>
+        <text>动态复原</text>
+      </view>
     </view>
-    <text class="ov-label">{{sceneName}} · AR复原</text>
+    <view class="ov-caption">
+      <text class="ov-name">{{sceneName}} · AR 复原</text>
+      <text class="ov-credit">{{creditNote}}</text>
+    </view>
   </view>
 
-  <!-- 未识别：扫描框 -->
+  <!-- 未识别：取景框 + 轻柔扫描线 -->
   <view class="reticle" wx:else>
     <view class="reticle-corner tl"></view>
     <view class="reticle-corner tr"></view>
     <view class="reticle-corner bl"></view>
     <view class="reticle-corner br"></view>
+    <view class="scan-line"></view>
+    <view class="reticle-hint">
+      <view class="reticle-pulse"></view>
+      <text>正在识别解说牌 / 识别图</text>
+    </view>
   </view>
 
   <view class="cam-bottom">
     <view class="loc-row">
-      <text class="loc-text" wx:if="{{distance}}">{{distance}}</text>
-      <text class="loc-text" wx:if="{{heading}}">{{heading}}</text>
+      <view class="loc-chip" wx:if="{{distance}}">
+        <text class="loc-glyph">◉</text>
+        <text class="loc-text">{{distance}}</text>
+      </view>
+      <view class="loc-chip" wx:if="{{heading}}">
+        <text class="loc-glyph">✥</text>
+        <text class="loc-text">{{heading}}</text>
+      </view>
     </view>
     <button class="btn-primary detect-btn" bindtap="onDetect">
       {{detected ? '重新识别' : '识别图中复原'}}
