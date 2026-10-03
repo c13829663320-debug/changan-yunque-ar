@@ -15,9 +15,9 @@ export interface AppConfig {
 }
 
 const config: AppConfig = {
-  cloudEnvId: '', // TODO: 在微信开发者工具-云开发中创建环境后填入
+  cloudEnvId: 'cloudbase-d0gj4zu5i46af9fbd', // 微信云开发环境 ID（已开通）
   cdnBase: '', // TODO: 配置静态资源托管域名后填入，并在小程序后台加入 downloadFile 合法域名
-  useMock: true,
+  useMock: false, // false：意向单走云函数 intention；其余内容仍读本地结构化数据
   version: '0.1.0',
 };
 
