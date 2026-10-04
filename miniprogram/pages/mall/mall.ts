@@ -3,10 +3,6 @@ import { CATEGORY_LABEL, Goods, GoodsCategory } from '../../data/types/goods';
 
 interface GoodsVM extends Goods {
   categoryLabel: string;
-  /** 封面图是否已加载完成（微光淡入用，纯展示态） */
-  imgLoaded?: boolean;
-  /** 封面加载失败：切回既有分类标签兜底 */
-  coverErr?: boolean;
 }
 
 interface CatFilter {
@@ -44,29 +40,8 @@ Page({
 
   applyFilter(cat: 'all' | GoodsCategory) {
     const source = cat === 'all' ? getAllGoods() : getAllGoods().filter((g) => g.category === cat);
-    const goods: GoodsVM[] = source.map((g) => ({
-      ...g,
-      categoryLabel: CATEGORY_LABEL[g.category],
-      imgLoaded: false,
-      coverErr: false,
-    }));
+    const goods: GoodsVM[] = source.map((g) => ({ ...g, categoryLabel: CATEGORY_LABEL[g.category] }));
     this.setData({ activeCat: cat, goods });
-  },
-
-  /** 封面加载完成：淡入图片，微光底被不透明图片自然覆盖 */
-  onCoverLoad(e: WechatMiniprogram.TouchEvent) {
-    const id = (e.currentTarget.dataset as { id: string }).id;
-    const idx = this.data.goods.findIndex((g) => g.id === id);
-    if (idx < 0) return;
-    this.setData({ [`goods.${idx}.imgLoaded`]: true });
-  },
-
-  /** 封面失败：隐藏坏图，复用既有「分类标签」兜底 */
-  onCoverError(e: WechatMiniprogram.TouchEvent) {
-    const id = (e.currentTarget.dataset as { id: string }).id;
-    const idx = this.data.goods.findIndex((g) => g.id === id);
-    if (idx < 0) return;
-    this.setData({ [`goods.${idx}.coverErr`]: true });
   },
 
   goDetail(e: WechatMiniprogram.TouchEvent) {

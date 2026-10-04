@@ -55,11 +55,11 @@
   overflow: hidden;
   box-shadow: var(--shadow);
   box-sizing: border-box;
-  animation: mallFadeUp 0.45s ease backwards;
+  animation: mallFadeUp 0.4s ease backwards;
 }
 .grid-item:nth-child(2n) { margin-right: 0; }
 
-/* 正方形封面：padding-bottom 100% 撑出方图，图片绝对定位铺满（跨机型稳定） */
+/* 正方形封面：padding-bottom 100% 撑出方图；兜底标签与图片均绝对定位铺满 */
 .grid-cover {
   position: relative;
   width: 100%;
@@ -67,23 +67,7 @@
   overflow: hidden;
   background: linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
 }
-/* 骨架微光：在原有象牙渐变底上叠加极淡金高光扫过（复用全局 shimmerSweep）；
-   封面 bindload 淡入后覆盖，binderror 移除 .shimmer 并切回分类标签兜底 */
-.grid-cover.shimmer {
-  background-image:
-    linear-gradient(100deg, rgba(255, 250, 236, 0) 0%, rgba(255, 244, 214, 0.85) 50%, rgba(255, 250, 236, 0) 100%),
-    linear-gradient(160deg, var(--ivory-deep), var(--bg-card-deep));
-  background-size: 220% 100%, 100% 100%;
-  background-repeat: no-repeat, no-repeat;
-  animation: shimmerSweep 1.9s ease-in-out infinite;
-}
-.grid-cover-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+/* 兜底：分类标签常驻下层；图片缺失/未加载/失败时自然露出 */
 .grid-cover-fallback {
   position: absolute;
   top: 0;
@@ -95,6 +79,14 @@
   justify-content: center;
 }
 .cover-cat { font-size: var(--fs-small); color: var(--dark-gold); letter-spacing: 3rpx; }
+/* 图片在上层（DOM 在后），加载成功即覆盖兜底；无需 opacity 切换与回调 setData */
+.grid-cover-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .cover-scrim {
   position: absolute;
   left: 0;

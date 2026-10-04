@@ -18,30 +18,26 @@
     <view class="cat-fade"></view>
   </view>
 
-  <!-- 两列等宽网格：图(预售角标) → 名称(≤2行) → 一行短描述 → 价格 -->
+  <!-- 两列等宽网格：兜底标签常驻下层，图片在上加载成功自然覆盖；不做渲染期回调 setData -->
   <view class="goods-grid">
     <view
       class="grid-item"
       wx:for="{{goods}}"
       wx:key="id"
-      style="animation-delay: {{index * 50}}ms"
+      style="animation-delay: {{index * 40}}ms"
       data-id="{{item.id}}"
       bindtap="goDetail"
     >
-      <view class="grid-cover {{item.coverErr ? '' : 'shimmer'}}">
+      <view class="grid-cover">
+        <view class="grid-cover-fallback">
+          <text class="cover-cat">{{item.categoryLabel}}</text>
+        </view>
         <image
-          wx:if="{{item.cover && !item.coverErr}}"
-          class="grid-cover-img shimmer-media {{item.imgLoaded ? 'is-loaded' : ''}}"
+          class="grid-cover-img"
           src="{{item.cover}}"
           mode="aspectFill"
           lazy-load
-          bindload="onCoverLoad"
-          binderror="onCoverError"
-          data-id="{{item.id}}"
         ></image>
-        <view wx:else class="grid-cover-fallback">
-          <text class="cover-cat">{{item.categoryLabel}}</text>
-        </view>
         <view class="cover-scrim"></view>
         <text wx:if="{{item.presale}}" class="cover-badge">预售</text>
       </view>
