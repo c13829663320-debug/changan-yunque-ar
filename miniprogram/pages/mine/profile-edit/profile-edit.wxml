@@ -1,0 +1,49 @@
+<view class="pe">
+  <!-- 头像：点击触发官方头像昵称填写能力 -->
+  <view class="pe-head">
+    <button class="pe-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <view class="pe-avatar">
+        <image class="pe-avatar-img" src="{{form.avatar}}" mode="aspectFill"></image>
+        <view class="pe-cam"><text class="pe-cam-text">换</text></view>
+      </view>
+    </button>
+    <text class="pe-tip">点击头像更换 · 可选微信头像 / 相册 / 拍照</text>
+  </view>
+
+  <view class="pe-body">
+    <!-- 昵称：type=nickname 可一键使用微信昵称 -->
+    <view class="pe-field">
+      <text class="pe-label">昵称</text>
+      <view class="pe-input-wrap">
+        <input
+          class="pe-input"
+          type="nickname"
+          value="{{form.nickname}}"
+          maxlength="12"
+          placeholder="给自己起个雅号"
+          placeholder-class="pe-ph"
+          bindinput="onNicknameInput"
+        />
+        <text class="pe-count">{{nicknameLen}}/12</text>
+      </view>
+    </view>
+
+    <!-- 个性签名 -->
+    <view class="pe-field pe-field-col">
+      <text class="pe-label">个性签名</text>
+      <textarea
+        class="pe-textarea"
+        value="{{form.signature}}"
+        maxlength="40"
+        placeholder="一句话，写下你的长安心绪（选填）"
+        placeholder-class="pe-ph"
+        auto-height
+        bindinput="onSignatureInput"
+      ></textarea>
+    </view>
+  </view>
+
+  <view class="pe-actions">
+    <button class="btn-primary pe-save" bindtap="onSave">保存资料</button>
+  </view>
+</view>

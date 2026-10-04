@@ -1,9 +1,16 @@
 <view class="mine">
   <!-- 头部 -->
   <view class="mine-head">
-    <view class="avatar"><image class="avatar-img" src="/assets/characters/yunque-avatar.jpg" mode="aspectFill"></image></view>
-    <text class="mine-name">云阙旅人</text>
+    <view class="avatar" bindtap="goEdit">
+      <image class="avatar-img" src="{{profile.avatar}}" mode="aspectFill"></image>
+      <view class="avatar-badge"><text class="avatar-badge-text">换</text></view>
+    </view>
+    <view class="mine-name-row" bindtap="goEdit">
+      <text class="mine-name">{{profile.nickname}}</text>
+      <text class="mine-edit">编辑</text>
+    </view>
     <text class="mine-sub">已集 {{scaleCount}} 鳞 · 收录 {{relicCount}} 件文物 · 走过 {{stampCount}} 处</text>
+    <text wx:if="{{profile.signature}}" class="mine-sign">{{profile.signature}}</text>
   </view>
 
   <view class="page-wrap mine-body">

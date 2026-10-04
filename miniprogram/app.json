@@ -5,7 +5,8 @@
     "pages/tour/tour",
     "pages/mall/mall",
     "pages/mine/mine",
-    "pages/mine/detail/detail"
+    "pages/mine/detail/detail",
+    "pages/mine/profile-edit/profile-edit"
   ],
   "subpackages": [
     {

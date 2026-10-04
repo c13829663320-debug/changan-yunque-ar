@@ -1,5 +1,6 @@
 import config from './config/index';
 import { getProgressStore } from './store/progress';
+import { getProfileStore } from './store/profile';
 
 interface IGlobalData {
   cloudReady: boolean;
@@ -27,5 +28,7 @@ App<{ globalData: IGlobalData }>({
 
     // 恢复本地巡游进度（龙鳞 / 集章 / 已完成点位）
     getProgressStore().restore();
+    // 恢复用户资料（头像 / 昵称 / 签名）
+    getProfileStore().restore();
   },
 });

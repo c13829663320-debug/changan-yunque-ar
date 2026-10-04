@@ -1,4 +1,5 @@
 import { getProgressStore } from '../../store/progress';
+import { getProfileStore, UserProfile } from '../../store/profile';
 import { getSpots } from '../../data/repositories/spotRepo';
 import { getScenesBySpot } from '../../data/repositories/sceneRepo';
 import { getRelicsBySpot } from '../../data/repositories/relicRepo';
@@ -59,6 +60,11 @@ Page({
     currentTitle: '',
     titleGotCount: 0,
     titleTotal: 0,
+    profile: {
+      avatar: '/assets/characters/yunque-avatar.jpg',
+      nickname: '云阙旅人',
+      signature: '',
+    } as UserProfile,
   },
 
   onLoad() {
@@ -67,7 +73,17 @@ Page({
 
   onShow() {
     this.syncProgress();
+    this.syncProfile();
     this.setData({ soundOn: audio.isOn() });
+  },
+
+  /** 读取用户资料，驱动头部头像 / 昵称 / 签名 */
+  syncProfile() {
+    this.setData({ profile: getProfileStore().snapshot });
+  },
+
+  goEdit() {
+    wx.navigateTo({ url: '/pages/mine/profile-edit/profile-edit' });
   },
 
   /** 读取真实进度，驱动分组龙鳞墙、文物图鉴与景点到访态（纯展示计算） */

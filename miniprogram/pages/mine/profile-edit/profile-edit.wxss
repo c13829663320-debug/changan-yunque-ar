@@ -1,0 +1,98 @@
+/* —— 编辑资料页：盛唐低饱和质感，头像 + 昵称 + 签名 —— */
+.pe { min-height: 100vh; background: var(--bg); }
+
+/* 头部 */
+.pe-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0 48rpx;
+  background:
+    radial-gradient(120% 100% at 50% 0%, var(--moon), transparent 70%),
+    linear-gradient(180deg, var(--ivory-deep), var(--bg));
+}
+/* 重置 chooseAvatar button 默认样式 */
+.pe-avatar-btn {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+  border-radius: 50%;
+}
+.pe-avatar-btn::after { border: none; }
+.pe-avatar {
+  position: relative;
+  width: 168rpx;
+  height: 168rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--dark-gold-soft);
+  box-shadow: var(--shadow-deep);
+  background: var(--bg-card);
+}
+.pe-avatar-img {
+  width: 168rpx;
+  height: 168rpx;
+  border-radius: 50%;
+  display: block;
+}
+.pe-cam {
+  position: absolute;
+  right: -6rpx;
+  bottom: 2rpx;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cinnabar), var(--ochre-deep));
+  border: 3rpx solid var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pe-cam-text { color: #fbf3e4; font-size: 24rpx; font-weight: 600; }
+.pe-tip {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-top: 22rpx;
+  letter-spacing: 1rpx;
+}
+
+/* 字段卡片 */
+.pe-body { padding: 24rpx 28rpx; }
+.pe-field {
+  background: var(--bg-card);
+  border: 1rpx solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 26rpx;
+  margin-bottom: 22rpx;
+}
+.pe-label {
+  font-size: var(--fs-small);
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+.pe-input-wrap { display: flex; align-items: center; margin-top: 18rpx; }
+.pe-input { flex: 1; font-size: var(--fs-body); color: var(--ink-soft); min-width: 0; }
+.pe-count {
+  font-size: var(--fs-mini);
+  color: var(--ink-muted);
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+.pe-ph { color: var(--ink-muted); opacity: 0.7; }
+
+.pe-field-col { display: flex; flex-direction: column; }
+.pe-textarea {
+  width: 100%;
+  font-size: var(--fs-body);
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-top: 16rpx;
+  min-height: 60rpx;
+  box-sizing: border-box;
+}
+
+/* 保存按钮 */
+.pe-actions { padding: 12rpx 28rpx 40rpx; }
+.pe-save { width: 100%; }
