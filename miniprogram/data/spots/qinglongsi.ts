@@ -11,6 +11,9 @@ const qinglongsi: Spot = {
   name: '青龙寺',
   subtitle: '唐风密宗 · 樱花名刹',
   city: '西安',
+  cover: 'https://aka.doubaocdn.com/s/duaSCVGiQv',
+  overviewImage: 'https://aka.doubaocdn.com/s/haEqODjTp5',
+  timelineImage: 'https://aka.doubaocdn.com/s/WGsEpNwCsm',
   summary:
     '青龙寺遗址在唐长安新昌坊（今西安雁塔区西影路铁炉庙村北），前身隋灵感寺，是唐代密宗重要道场。日本僧空海于此从惠果阿阇梨受两部灌顶，归国后创日本真言宗；今日青龙寺亦是西安著名赏樱胜地。',
   tags: ['唐代密宗', '空海入唐', '真言宗祖庭', '赏樱胜地'],
