@@ -28,6 +28,7 @@ Page({
     submitting: false,
     submitted: false,
     cloudReady: false,
+    agreed: false,
   },
 
   onShow() {
@@ -83,7 +84,21 @@ Page({
     this.setData({ remark: e.detail.value });
   },
 
+  toggleAgree() {
+    this.setData({ agreed: !this.data.agreed });
+  },
+  openService() {
+    wx.navigateTo({ url: '/package-mall/pages/agreement/agreement?type=service' });
+  },
+  openPrivacy() {
+    wx.navigateTo({ url: '/package-mall/pages/agreement/agreement?type=privacy' });
+  },
+
   submit() {
+    if (!this.data.agreed) {
+      wx.showToast({ title: '请先阅读并同意协议', icon: 'none' });
+      return;
+    }
     const { name, phone, items } = this.data;
     if (!items.length) {
       wx.showToast({ title: '没有意向商品', icon: 'none' });

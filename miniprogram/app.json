@@ -31,7 +31,8 @@
       "pages": [
         "pages/goods-detail/goods-detail",
         "pages/cart/cart",
-        "pages/intention/intention"
+        "pages/intention/intention",
+        "pages/agreement/agreement"
       ]
     }
   ],

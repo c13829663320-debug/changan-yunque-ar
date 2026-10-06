@@ -1,0 +1,11 @@
+<view class="page-wrap agreement-page">
+  <view class="card agree-card">
+    <text class="agree-title">{{doc.title}}</text>
+    <text class="agree-updated">{{doc.updated}}</text>
+    <text class="agree-intro">{{doc.intro}}</text>
+    <view class="sec" wx:for="{{doc.sections}}" wx:for-item="s" wx:key="h">
+      <text class="sec-h">{{s.h}}</text>
+      <text class="sec-p" wx:for="{{s.p}}" wx:for-item="para" wx:key="*this">{{para}}</text>
+    </view>
+  </view>
+</view>

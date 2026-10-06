@@ -35,7 +35,18 @@
     </view>
   </view>
 
-  <button class="btn-primary submit-btn" wx:if="{{!submitted}}" bindtap="submit" loading="{{submitting}}">
+  <view class="agree-row" wx:if="{{!submitted}}">
+    <view class="agree-check {{agreed ? 'on' : ''}}" bindtap="toggleAgree">
+      <text wx:if="{{agreed}}" class="check-tick">✓</text>
+    </view>
+    <view class="agree-line">
+      <text class="agree-tap" bindtap="toggleAgree">我已阅读并同意</text>
+      <text class="agree-link" catchtap="openService">《用户服务协议》</text>
+      <text class="agree-link" catchtap="openPrivacy">《隐私政策》</text>
+    </view>
+  </view>
+
+  <button class="btn-primary submit-btn {{agreed ? '' : 'is-disabled'}}" wx:if="{{!submitted}}" bindtap="submit" loading="{{submitting}}">
     {{cloudReady ? '提交意向登记' : '提交（演示 · 本地登记）'}}
   </button>
 

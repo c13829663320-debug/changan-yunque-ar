@@ -1,0 +1,7 @@
+.agree-card { padding: 32rpx 28rpx; }
+.agree-title { font-size: var(--fs-title); color: var(--dark-gold); font-weight: 700; display: block; text-align: center; }
+.agree-updated { font-size: var(--fs-mini); color: var(--ink-muted); display: block; text-align: center; margin: 12rpx 0 20rpx; }
+.agree-intro { font-size: var(--fs-small); color: var(--ink-soft); line-height: 1.7; display: block; padding-bottom: 16rpx; border-bottom: 1rpx solid var(--line); margin-bottom: 8rpx; text-align: justify; }
+.sec { padding: 14rpx 0; }
+.sec-h { font-size: var(--fs-body); color: var(--ink); font-weight: 600; display: block; margin-bottom: 8rpx; }
+.sec-p { font-size: var(--fs-small); color: var(--ink-soft); line-height: 1.75; display: block; margin-top: 6rpx; text-align: justify; }

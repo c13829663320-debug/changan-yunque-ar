@@ -21,5 +21,14 @@
 .ii-status { font-size: var(--fs-mini); color: var(--dark-gold); }
 
 .submit-btn { margin-top: 8rpx; }
+
+/* 协议授权 */
+.agree-row { display: flex; align-items: flex-start; gap: 14rpx; padding: 18rpx 12rpx 4rpx; }
+.agree-check { width: 36rpx; height: 36rpx; border-radius: 50%; border: 2rpx solid var(--ink-muted); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2rpx; }
+.agree-check.on { background: var(--cinnabar); border-color: var(--cinnabar); }
+.check-tick { color: #fff; font-size: 24rpx; line-height: 1; }
+.agree-line { flex: 1; font-size: var(--fs-mini); color: var(--ink-soft); line-height: 1.6; }
+.agree-link { color: var(--cinnabar); }
+.submit-btn.is-disabled { opacity: .55; }
 .clear-btn { margin-top: 16rpx; margin-bottom: 16rpx; }
 .back-mall { margin-top: 4rpx; }
